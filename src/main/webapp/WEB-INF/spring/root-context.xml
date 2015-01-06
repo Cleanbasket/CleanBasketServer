@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="100000000" />
+	</bean>
+
+	<bean id="gson" class="com.google.gson.Gson" />
+
+	<bean id="email" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smart.whoismail.net" />
+		<property name="port" value="587" />
+		<property name="protocol" value="smtp" />
+		<property name="username" value="password@cleanbasket.co.kr" />
+		<property name="password" value="clba2014!" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.ssl.trust">smart.whoismail.net</prop>
+			</props>
+		</property>
+	</bean>
+
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:annotation-config />
+
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="username" value="hanyong" />
+
+		<!-- 본서버 -->
+		<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" />
+		<property name="password" value="hanyong1234" />
+
+		<!-- 개발서버 -->
+		<!-- <property name="url" value="jdbc:mysql://sevencore.iptime.org/wash?autoReconnect=true" /> -->
+		<!-- <property name="password" value="@kks148@" /> -->
+
+		<property name="maxActive" value="150" />
+		<property name="maxIdle" value="50" />
+		<property name="minIdle" value="25" />
+		<property name="initialSize" value="10" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnConnect" value="true" />
+		<property name="validationQuery" value="SELECT 1" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="mapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.MybatisMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="dao" class="com.bridge4biz.wash.mybatis.MybatisDAO" />
+
+	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+</beans>

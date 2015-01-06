@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http disable-url-rewriting="true" create-session="never">
+		<form-login login-processing-url="/auth" username-parameter="email" password-parameter="password" login-page="/admin/login" authentication-success-handler-ref="loginSuccessHandler"
+			authentication-failure-handler-ref="loginFailureHandler" />
+		<remember-me key="*E87F1*6E91250B0BF871D2B218E0C870DCF0F61ACA4D17*28C2A5" remember-me-parameter="remember" token-validity-seconds="-1" />
+		<session-management>
+			<concurrency-control max-sessions="99999999" expired-url="/admin/login" />
+		</session-management>
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+			<password-encoder hash="sha" />
+			<jdbc-user-service data-source-ref="dataSource" users-by-username-query="select email as username, password, enabled from user where email = ?" authorities-by-username-query="select email as username, authority from user where email = ?" />
+		</authentication-provider>
+	</authentication-manager>
+
+	<beans:bean id="loginSuccessHandler" class="com.bridge4biz.wash.authentication.LoginSuccessHandler" />
+	<beans:bean id="loginFailureHandler" class="com.bridge4biz.wash.authentication.LoginFailureHandler" />
+
+</beans:beans>
