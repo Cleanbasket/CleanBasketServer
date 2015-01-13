@@ -75,11 +75,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="paging_1" class="paging" style="width: 800px; margin-top: 3px;">
-	<a href="#" class="prev">Previous</a>
-	<div class="list"></div>
-	<a href="#" class="next">Next</a>
-	</div>
+
 	<script src="../resources/jquery.min.js"></script>
 	<script src="../resources/bootstrap.min.js"></script>
 	<script src="../resources/bootbox.min.js"></script>
@@ -112,11 +108,7 @@
 			<label class="text text-small"><!= memo !></label>
 		</div>
 	</script>
-	<script data-jui="#paging_1" data-tpl="pages" type="text/template">
-		<! for(var i = 0; i < pages.length; i++) { !>
-			<a href="#" class="page"><!= pages[i] !></a>
-		<! } !>
-	</script>
+
 	<script>
 		var constant = new Constant();
 
@@ -131,7 +123,7 @@
 			
 			orderResize();
 		});
-
+		
 		$(window).ready(function() {
 			socket = webSocketIO();
 			socket.on('message', function(msg) {
@@ -346,14 +338,24 @@
 						url : '../admin/refresh',
 						async : true,
 						success : function(json) {
-							var data = JSON.parse(json.data);
+							var data = JSON.parse(json);
+							var num = $("#order td")[1];
+							var oid = num.outerText.split('-')[1];
+							if(parseInt(data.data) > parseInt(oid)) {
+								playSound();
+							};
 						},
 						error : function(request, status, error) {
 							console.log(request.responseText);
 						}
 					});
-				}, 3000 * 1200);
+				}, 30000);
 			});
+		}
+		
+		function playSound() {
+			var snd = new Audio('../resources/sounds/alarm.mp3'); // buffers automatically when created
+			snd.play();
 		}
 		
 		function orderResize() {
