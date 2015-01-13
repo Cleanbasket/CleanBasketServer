@@ -976,7 +976,7 @@ function orderCalculationProcess(calcModal, item, coupon) {
 	});
 
 	$("#button-order-decide").click(function() {
-		if ($("#order-address-text").text().indexOf("강남구") != -1 || $("#order-address-text").text().indexOf("서초구") != -1 || $("#order-address-text").text().indexOf("용산") != -1 || || $("#order-address-text").text().indexOf("마포구") != -1 || || $("#order-address-text").text().indexOf("성동구") != -1) {
+		if ($("#order-address-text").text().indexOf("강남구") != -1 || $("#order-address-text").text().indexOf("서초구") != -1 || $("#order-address-text").text().indexOf("용산") != -1 || $("#order-address-text").text().indexOf("마포구") != -1 || $("#order-address-text").text().indexOf("성동구") != -1) {
 
 			var clacData = priceCalculation();
 

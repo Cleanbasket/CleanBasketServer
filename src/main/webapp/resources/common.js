@@ -63,8 +63,8 @@ function errorCheck(message) {
 $(window).ready(function() {
 	setInterval(function() {
 		$.ajax({
-			url : '../refresh',
+			url : '../admin/refresh',
 			async : true
 		});
-	}, 1200 * 1000);
+	}, 1000 * 1200);
 });

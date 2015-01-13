@@ -64,7 +64,8 @@
 							<th>수거일자</th>
 							<th>배달일자</th>
 							<th>가격</th>							
-							<th>수량</th>														
+							<th>수량</th>		
+							<th>품목</th>																			
 							<th>쿠폰내역</th>
 							<th>주문현황</th>
 						</tr>
@@ -95,6 +96,7 @@
 			<td><!= dropoff_date !></td>
 			<td><!= price !></td>
 			<td><!= count !></td>
+			<td><!= item !></td>
 			<td><!= orderInfo !></td>
 			<td><!= state !></td>
 		</tr>
@@ -120,7 +122,7 @@
 
 		var global_uix = null;
 		var global_ui = null;
-
+		
 		jui.ready(function(ui, uix, _) {
 			order = uix.table("#order", {
 				animate : true,
@@ -141,6 +143,7 @@
 				}
 			});
 			getOrderState();
+			startRefresher();
 		});
 
 		function receiveMessage(msg) {
@@ -209,6 +212,7 @@
 				data.stateData[i].address = '<a target="_blank" onfocus="this.blur()" href="http://map.naver.com/?query=' + tempAddress + '">' + tempAddress + " " + data.stateData[i].addr_remainder
 						+ '</a>';
 				data.stateData[i]['orderInfo'] = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" data-email="' + data.stateData[i].email + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="detail_coupon_link">쿠폰내역</a>';
+				data.stateData[i]['item'] = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" data-dropoff-price="' + data.stateData[i].dropoff_price + '" data-email="' + data.stateData[i].email + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="detail_item_link">품목</a>';
 				tempState = data.stateData[i].state;
 				switch (tempState) {
 				case 0:
@@ -231,8 +235,58 @@
 			order.update(data.stateData);
 			setDetailButtonEvent();
 		}
-
+		
 		function setDetailButtonEvent() {
+			var detail_item_link = $('.detail_item_link').unbind('click');
+			detail_item_link.click(function() {
+				var clicked = $(this);
+				var list_group = $('<div />', {
+					'class' : 'list-group'
+				});
+				bootbox.dialog({
+					title : "품목 내용을 확인합니다.",
+					message : list_group,
+					buttons : {
+						ok : {
+							label : "확인",
+							className : "btn-success"
+						}
+					}
+				});
+
+				$.ajax({
+					type : 'POST',
+					url : '../admin/member/item',
+					dataType : 'json',
+					contentType : "application/json",
+					async : true,
+					data : JSON.stringify({
+						oid : clicked.attr('oid'),
+						uid : clicked.attr('id')
+					}),
+					success : function(json) {
+						var data = JSON.parse(json.data);
+						var datalength = data.length;
+						var heading = null;
+						var price = 0;
+						var total_price = 0;
+						var total_count = 0;
+						for (var i = 0; i < datalength; i++) {
+							heading = '[' + data[i].price + '] ' + data[i].name + ' ' + data[i].count + '개';
+							price = data[i].price * data[i].count;
+							total_price += price;
+							total_count += data[i].count;
+							list_group.append('<a class="list-group-item"><h6 class="list-group-item-heading">' + heading + '</h6><p class="list-group-item-text">금액: ' + price + '원</p></a>');
+						}
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+						errorCheck(request.responseText);
+					}
+				});
+
+			});
+			
 			var detail_coupon_link = $('.detail_coupon_link').unbind('click');
 			detail_coupon_link.click(function() {
 				var clicked = $(this);
@@ -280,24 +334,41 @@
 					},
 					error : function(request, status, error) {
 						console.log(request.responseText);
-						errorCheck(request.responseText);
 					}
 				});
 			});
 		}
-
+		
+		function startRefresher() {
+			$(window).ready(function() {
+				setInterval(function() {
+					$.ajax({
+						url : '../admin/refresh',
+						async : true,
+						success : function(json) {
+							var data = JSON.parse(json.data);
+						},
+						error : function(request, status, error) {
+							console.log(request.responseText);
+						}
+					});
+				}, 3000 * 1200);
+			});
+		}
+		
 		function orderResize() {
 			var th = $('.order_thead').find('th');
 			th.eq(0).css('width', '10%');
 			th.eq(1).css('width', '10%');
 			th.eq(2).css('width', '30%');
 			th.eq(3).css('width', '10%');
-			th.eq(4).css('width', '8%');
-			th.eq(5).css('width', '8%');
+			th.eq(4).css('width', '7%');
+			th.eq(5).css('width', '7%');
 			th.eq(6).css('width', '5%');
-			th.eq(7).css('width', '5%');			
-			th.eq(8).css('width', '7%');
-			th.eq(9).css('width', '7%');
+			th.eq(7).css('width', '4%');
+			th.eq(8).css('width', '5%');
+			th.eq(9).css('width', '6%');
+			th.eq(10).css('width', '6%');
 		}
 	</script>
 </body>

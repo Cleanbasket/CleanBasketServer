@@ -347,6 +347,13 @@ public class WebController {
 		}
 	}
 
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/admin/refresh")
+	@ResponseBody
+	public Constant getLatestOrderId(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getLatestOrderId()));
+	}
+	
 	@RequestMapping(value = "/coupon/{serial_number}")
 	public String couponCode(Model model, SitePreference sitePreference, HttpServletRequest request, @PathVariable String serial_number) {
 		if (serial_number != null) {

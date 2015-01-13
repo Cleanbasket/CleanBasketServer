@@ -69,7 +69,7 @@ public class MybatisDAO {
 	public String getAuthority(String email) {
 		return mapper.getAuthority(email);
 	}
-
+	
 	public Integer loginFailureCheck(String email, String password) {
 		try {
 			if (mapper.emailCheck(email) == 0) {
@@ -624,4 +624,7 @@ public class MybatisDAO {
 		return memberOrderInfos;
 	}
 
+	public Integer getLatestOrderId() {
+		return mapper.getLatestOrderId();
+	}
 }

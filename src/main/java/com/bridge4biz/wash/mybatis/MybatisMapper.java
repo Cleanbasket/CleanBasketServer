@@ -194,6 +194,9 @@ public interface MybatisMapper {
 	@Select("SELECT value FROM coupon WHERE cpid = #{cpid} AND uid = #{uid}")
 	Integer getCouponPrice(@Param("uid") Integer uid, @Param("cpid") Integer cpid);
 
+	@Select("SELECT oid from orders order by oid DESC LIMIT 1;")
+	Integer getLatestOrderId();
+	
 	@Insert("INSERT INTO user (email, password, name, phone, img, birthday, enabled, authority, rdate) VALUES(#{email}, SHA(#{password}), #{name}, #{phone}, #{img}, #{birthday}, #{enabled}, #{authority}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "uid", before = false, resultType = Integer.class)
 	Boolean addUser(UserData userData);
