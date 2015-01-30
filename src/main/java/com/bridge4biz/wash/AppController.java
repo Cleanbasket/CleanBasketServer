@@ -80,7 +80,14 @@ public class AppController {
 		if (value == Constant.SUCCESS) {
 			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_ADD, uid, orderData.oid));
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS", orderData.order_number);
-		} else {
+		} 
+		else if (value == Constant.ADDRESS_UNVAILABLE) {
+			return constant.setConstant(Constant.ADDRESS_UNVAILABLE, "서비스 지역이 아님 : ERROR");		
+		}
+		else if (value == Constant.DATE_UNVAILABLE) {
+			return constant.setConstant(Constant.DATE_UNVAILABLE, "해당 수거배달일 서비스 안 함 : ERROR");
+		}
+		else {
 			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
 		}
 	}
@@ -198,7 +205,7 @@ public class AppController {
 			return constant.setConstant(Constant.ERROR, "쿠폰지급  준비 에러 : ERROR");
 		}
 	}
-
+	
 	@RequestMapping(value = "/deliverer/join")
 	@ResponseBody
 	public Constant delivererJoin(HttpServletRequest request, UserData user, Constant constant, @RequestParam(value = "file") MultipartFile file) {

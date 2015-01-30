@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bridge4biz.wash.data.DropoffStateData;
@@ -204,6 +205,12 @@ public class WebController {
 	}
 
 	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/admin/area")
+	public String area() {
+		return "area";
+	}	
+	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/order", consumes = { "application/json" })
 	@ResponseBody
 	public Constant orderState(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
@@ -215,6 +222,109 @@ public class WebController {
 		}
 	}
 
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.GET, value = "/admin/area", consumes = { "application/json" })
+	@ResponseBody
+	public Constant getArea(Constant constant, Gson gson) {		
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getAvailableAreaDatas()));
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.POST, value = "/admin/area", consumes = { "application/json" })
+	@ResponseBody
+	public Constant insertArea(Constant constant, Gson gson, @RequestBody Map<String, String> data) {		
+		String areacode = data.get("areacode");
+		String area = data.get("area");
+		Boolean success = dao.insertArea(areacode, area);
+		if (success) {
+			constant.setConstant(Constant.SUCCESS, "");
+		} else {
+			constant.setConstant(Constant.ERROR, "");			
+		}
+		return constant;
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.DELETE, value = "/admin/area", consumes = { "application/json" })
+	@ResponseBody
+	public Constant deleteArea(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		String acidStr = data.get("acid");
+		int acid = Integer.parseInt(acidStr);
+		
+		Boolean success = dao.deleteArea(acid);
+		if (success) {
+			constant.setConstant(Constant.SUCCESS, "");
+		} else {
+			constant.setConstant(Constant.ERROR, "");			
+		}
+		
+		return constant;
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.GET, value = "/admin/date")
+	@ResponseBody
+	public Constant getData(Constant constant, Gson gson, @RequestBody Map<String, String> data) {		
+		String acidStr = data.get("acid");
+		Integer acid = Integer.parseInt(acidStr);
+		
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getAvailableAreaDate(acid)));
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.POST, value = "/admin/date", consumes = { "application/json" })
+	@ResponseBody
+	public Constant insertDate(Constant constant, Gson gson, @RequestBody Map<String, String> data) {		
+		String acidStr = data.get("acid");
+		String area_date = data.get("area_date");
+		int acid = Integer.parseInt(acidStr);
+		Boolean success = dao.insertAreaDate(acid, area_date);
+		
+		if (success) {
+			constant.setConstant(Constant.SUCCESS, "");
+		} else {
+			constant.setConstant(Constant.ERROR, "");			
+		}
+		
+		return constant;
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.DELETE, value = "/admin/date", consumes = { "application/json" })
+	@ResponseBody
+	public Constant deleteDate(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		String adidStr = data.get("adid");
+		int adid = Integer.parseInt(adidStr);
+		Boolean success = dao.deleteAreaDate(adid);
+		
+		if (success) {
+			constant.setConstant(Constant.SUCCESS, "");
+		} else {
+			constant.setConstant(Constant.ERROR, "");			
+		}
+		
+		return constant;
+	}
+	
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.POST, value = "/admin/alarm", consumes = { "application/json" })
+	@ResponseBody
+	public Constant insertAlarm(Constant constant, Gson gson, @RequestBody Map<String, String> data) {		
+		String acidStr = data.get("acid");
+		String phone = data.get("phone");
+		int acid = Integer.parseInt(acidStr);
+		Boolean success = dao.insertAreaAlarm(acid, phone);
+		
+		if (success) {
+			constant.setConstant(Constant.SUCCESS, "");
+		} else {
+			constant.setConstant(Constant.ERROR, "");			
+		}
+		
+		return constant;
+	}
+	
 	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/admin/pickup", consumes = { "application/json" })
 	@ResponseBody

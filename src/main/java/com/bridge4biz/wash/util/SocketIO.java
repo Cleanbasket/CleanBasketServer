@@ -15,9 +15,7 @@ public class SocketIO {
 		opts.forceNew = true;
 		opts.reconnection = true;
 		try {
-			// 본서버
 			socket = IO.socket("http://www.cleanbasket.co.kr:8000", opts);
-			// 개발서버
 			// socket = IO.socket("http://www.cleanbasket.co.kr:8001", opts);
 			socket.connect();
 		} catch (Exception e) {

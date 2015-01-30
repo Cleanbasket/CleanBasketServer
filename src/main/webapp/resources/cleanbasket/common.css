@@ -205,13 +205,25 @@ button, input {
 
 #googleplay-button {
 	border: 0px;
-	width: 111px;
+	width: 162px;
 	height: 54px;
 	margin-right: 20px;
 	outline: none;
 	display: inline-block;
 	background-color: #f8f8f8;
 	background-image: url("./images/googleplay.png");
+	float: right;
+}
+
+#appstore-button {
+	border: 0px;
+	width: 160px;
+	height: 54px;
+	margin-right: 20px;
+	outline: none;
+	display: inline-block;
+	background-color: #f8f8f8;
+	background-image: url("./images/appstore.png");
 	float: right;
 }
 

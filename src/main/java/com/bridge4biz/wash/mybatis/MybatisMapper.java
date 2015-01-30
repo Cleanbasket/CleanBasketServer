@@ -1,7 +1,6 @@
 package com.bridge4biz.wash.mybatis;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Delete;
@@ -12,6 +11,9 @@ import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 
 import com.bridge4biz.wash.data.AddressData;
+import com.bridge4biz.wash.data.AreaAlarmData;
+import com.bridge4biz.wash.data.AreaData;
+import com.bridge4biz.wash.data.AreaDateData;
 import com.bridge4biz.wash.data.CouponCodeData;
 import com.bridge4biz.wash.data.CouponData;
 import com.bridge4biz.wash.data.DropoffStateData;
@@ -21,6 +23,8 @@ import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Address;
+import com.bridge4biz.wash.service.Area;
+import com.bridge4biz.wash.service.AreaDate;
 import com.bridge4biz.wash.service.Coupon;
 import com.bridge4biz.wash.service.Deliverer;
 import com.bridge4biz.wash.service.DelivererInfo;
@@ -182,6 +186,9 @@ public interface MybatisMapper {
 	@Select("SELECT price FROM item_code WHERE item_code = #{item_code}")
 	Integer getItemPrice(@Param("item_code") Integer item_code);
 
+	@Select("SELECT name FROM item_code WHERE item_code = #{item_code}")
+	String getItemName(@Param("item_code") Integer item_code);
+	
 	@Select("SELECT value FROM coupon_code WHERE coupon_code = #{coupon_code}")
 	Integer getCouponValue(@Param("coupon_code") Integer coupon_code);
 
@@ -194,8 +201,29 @@ public interface MybatisMapper {
 	@Select("SELECT value FROM coupon WHERE cpid = #{cpid} AND uid = #{uid}")
 	Integer getCouponPrice(@Param("uid") Integer uid, @Param("cpid") Integer cpid);
 
-	@Select("SELECT oid from orders order by oid DESC LIMIT 1;")
+	@Select("SELECT oid FROM orders order by oid DESC LIMIT 1")
 	Integer getLatestOrderId();
+	
+	@Select("SELECT * FROM areacode")
+	ArrayList<Area> getAvailableAreaDatas();
+
+	@Select("SELECT acid FROM areacode WHERE area = #{area} LIMIT 1")
+	Integer getAcidWithAreaData(@Param("area") String area);
+	
+	@Select("SELECT area FROM areacode")
+	ArrayList<String> getAvailableArea();
+	
+	@Select("SELECT area_date FROM area_date WHERE acid = #{acid}")
+	ArrayList<String> getAvailableAreaDateDatas(@Param("acid") Integer acid);
+	
+	@Select("SELECT * FROM area_date WHERE acid = #{acid}")
+	ArrayList<AreaDate> getAvailableAreaDate(@Param("acid") Integer acid);
+	
+	@Select("SELECT phone FROM area_alarm WHERE acid = #{acid}")
+	ArrayList<String> getPhones(@Param("acid") Integer acid);
+	
+	@Select("SELECT * FROM orders WHERE oid = #{oid}")
+	OrderData getOrderForSingle(@Param("oid") Integer oid);
 	
 	@Insert("INSERT INTO user (email, password, name, phone, img, birthday, enabled, authority, rdate) VALUES(#{email}, SHA(#{password}), #{name}, #{phone}, #{img}, #{birthday}, #{enabled}, #{authority}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "uid", before = false, resultType = Integer.class)
@@ -224,6 +252,18 @@ public interface MybatisMapper {
 	@Insert("INSERT INTO gcm (uid, regid, rdate) VALUES(#{uid}, #{regid}, NOW()) ON DUPLICATE KEY UPDATE regid = #{regid}, rdate = NOW()")
 	Boolean updateRegid(@Param("uid") Integer uid, @Param("regid") String regid);
 
+	@Insert("INSERT INTO areacode (areacode, area) VALUES(#{areacode}, #{area})")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "acid", before = false, resultType = Integer.class)
+	Boolean insertArea(AreaData areaData);
+	
+	@Insert("INSERT INTO area_date (acid, area_date) VALUES(#{acid}, #{area_date})")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adid", before = false, resultType = Integer.class)
+	Boolean insertAreaDate(AreaDateData areaDateData);
+
+	@Insert("INSERT INTO area_alarm (acid, phone) VALUES(#{acid}, #{phone})")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "aaid", before = false, resultType = Integer.class)
+	Boolean insertAreaAlarm(AreaAlarmData areaAlarmData);
+	
 	@Update("UPDATE user SET password = SHA(#{password}) WHERE email = #{email}")
 	Boolean updatePassword(@Param("email") String email, @Param("password") String password);
 
@@ -283,5 +323,19 @@ public interface MybatisMapper {
 
 	@Delete("DELETE FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	Boolean delOrder(@Param("oid") Integer oid, @Param("uid") Integer uid);
-
+	
+	@Delete("DELETE FROM areacode WHERE acid = #{acid}")
+	Boolean delArea(@Param("acid") Integer acid);
+	
+	@Delete("DELETE FROM area_date WHERE acid = #{acid}")
+	Boolean delAllAreaDate(@Param("acid") Integer acid);
+	
+	@Delete("DELETE FROM area_alarm WHERE acid = #{acid}")
+	Boolean delAllAreaAlarm(@Param("acid") Integer acid);
+	
+	@Delete("DELETE FROM area_date WHERE adid = #{adid}")
+	Boolean delAreaDate(@Param("adid") Integer adid);
+	
+	@Delete("DELETE FROM area_alarm WHERE adid = #{aaid}")
+	Boolean delAreaAlarm(@Param("aaid") Integer aaid);
 }

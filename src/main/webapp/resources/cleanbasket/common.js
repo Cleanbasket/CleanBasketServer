@@ -1059,6 +1059,10 @@ function couponApply() {
 					coupon.find(".coupon-text").text("가입감사 쿠폰. 2000원 할인권!");
 				} else if (val.kind == 1) {
 					coupon.find(".coupon-text").text("친구추천 쿠폰. 2000원 할인권!");
+				} else if (val.kind == 2) {
+					coupon.find(".coupon-text").text("10,000원 할인권!");
+				} else if (val.kind == 3) {
+					coupon.find(".coupon-text").text("20,000원 할인권!");
 				}
 				divWarp.append(coupon);
 			});
@@ -1629,7 +1633,7 @@ function setDatePicker() {
 	pickupDate.on("hide", function(e) {
 		setDatetimeLimit();
 		var dayAfter2 = pickupDate.datepicker("getDate");
-		dayAfter2.setDate(dayAfter2.getDate() + 2);
+		dayAfter2.setDate(dayAfter2.getDate() + 3);
 		var dayAfter8 = pickupDate.datepicker("getDate");
 		dayAfter8.setDate(dayAfter8.getDate() + 8);
 		dropoffDate.datepicker("setStartDate", dayAfter2);
@@ -1655,7 +1659,7 @@ function setDatePicker() {
 		pickupDate.datepicker("setDate", dayNow);
 
 		var dayAfter2 = new Date(year, month, day);
-		dayAfter2.setDate(dayAfter2.getDate() + 2);
+		dayAfter2.setDate(dayAfter2.getDate() + 3);
 		var dayAfter8 = new Date(year, month, day);
 		dayAfter8.setDate(dayAfter8.getDate() + 8);
 		dropoffDate.datepicker("setStartDate", dayAfter2);

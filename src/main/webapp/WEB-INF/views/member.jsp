@@ -34,24 +34,13 @@
 					</div>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<a href="../admin/order" onfocus="this.blur()">주문현황</a>
-					</li>
-					<li>
-						<a href="../admin/pickup" onfocus="this.blur()">수거관리</a>
-					</li>
-					<li>
-						<a href="../admin/dropoff" onfocus="this.blur()">배달관리</a>
-					</li>
-					<li class="active">
-						<a href="../admin/member" onfocus="this.blur()">회원관리</a>
-					</li>
-					<li>
-						<a href="../admin/deliverer" onfocus="this.blur()">배달자관리</a>
-					</li>
-					<li>
-						<a href="../logout" onfocus="this.blur()">로그아웃</a>
-					</li>
+					<li><a href="../admin/order" onfocus="this.blur()">주문현황</a></li>
+					<li><a href="../admin/pickup" onfocus="this.blur()">수거관리</a></li>
+					<li><a href="../admin/dropoff" onfocus="this.blur()">배달관리</a></li>
+					<li class="active"><a href="../admin/member" onfocus="this.blur()">회원관리</a></li>
+					<li><a href="../admin/deliverer" onfocus="this.blur()">배달자관리</a></li>
+					<li><a href="../admin/area" onfocus="this.blur()">지역관리</a></li>																				
+					<li><a href="../logout" onfocus="this.blur()">로그아웃</a></li>
 				</ul>
 			</div>
 		</div>

@@ -22,6 +22,8 @@ public class Constant {
 	public static final int IMPOSSIBLE = 15;
 	public static final int ACCOUNT_DUPLICATION = 16;
 	public static final int SESSION_VALID = 17;
+	public static final int ADDRESS_UNVAILABLE = 18;
+	public static final int DATE_UNVAILABLE = 19;
 
 	public static final int PUSH_ASSIGN_PICKUP = 100;
 	public static final int PUSH_ASSIGN_DROPOFF = 101;

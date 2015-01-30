@@ -8,11 +8,11 @@
 	<bean id="gson" class="com.google.gson.Gson" />
 
 	<bean id="email" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smart.whoismail.net" />
+		<property name="host" value="dsmtp.naver.com " />
 		<property name="port" value="587" />
 		<property name="protocol" value="smtp" />
-		<property name="username" value="password@cleanbasket.co.kr" />
-		<property name="password" value="clba2014!" />
+		<property name="username" value="help@cleanbasket.co.kr" />
+		<property name="password" value="fastdel2015@" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
