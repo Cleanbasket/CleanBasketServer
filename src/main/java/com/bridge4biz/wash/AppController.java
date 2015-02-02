@@ -51,7 +51,7 @@ public class AppController {
 		Integer value = dao.addUserForMember(userData);
 		switch (value) {
 		case Constant.SUCCESS:
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_MEMBER_JOIN, userData.uid, 0));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_MEMBER_JOIN, userData.uid, 0));
 			constant.setConstant(Constant.SUCCESS, "일반회원 가입 성공 : SUCCESS");
 			break;
 		case Constant.ERROR:
@@ -78,7 +78,7 @@ public class AppController {
 		Integer uid = dao.getUid(auth.getName());
 		Integer value = dao.addOrder(orderData, uid);
 		if (value == Constant.SUCCESS) {
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_ADD, uid, orderData.oid));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_ADD, uid, orderData.oid));
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS", orderData.order_number);
 		} 
 		else if (value == Constant.ADDRESS_UNVAILABLE) {
@@ -99,7 +99,7 @@ public class AppController {
 		Integer uid = dao.getUid(auth.getName());
 		Integer value = dao.delOrder(orderData, uid);
 		if (value == Constant.SUCCESS) {
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_CANCEL, uid, orderData.oid));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_CANCEL, uid, orderData.oid));
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문취소 성공 : SUCCESS");
 		} else if (value == Constant.IMPOSSIBLE) {
 			return constant.setConstant(Constant.IMPOSSIBLE, "주문취소가 불가능한 상태가 입니다. : IMPOSSIBLE");
@@ -215,7 +215,7 @@ public class AppController {
 		Integer value = dao.addUserForDeliverer(user, file);
 		switch (value) {
 		case Constant.SUCCESS:
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_DELIVERER_JOIN, user.uid, 0));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_DELIVERER_JOIN, user.uid, 0));
 			constant.setConstant(Constant.SUCCESS, "배달자 회원가입 성공 : SUCCESS");
 			break;
 		case Constant.ERROR:
@@ -244,7 +244,7 @@ public class AppController {
 	public Constant delivererPickupComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "수거완료 처리 실패 : ERROR");
@@ -264,7 +264,7 @@ public class AppController {
 	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
 		Boolean success = dao.updateDeliveryRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			SocketIO.broadCast(new PushMessage(Constant.PUSH_DROPOFF_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
+//			SocketIO.broadCast(new PushMessage(Constant.PUSH_DROPOFF_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");

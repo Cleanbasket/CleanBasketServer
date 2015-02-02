@@ -241,6 +241,14 @@ var addressStorage = {
 	addressRemainder : ""
 };
 
+var addressCityData = [ "서울", "인천" ];
+
+var addressDistrictData = [ 
+                            [ "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구",
+                              "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구", "서대문구", "서초구", "성동구", 
+                              "성북구", "송파구", "양천구", "영등포구", "용산구", "은평구", "종로구", "중구", "중랑구" ],
+                            [ "연수구", "남구", "남동구", "중구", "동구" ] 
+                            ];
 var addressData = [
 		[ "개포1동", "개포2동", "개포4동", "개포동", "논현1동", "논현2동", "논현동", "대치1동", "대치2동", "대치4동", "대치동", "도곡1동", "도곡2동", "도곡동", "삼성1동", "삼성2동", "삼성동", "세곡동", "수서동", "신사동", "압구정동", "역삼1동", "역삼2동", "역삼동", "율현동",
 				"일원1동", "일원2동", "일원동", "일원본동", "자곡동", "청담동" ],
@@ -286,6 +294,18 @@ var addressData = [
 				"충무로4가", "충무로5가", "충정로1가", "태평로1가", "태평로2가", "필동1가", "필동2가", "필동3가", "황학동", "회현동1가", "회현동2가", "회현동3가", "흥인동" ],
 		[ "망우3동", "망우동", "망우본동", "면목2동", "면목3.8동", "면목4동", "면목5동", "면목7동", "면목동", "면목본동", "묵1동", "묵2동", "묵동", "상봉1동", "상봉2동", "상봉동", "신내1동", "신내2동", "신내동", "중화1동", "중화2동", "중화동" ] ];
 
+var addressData2 = [
+                    [ "동춘동", "선학동", "송도동", "연수동", "옥련동", "청학동" ],
+                    [ "관교동", "도화동", "문학동", "숭의동", "용현동", "주안동", "학익동" ],
+                    [ "간석동", "고잔동", "구월동", "남촌동", "논현동", "도림동", "만수동", "서창동", "수산동", "운연동", "장수동" ],
+                    [ "경동", "관동1가", "관동2가", "관동3가", "남북동", "내동", "답동", "덕교동", "도원동", "무의동", "북성동1가",
+                      "북성동2가", "북성동3가", "사동", "선린동", "선화동", "송월동1가", "송월동2가", "송월동3가", "송학동1가", "송학동2가",
+                      "송학동3가", "신생동", "신포동", "신흥동1가", "신흥동2가", "신흥동3가", "용동", "유동", "율목동", "을왕동", "인현동",
+                      "전동", "중산동", "중앙동1가", "중앙동2가", "중앙동3가", "중앙동4가", "항동1가", "항동2가", "항동3가", "항동4가",
+                      "항동5가", "항동6가", "항동7가", "해안동1가", "해안동2가", "해안동3가", "해안동4가" ],
+                      [ "금곡동", "만석동", "송림동", "송현동", "창영동", "화수동", "화평동" ] 
+                    ];
+
 function setAddressHtml() {
 	getHtmlCode("./address", function(html) {
 		var body = $("body").append(html);
@@ -327,7 +347,58 @@ function setAddressHtml() {
 
 			addressModal.modal("hide");
 		});
+		
+		var selectedCity = $(".bootstrap-select.address-first").find("a");
+		selectedCity.click(function() {
+			var index = selectedCity.index(this);
+			var selectDistrict = $("select.address-second");
+			selectDistrict.find("option").remove();
+			for (var i = 0; i < addressDistrictData[index].length; i++) {
+				selectDistrict.append("<option value='" + addressDistrictData[index][i] + "'>" + addressDistrictData[index][i] + "</option>");
+			}
+			$(".address-second").selectpicker('refresh');
+			
+			if(index == 0) {
+				var selected = $(".bootstrap-select.address-second").find("a");
+				var select = $("select.address-third");
+				select.find("option").remove();
+				for (var i = 0; i < addressData[0].length; i++) {
+					select.append("<option value='" + addressData[0][i] + "'>" + addressData[0][i] + "</option>");
+				}
+				$(".address-third").selectpicker('refresh');
 
+				selected.click(function() {
+					var index = selected.index(this);
+					var select = $("select.address-third");
+					select.find("option").remove();
+					for (var i = 0; i < addressData[index].length; i++) {
+						select.append("<option value='" + addressData[index][i] + "'>" + addressData[index][i] + "</option>");
+					}
+					$(".address-third").selectpicker('refresh');
+				});
+			}
+			if(index == 1) {
+				var selected = $(".bootstrap-select.address-second").find("a");
+				var select = $("select.address-third");
+				select.find("option").remove();
+				for (var i = 0; i < addressData2[0].length; i++) {
+					select.append("<option value='" + addressData2[0][i] + "'>" + addressData2[0][i] + "</option>");
+				}
+				$(".address-third").selectpicker('refresh');
+
+				selected.click(function() {
+					var index = selected.index(this);
+					var select = $("select.address-third");
+					select.find("option").remove();
+					for (var i = 0; i < addressData[index].length; i++) {
+						select.append("<option value='" + addressData2[index][i] + "'>" + addressData2[index][i] + "</option>");
+					}
+					$(".address-third").selectpicker('refresh');
+				});
+				
+			}
+		});
+		
 		var selected = $(".bootstrap-select.address-second").find("a");
 		selected.click(function() {
 			var index = selected.index(this);
@@ -336,7 +407,6 @@ function setAddressHtml() {
 			for (var i = 0; i < addressData[index].length; i++) {
 				select.append("<option value='" + addressData[index][i] + "'>" + addressData[index][i] + "</option>");
 			}
-			$(".address-third").selectpicker('refresh');
 			$(".address-third").selectpicker('refresh');
 		});
 	});
@@ -976,8 +1046,6 @@ function orderCalculationProcess(calcModal, item, coupon) {
 	});
 
 	$("#button-order-decide").click(function() {
-		if ($("#order-address-text").text().indexOf("강남구") != -1 || $("#order-address-text").text().indexOf("서초구") != -1 || $("#order-address-text").text().indexOf("용산") != -1 || $("#order-address-text").text().indexOf("마포구") != -1 || $("#order-address-text").text().indexOf("성동구") != -1) {
-
 			var clacData = priceCalculation();
 
 			if (clacData.price < 10000) {
@@ -1014,12 +1082,19 @@ function orderCalculationProcess(calcModal, item, coupon) {
 					}),
 					success : function(json) {
 						var constant = new Constant();
-						if (json.constant == constant.SUCCESS) {
+						if (json.constant == constant.AREA_UNAVAILABLE) {
+							alert("죄송합니다. 서비스 가능 지역이 아닙니다.");						
+						}
+						else if(json.constant == constant.DATE_UNAVAILABLE) {
+							alert("죄송합니다. 해당 지역은 해당 수거배달일에 휴무입니다.");							
+						} 
+						else if(json.constant == constant.SUCCESS) {
 							alert("주문이 접수되었습니다.");
 							setOrderInfo();
 							setCoupon();
 							calcModal.modal("hide");
-						} else {
+						} 
+						else {
 							alert("오류가 발생하였습니다.");
 						}
 					},
@@ -1028,10 +1103,7 @@ function orderCalculationProcess(calcModal, item, coupon) {
 					}
 				});
 			});
-		} else {
-			alert("강남구와 서초구 지역만 가능합니다.");
-		}
-	});
+		});
 }
 
 function couponApply() {
@@ -1274,6 +1346,57 @@ function setAddressSettings(type) {
 			});
 		});
 
+		var selectedCity = $(".bootstrap-select.address-first").find("a");
+		selectedCity.click(function() {
+			var index = selectedCity.index(this);
+			var selectDistrict = $("select.address-second");
+			selectDistrict.find("option").remove();
+			for (var i = 0; i < addressDistrictData[index].length; i++) {
+				selectDistrict.append("<option value='" + addressDistrictData[index][i] + "'>" + addressDistrictData[index][i] + "</option>");
+			}
+			$(".address-second").selectpicker('refresh');
+			
+			if(index == 0) {
+				var selected = $(".bootstrap-select.address-second").find("a");
+				var select = $("select.address-third");
+				select.find("option").remove();
+				for (var i = 0; i < addressData[0].length; i++) {
+					select.append("<option value='" + addressData[0][i] + "'>" + addressData[0][i] + "</option>");
+				}
+				$(".address-third").selectpicker('refresh');
+
+				selected.click(function() {
+					var index = selected.index(this);
+					var select = $("select.address-third");
+					select.find("option").remove();
+					for (var i = 0; i < addressData[index].length; i++) {
+						select.append("<option value='" + addressData[index][i] + "'>" + addressData[index][i] + "</option>");
+					}
+					$(".address-third").selectpicker('refresh');
+				});
+			}
+			if(index == 1) {
+				var selected = $(".bootstrap-select.address-second").find("a");
+				var select = $("select.address-third");
+				select.find("option").remove();
+				for (var i = 0; i < addressData2[0].length; i++) {
+					select.append("<option value='" + addressData2[0][i] + "'>" + addressData2[0][i] + "</option>");
+				}
+				$(".address-third").selectpicker('refresh');
+				
+				selected.click(function() {
+					var index = selected.index(this);
+					var select = $("select.address-third");
+					select.find("option").remove();
+					for (var i = 0; i < addressData[index].length; i++) {
+						select.append("<option value='" + addressData2[index][i] + "'>" + addressData2[index][i] + "</option>");
+					}
+					$(".address-third").selectpicker('refresh');
+				});
+			}
+			
+		});
+		
 		var selected = $(".bootstrap-select.address-second").find("a");
 		selected.click(function() {
 			var index = selected.index(this);
@@ -1283,10 +1406,9 @@ function setAddressSettings(type) {
 				select.append("<option value='" + addressData[index][i] + "'>" + addressData[index][i] + "</option>");
 			}
 			$(".address-third").selectpicker('refresh');
-			$(".address-third").selectpicker('refresh');
 		});
 	});
-}
+}	
 
 function setCoupon() {
 	getCouponData(function(coupon) {
@@ -1301,7 +1423,11 @@ function setCoupon() {
 					divWarp.append(createCouponElement("가입감사 쿠폰. 2000원 할인권!"));
 				} else if (couponData[i].kind == 1) {
 					divWarp.append(createCouponElement("친구추천 쿠폰. 2000원 할인권!"));
-				}
+				} else if (couponData[i].kind == 2) {
+					divWarp.append(createCouponElement("10,000원 할인권!"));
+				} else if (couponData[i].kind == 3) {
+					divWarp.append(createCouponElement("20,000원 할인권!"));
+				} 
 			}
 			couponList.append(divWarp.html());
 		} else {
@@ -2071,6 +2197,8 @@ var Constant = function() {
 	this.IMPOSSIBLE = 15;
 	this.ACCOUNT_DUPLICATION = 16;
 	this.SESSION_VALID = 17;
+	this.AREA_UNAVAILABLE = 18;
+	this.DATE_UNAVAILABLE = 19;
 	this.PUSH_ASSIGN_PICKUP = 100;
 	this.PUSH_ASSIGN_DROPOFF = 101;
 	this.PUSH_SOON_PICKUP = 102

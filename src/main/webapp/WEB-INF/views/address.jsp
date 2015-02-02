@@ -14,6 +14,7 @@
 						<span style="width: 60px; display: inline-block;">시/도</span>
 						<select class="address-first">
 							<option value="서울">서울</option>
+							<option value="인천">인천</option>							
 						</select>
 					</div>
 					<div style="margin-bottom: 10px;">
