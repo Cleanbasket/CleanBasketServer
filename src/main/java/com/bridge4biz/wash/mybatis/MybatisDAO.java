@@ -229,7 +229,7 @@ public class MybatisDAO {
 			
 			Integer acid = mapper.getAcidWithAreaData(addr);
 			
-			if (checkUnavailableDate(acid)) {
+			if (checkUnavailableDate(acid, orderData.pickup_date, orderData.dropoff_date)) {
 				return Constant.DATE_UNVAILABLE;
 			}
 			
@@ -311,24 +311,24 @@ public class MybatisDAO {
 			 */
 			System.out.println("실패");
 			System.out.println(result.getErrorString()); // 에러 메시지
+			sendErrorSMS(result.getErrorString());
 		}		
 	}
 
-	private Boolean checkUnavailableDate(Integer acid) {
+	private Boolean checkUnavailableDate(Integer acid, String pickup_date, String dropoff_date) {
 		// 오늘이 수거배달 제한일인지 확인합니다
 		ArrayList<String> areaDateDatas = mapper.getAvailableAreaDateDatas(acid);
 		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
-		// get current date time with Date()
-		Date date = new Date();
-		String today = dateFormat.format(date);
-					
-		for(String areaDateData : areaDateDatas) {
-			System.out.println(today + " / " + areaDateData);
-			
-			if(areaDateData.startsWith(today))
-				return true;
+		try {
+			String pickup_date_split = pickup_date.split(" ")[0];
+			String dropoff_date_split = dropoff_date.split(" ")[0];
+	
+			for(String areaDateData : areaDateDatas) {			
+				if(areaDateData.startsWith(pickup_date_split) || areaDateData.startsWith(dropoff_date_split))
+					return true;
+			}
+		} catch(Exception e) {
+			return false;
 		}
 		
 		return false;
@@ -404,8 +404,8 @@ public class MybatisDAO {
 		
 		String stuff = "[주문취소]주문번호:" + orderData.order_number + "/수거:" + orderData.pickup_date + "/배달:" + orderData.dropoff_date;
 	
-		set.setText(stuff); // 문자내용 SMS(90바이트), LMS(장문 2,000바이트), MMS(장문+이미지)
-
+		set.setText(stuff); // 문자내용 SMS(90바이트), LMS(장문 2,000바이트), MMS(장문+이미지)	
+		
 		SendResult result = coolsms.send(set); // 보내기&전송결과받기
 
 		if (result.getErrorString() == null) {
@@ -424,9 +424,46 @@ public class MybatisDAO {
 			 */
 			System.out.println("실패");
 			System.out.println(result.getErrorString()); // 에러 메시지
+			sendErrorSMS(result.getErrorString());
 		}	
 	}
 
+	private void sendErrorSMS(String msg) {
+		Coolsms coolsms = new Coolsms();
+		
+		Set set = new Set();
+		set.setTo("01087537711"); // 받는사람 번호
+		set.setFrom("07075521385"); // 보내는 사람 번호
+		
+		String stuff = "SMS 에러 발생" + msg;
+	
+		if(stuff.length() > 80) {
+			set.setType("LMS");
+		}
+		
+		set.setText(stuff); // 문자내용 SMS(90바이트), LMS(장문 2,000바이트), MMS(장문+이미지)
+
+		SendResult result = coolsms.send(set); // 보내기&전송결과받기
+
+		if (result.getErrorString() == null) {
+			/*
+			 *  메시지 보내기 성공 및 전송결과 출력
+			 */
+			System.out.println("성공");			
+			System.out.println(result.getGroup_id()); // 그룹아이디			
+			System.out.println(result.getResult_code()); // 결과코드
+			System.out.println(result.getResult_message());  // 결과 메시지
+			System.out.println(result.getSuccessCount()); // 성공개수
+			System.out.println(result.getErrorCount());  // 여러개 보낼시 오류난 메시지 수
+		} else {
+			/*
+			 * 메시지 보내기 실패
+			 */
+			System.out.println("에러 메세지 전송 실패");
+			System.out.println(result.getErrorString()); // 에러 메시지
+		}	
+	}
+	
 	public Member getMember(String email) {
 		Member member = mapper.getMember(email);
 		member.address = mapper.getAddress(member.uid);

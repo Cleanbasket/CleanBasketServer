@@ -8,16 +8,16 @@
 	<bean id="gson" class="com.google.gson.Gson" />
 
 	<bean id="email" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-		<property name="host" value="smtp.works.naver.com" />
+		<property name="host" value="smtp.gmail.com" />
 		<property name="port" value="465" />
 		<property name="protocol" value="smtp" />
-		<property name="username" value="help@cleanbasket.co.kr" />
+		<property name="username" value="washappkorea@gmail.com" />
 		<property name="password" value="fastdel2015@" />
 		<property name="javaMailProperties">
 			<props>
 				<prop key="mail.smtp.auth">true</prop>
-				<prop key="mail.smtp.starttls.enable">true</prop>
-				<prop key="mail.smtp.ssl.trust">smtp.works.naver.com</prop>
+				<prop key="mail.smtp.ssl.enable">true</prop>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
 			</props>
 		</property>
 	</bean>

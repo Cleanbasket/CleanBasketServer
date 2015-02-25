@@ -30,8 +30,6 @@ import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
-import com.bridge4biz.wash.util.PushMessage;
-import com.bridge4biz.wash.util.SocketIO;
 import com.google.gson.Gson;
 
 @Controller
@@ -275,8 +273,8 @@ public class AppController {
 	@ResponseBody
 	public Constant passwordInquiry(Constant constant, EmailData email, @RequestBody UserData userData) {
 		email.setFrom("password@cleanbasket.co.kr");
-		email.setFromPersonal("비밀번호고객지원");
-		email.setSubject("CleanBasket 임시비밀번호 입니다.");
+		email.setFromPersonal("Password Support");
+		email.setSubject("Clean Basket Temporary Password");
 		Integer result = dao.passwordInquiry(userData, emailService, email);
 		switch (result) {
 		case 0:

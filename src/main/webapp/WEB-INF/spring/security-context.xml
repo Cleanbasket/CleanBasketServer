@@ -8,7 +8,7 @@
 			authentication-failure-handler-ref="loginFailureHandler" />
 		<remember-me key="*E87F1*6E91250B0BF871D2B218E0C870DCF0F61ACA4D17*28C2A5" remember-me-parameter="remember" token-validity-seconds="-1" />
 		<session-management>
-			<concurrency-control max-sessions="30" expired-url="/admin/login" />
+			<concurrency-control max-sessions="99999" expired-url="/admin/login" />
 		</session-management>
 	</http>
 
