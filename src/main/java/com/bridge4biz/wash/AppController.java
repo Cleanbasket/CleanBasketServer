@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +31,8 @@ import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
+import com.bridge4biz.wash.util.PushMessage;
+import com.bridge4biz.wash.util.SocketIO;
 import com.google.gson.Gson;
 
 @Controller
@@ -62,6 +65,42 @@ public class AppController {
 		return constant;
 	}
 
+	@RequestMapping(method=RequestMethod.GET, value = "/item")
+	@ResponseBody
+	public Constant getItemList(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getItemInfo()));		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/notice")
+	@ResponseBody
+	public Constant getNotice(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getNotice()));		
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/mileage")
+	@ResponseBody
+	public Constant getMileage(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getMileage()));		
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/appinfo")
+	@ResponseBody
+	public Constant getAppInfo(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getAppInfo()));		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/code")
+	@ResponseBody
+	public Constant getAuthorizationCode(Constant constant, Gson gson) {
+		Boolean success = dao.getAuthorizationCode();
+		if(success)
+			return constant.setConstant(Constant.SUCCESS, "인증코드 문자 전송 성공");
+		
+		return constant.setConstant(Constant.ERROR, "인증코드 문자 전송 실패");
+	}
+	
 	@Secured("ROLE_MEMBER")
 	@RequestMapping(value = "/member/order")
 	@ResponseBody
@@ -301,7 +340,7 @@ public class AppController {
 	}
 
 	@Secured({ "ROLE_DELIVERER", "ROLE_MEMBER" })
-	@RequestMapping(value = "/regid")
+	@RequestMapping(method=RequestMethod.POST, value = "/regid", consumes = { "application/json" })
 	@ResponseBody
 	public Constant regid(@RequestBody Map<String, String> data, Constant constant, Authentication auth, Gson gson) {
 		String regid = data.get("regid");

@@ -19,6 +19,7 @@ public class Order {
 	public String pickup_date = "";
 	public String dropoff_date = "";
 	public String rdate = "";
+	public Integer mileage = 0;
 	public Deliverer pickupInfo = null;
 	public Deliverer dropoffInfo = null;
 	public ArrayList<Item> item = null;

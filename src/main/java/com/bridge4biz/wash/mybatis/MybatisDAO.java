@@ -2,10 +2,12 @@ package com.bridge4biz.wash.mybatis;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -26,9 +28,15 @@ import com.bridge4biz.wash.data.OrderData;
 import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
+import com.bridge4biz.wash.gcm.Message;
+import com.bridge4biz.wash.gcm.MulticastResult;
+import com.bridge4biz.wash.gcm.Result;
+import com.bridge4biz.wash.gcm.Sender;
 import com.bridge4biz.wash.service.Address;
+import com.bridge4biz.wash.service.AppInfo;
 import com.bridge4biz.wash.service.Area;
 import com.bridge4biz.wash.service.AreaDate;
+import com.bridge4biz.wash.service.Category;
 import com.bridge4biz.wash.service.Coupon;
 import com.bridge4biz.wash.service.Deliverer;
 import com.bridge4biz.wash.service.DelivererInfo;
@@ -36,10 +44,13 @@ import com.bridge4biz.wash.service.DelivererWork;
 import com.bridge4biz.wash.service.DropoffState;
 import com.bridge4biz.wash.service.Item;
 import com.bridge4biz.wash.service.ItemCode;
+import com.bridge4biz.wash.service.ItemInfo;
 import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.service.MemberInfo;
 import com.bridge4biz.wash.service.MemberOrderInfo;
+import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
+import com.bridge4biz.wash.service.OrderItem;
 import com.bridge4biz.wash.service.OrderState;
 import com.bridge4biz.wash.service.PickupState;
 import com.bridge4biz.wash.sms.Coolsms;
@@ -50,10 +61,12 @@ import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
 import com.bridge4biz.wash.util.RandomNumber;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 public class MybatisDAO {
 
 	private MybatisMapper mapper;
+	
 	@Autowired
 	private MybatisDAO(MybatisMapper mapper, PlatformTransactionManager platformTransactionManager) {
 		this.mapper = mapper;
@@ -257,7 +270,7 @@ public class MybatisDAO {
 				mapper.updateCoupon(orderData.uid, orderData.oid, cpid);
 			}
 			
-			sendSMS(orderData, fullAddr, phones);
+//			sendSMS(orderData, fullAddr, phones);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// platformTransactionManager.rollback(status);
@@ -373,8 +386,9 @@ public class MybatisDAO {
 			} else if (state >= 2) {
 				return Constant.IMPOSSIBLE;
 			} else {
-				OrderData orderDataFromDB = mapper.getOrderForSingle(orderData.oid);
-				sendDeleteSMS(orderDataFromDB, uid);
+//				OrderData orderDataFromDB = mapper.getOrderForSingle(orderData.oid);
+				deletePush(uid);
+//				sendDeleteSMS(orderDataFromDB, uid);
 				mapper.updateCouponUsedCancel(orderData.oid, uid);
 				mapper.delOrder(orderData.oid, uid);
 			}
@@ -387,6 +401,28 @@ public class MybatisDAO {
 		return Constant.SUCCESS;
 	}
 
+	private void deletePush(int uid) {
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
+		String regId = mapper.getRegid(uid);
+		System.out.println(regId + "보");
+		Message message = new Message.Builder().addData("msg", "push notify").build();
+		List<String> list = new ArrayList<String>();
+		list.add(regId);
+		MulticastResult multiResult;
+		try {
+			multiResult = sender.send(message, list, 3);
+			if (multiResult != null) {
+				List<Result> resultList = multiResult.getResults();
+				for (Result result : resultList) {
+					System.out.println(result.getMessageId());
+				}
+		}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void sendDeleteSMS(OrderData orderData, Integer uid) {
 		Address address = mapper.getAddressForSingle(orderData.adrid, uid);
 		String district = address.address;
@@ -474,6 +510,18 @@ public class MybatisDAO {
 		return mapper.getItemCode();
 	}
 
+	public ItemInfo getItemInfo() {
+		ItemInfo itemInfo = new ItemInfo();
+		itemInfo.categories = mapper.getCategory();
+		itemInfo.orderItems = mapper.getItemCode();
+		
+		return itemInfo;
+	}
+
+	public Integer getMileage() {
+		return 500;
+	}
+	
 	public ArrayList<Coupon> getAvailableCoupon(Integer uid) {
 		return mapper.getAvailableCoupon(uid);
 	}
@@ -485,6 +533,7 @@ public class MybatisDAO {
 			order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
 			order.item = mapper.getItem(order.oid);
 			order.coupon = mapper.getCoupon(order.oid, uid);
+			order.mileage = 500;
 		}
 		
 		return orders;
@@ -844,5 +893,19 @@ public class MybatisDAO {
 
 	public Boolean insertAreaAlarm(int acid, String phone) {
 		return mapper.insertAreaAlarm(new AreaAlarmData(acid, phone));
+	}
+
+	public Boolean getAuthorizationCode() {
+		
+		return null;
+	}
+
+	public AppInfo getAppInfo() {
+		return mapper.getAppInfo();
+	}
+
+	public ArrayList<Notice> getNotice() {
+		// TODO Auto-generated method stub
+		return mapper.getNotice();
 	}
 }

@@ -80,6 +80,13 @@ public class WebController {
 		return "privacy";
 	}
 
+
+	@RequestMapping(value = "/service-info")
+	public String serviceInfo() {
+		return "service-info";
+	}
+
+	
 	@RequestMapping(value = "/menu")
 	public String menu() {
 		return "menu";

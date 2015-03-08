@@ -23,8 +23,10 @@ import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Address;
+import com.bridge4biz.wash.service.AppInfo;
 import com.bridge4biz.wash.service.Area;
 import com.bridge4biz.wash.service.AreaDate;
+import com.bridge4biz.wash.service.Category;
 import com.bridge4biz.wash.service.Coupon;
 import com.bridge4biz.wash.service.Deliverer;
 import com.bridge4biz.wash.service.DelivererInfo;
@@ -34,10 +36,12 @@ import com.bridge4biz.wash.service.ItemCode;
 import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.service.MemberInfo;
 import com.bridge4biz.wash.service.MemberOrderInfo;
+import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
+import com.bridge4biz.wash.service.OrderItem;
+import com.google.gson.JsonElement;
 
 public interface MybatisMapper {
-
 	@Select("SELECT 1")
 	Integer selectTest();
 
@@ -74,12 +78,16 @@ public interface MybatisMapper {
 	@Select("SELECT phone FROM user WHERE uid = #{uid}")
 	String getPhone(@Param("uid") Integer uid);
 
+	
+	
 	@Select("SELECT * FROM address WHERE adrid = #{adrid} AND uid = #{uid}")
 	Address getAddressForSingle(@Param("adrid") Integer adrid, @Param("uid") Integer uid);
 
 	@Select("SELECT * FROM address WHERE uid = #{uid}")
 	ArrayList<Address> getAddress(@Param("uid") Integer uid);
 
+	
+	
 	@Select("SELECT * FROM coupon_code WHERE kind = 0")
 	ArrayList<CouponCodeData> getOrderCoupon();
 
@@ -92,6 +100,8 @@ public interface MybatisMapper {
 	@Select("SELECT serial_number FROM coupon WHERE coupon_code = #{coupon_code} AND uid = #{uid} AND serial_number is not NULL")
 	String getSerialNumberIssueCheck(@Param("coupon_code") Integer coupon_code, @Param("uid") Integer uid);
 
+	
+	
 	@Select("SELECT * FROM item_code")
 	ArrayList<ItemCode> getItemCode();
 
@@ -153,15 +163,9 @@ public interface MybatisMapper {
 	@Select("SELECT SUM(count) FROM item WHERE oid = #{oid}")
 	Integer getSumCountForItem(@Param("oid") Integer oid);
 
-	@Select("SELECT regid FROM gcm WHERE uid = #{uid}")
-	String getRegid(@Param("uid") Integer uid);
-
-	@Select("SELECT COUNT(*) FROM gcm WHERE regid = #{regid}")
-	Integer getCanonicalRegidCount(@Param("regid") String canonicalRegId);
-
-	@Select("SELECT uid FROM gcm WHERE regid = #{regid}")
-	Integer getUidFromGcm(@Param("regid") String regid);
-
+	
+	
+	
 	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER'")
 	ArrayList<MemberInfo> getMemberInfo();
 
@@ -249,9 +253,6 @@ public interface MybatisMapper {
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "cpid", before = false, resultType = Integer.class)
 	Boolean addRecommendationCoupon(CouponData couponData);
 
-	@Insert("INSERT INTO gcm (uid, regid, rdate) VALUES(#{uid}, #{regid}, NOW()) ON DUPLICATE KEY UPDATE regid = #{regid}, rdate = NOW()")
-	Boolean updateRegid(@Param("uid") Integer uid, @Param("regid") String regid);
-
 	@Insert("INSERT INTO areacode (areacode, area) VALUES(#{areacode}, #{area})")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "acid", before = false, resultType = Integer.class)
 	Boolean insertArea(AreaData areaData);
@@ -315,11 +316,7 @@ public interface MybatisMapper {
 	@Update("UPDATE coupon SET enabled = 1 WHERE coupon_code = #{coupon_code} AND serial_number = #{serial_number}")
 	Boolean updateRecommendationCouponEnable(@Param("coupon_code") Integer coupon_code, @Param("serial_number") String serial_number);
 
-	@Delete("UPDATE gcm SET regid = null WHERE regid = #{regid}")
-	Boolean clearAllRegid(@Param("regid") String regid);
 
-	@Delete("UPDATE gcm SET regid = null WHERE uid = #{uid}")
-	Boolean clearRegid(@Param("uid") Integer uid);
 
 	@Delete("DELETE FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	Boolean delOrder(@Param("oid") Integer oid, @Param("uid") Integer uid);
@@ -338,4 +335,38 @@ public interface MybatisMapper {
 	
 	@Delete("DELETE FROM area_alarm WHERE adid = #{aaid}")
 	Boolean delAreaAlarm(@Param("aaid") Integer aaid);
+	
+	
+
+	@Select("SELECT regid FROM gcm WHERE uid = #{uid}")
+	String getRegid(@Param("uid") Integer uid);
+
+	@Select("SELECT COUNT(*) FROM gcm WHERE regid = #{regid}")
+	Integer getCanonicalRegidCount(@Param("regid") String canonicalRegId);
+
+	@Select("SELECT uid FROM gcm WHERE regid = #{regid}")
+	Integer getUidFromGcm(@Param("regid") String regid);
+	
+	@Insert("INSERT INTO gcm (uid, regid, rdate) VALUES(#{uid}, #{regid}, NOW()) ON DUPLICATE KEY UPDATE regid = #{regid}, rdate = NOW()")
+	Boolean updateRegid(@Param("uid") Integer uid, @Param("regid") String regid);
+	
+	@Delete("UPDATE gcm SET regid = null WHERE regid = #{regid}")
+	Boolean clearAllRegid(@Param("regid") String regid);
+
+	@Delete("UPDATE gcm SET regid = null WHERE uid = #{uid}")
+	Boolean clearRegid(@Param("uid") Integer uid);
+	
+	
+	
+	@Select("SELECT * FROM order_item")
+	ArrayList<OrderItem> getOrderItems();
+
+	@Select("SELECT * FROM category")
+	ArrayList<Category> getCategory();
+
+	@Select("SELECT * FROM app_info ORDER BY aiid DESC LIMIT 1")
+	AppInfo getAppInfo();
+
+	@Select("SELECT * FROM notice ORDER BY nid DESC")
+	ArrayList<Notice> getNotice();
 }

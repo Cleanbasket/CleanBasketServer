@@ -36,5 +36,4 @@ public class SocketIO {
 		message.put("oid", pushMessage.oid);
 		socket.emit("message", message);
 	}
-
 }

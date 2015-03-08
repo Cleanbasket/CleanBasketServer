@@ -4,7 +4,7 @@ public class Constant {
 	public int constant = 0;
 	public String message = "";
 	public String data = "";
-
+	
 	public static final int SESSION_EXPIRED = 0;
 	public static final int SUCCESS = 1;
 	public static final int ERROR = 2;
