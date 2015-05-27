@@ -1,4 +1,8 @@
 # LaundryServer
+### versionName 1.0.6
+##### 2015. 2. 2
++ 인천 선택 기능 추가
+
 ### versionName 1.0.5
 ##### 2015. 1. 31
 + 날짜 제한 추가
