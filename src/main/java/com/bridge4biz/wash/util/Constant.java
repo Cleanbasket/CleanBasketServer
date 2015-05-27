@@ -22,8 +22,11 @@ public class Constant {
 	public static final int IMPOSSIBLE = 15;
 	public static final int ACCOUNT_DUPLICATION = 16;
 	public static final int SESSION_VALID = 17;
-	public static final int ADDRESS_UNVAILABLE = 18;
-	public static final int DATE_UNVAILABLE = 19;
+	public static final int ADDRESS_UNAVAILABLE = 18;
+	public static final int DATE_UNAVAILABLE = 19;
+	public static final int AUTH_CODE_INVALID = 20;
+	public static final int AUTH_CODE_TIME = 21;
+	public static final int DUPLICATION_FEEDBACK = 22;
 
 	public static final int PUSH_ASSIGN_PICKUP = 100;
 	public static final int PUSH_ASSIGN_DROPOFF = 101;

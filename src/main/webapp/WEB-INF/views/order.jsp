@@ -198,7 +198,7 @@
 			var tempAddress = null;
 			for (var i = 0; i < stateDataSize; i++) {
 				if (data.stateData[i].addr_number != "") {
-					tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_number;
+					tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_number + data.stateData[i].addr_building;
 				} else {
 					tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_building;
 				}

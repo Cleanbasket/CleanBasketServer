@@ -22,4 +22,10 @@ public class AddressData {
 		this.addr_building = addr_building;
 		this.addr_remainder = addr_remainder;
 	}
+
+	public AddressData(Integer uid, String address, String addr_building) {
+		this.uid = uid;
+		this.address = address;
+		this.addr_building = addr_building;
+	}
 }

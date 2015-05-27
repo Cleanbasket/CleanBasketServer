@@ -49,5 +49,4 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 		OutputStream out = response.getOutputStream();
 		out.write(jsonString.getBytes("UTF-8"));
 	}
-
 }

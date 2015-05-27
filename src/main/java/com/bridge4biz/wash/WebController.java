@@ -164,15 +164,15 @@ public class WebController {
 
 	@RequestMapping(value = "/")
 	public String home(SitePreference sitePreference, HttpServletRequest request) {
-		if (sitePreference == SitePreference.MOBILE) {
-			if (request.getHeader("User-Agent").matches("(?i).*android.*")) {
-				return "redirect:intent://#Intent;scheme=cleanbasket;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.bridge4biz.laundry;end";
-			} else {
-				return "redirect:https://play.google.com/store/apps/details?id=com.bridge4biz.laundry";
-			}
-		} else {
-			return "home";
-		}
+//		if (sitePreference == SitePreference.MOBILE) {
+//			if (request.getHeader("User-Agent").matches("(?i).*android.*")) {
+//				return "redirect:intent://#Intent;scheme=cleanbasket;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.bridge4biz.laundry;end";
+//			} else {
+//				return "redirect:https://play.google.com/store/apps/details?id=com.bridge4biz.laundry";
+//			}
+//		} else {
+		return "home";
+//		}
 	}
 
 	@Secured("ROLE_ADMIN")

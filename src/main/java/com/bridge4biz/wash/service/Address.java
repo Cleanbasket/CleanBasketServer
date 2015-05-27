@@ -9,4 +9,13 @@ public class Address {
 	public String addr_building = "";
 	public String addr_remainder = "";
 	public String rdate = "";
+	
+	public Address() {
+		
+	}
+	
+	public Address(int uid, String address, String addr_building) {
+		this.address = address;
+		this.addr_building = addr_building;
+	}
 }
