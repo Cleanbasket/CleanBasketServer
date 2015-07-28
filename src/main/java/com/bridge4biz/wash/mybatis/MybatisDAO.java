@@ -3,15 +3,15 @@ package com.bridge4biz.wash.mybatis;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -39,7 +39,6 @@ import com.bridge4biz.wash.service.AppInfo;
 import com.bridge4biz.wash.service.Area;
 import com.bridge4biz.wash.service.AreaDate;
 import com.bridge4biz.wash.service.AuthUser;
-import com.bridge4biz.wash.service.Category;
 import com.bridge4biz.wash.service.Coupon;
 import com.bridge4biz.wash.service.Deliverer;
 import com.bridge4biz.wash.service.DelivererInfo;
@@ -56,11 +55,8 @@ import com.bridge4biz.wash.service.MemberOrderInfo;
 import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.Order;
-import com.bridge4biz.wash.service.OrderItem;
 import com.bridge4biz.wash.service.OrderState;
 import com.bridge4biz.wash.service.PickupState;
-import com.bridge4biz.wash.sms.Coolsms;
-import com.bridge4biz.wash.sms.SendResult;
 import com.bridge4biz.wash.sms.SendSMS;
 import com.bridge4biz.wash.sms.Set;
 import com.bridge4biz.wash.util.Constant;
@@ -71,6 +67,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 public class MybatisDAO {
+	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
 
 	private MybatisMapper mapper;
 	
@@ -135,10 +132,8 @@ public class MybatisDAO {
 		// TransactionStatus status =
 		// platformTransactionManager.getTransaction(paramTransactionDefinition);
 		try {
-			System.out.println("updateRegid " + uid + " / " + regid);
 			mapper.updateRegid(uid, regid);
 		} catch (DuplicateKeyException duplicateKeyException) {
-			System.out.println("duplicateKeyException");
 			mapper.clearAllRegid(regid);
 			mapper.updateRegid(uid, regid);
 		} catch (Exception e) {
@@ -251,12 +246,10 @@ public class MybatisDAO {
 	private boolean checkEnglish(String str) {
 		for(int i = 0; i < str.length(); i++) {
 			if(Character.getType(str.charAt(i)) == 5) {
-				System.out.println("Address is written in Korean");
 				return false;
 			}
 		}
 		
-		System.out.println("Address is written in English");
 		return true;
 	}
 	
@@ -412,9 +405,7 @@ public class MybatisDAO {
 			return;
 		
 		int total = mapper.getTotalPriceBySixMonth(uid);
-		
-		System.out.println(total + " has User");
-		
+				
 		if (total >= 150000 && total < 300000) {
 			mapper.updateUserClass(uid, 1);
 		} else if (total >= 300000 && total < 500000) {
@@ -425,8 +416,6 @@ public class MybatisDAO {
 	}
 	
 	public Integer addOrder(OrderData orderData, Integer uid) {
-		System.out.println(new Gson().toJson(orderData));
-
 		if (priceCheck(orderData, uid) == false) {
 			return Constant.ERROR;
 		}
@@ -452,9 +441,19 @@ public class MybatisDAO {
 			String addr = districts[0] + " " + districts[1];
 			
 			// 서비스 가능 지역인지 확인합니다
+			ArrayList<String> phones;
+			
 			ArrayList<String> areaDatas = mapper.getAvailableArea();
 			if(!areaDatas.contains(addr)) {
-				return Constant.ADDRESS_UNAVAILABLE;
+				if(mapper.isAvailableDistrict(new District(districts[0], districts[1], districts[2])) == 0)
+					return Constant.ADDRESS_UNAVAILABLE;
+				else {
+					Integer dcid = mapper.getDistrictId(new District(districts[0], districts[1], districts[2]));
+					phones = mapper.getDistrictPhones(dcid);
+				}
+			} else {
+				Integer acid = mapper.getAcidWithAreaData(addr);
+				phones = mapper.getPhones(acid);
 			}
 			
 			Integer acid = mapper.getAcidWithAreaData(addr);
@@ -462,9 +461,7 @@ public class MybatisDAO {
 			if (checkUnavailableDate(acid, orderData.pickup_date, orderData.dropoff_date)) {
 				return Constant.DATE_UNAVAILABLE;
 			}
-			
-			ArrayList<String> phones = mapper.getPhones(acid);
-			
+						
 			mapper.addOrder(orderData);
 			orderData.order_number = new SimpleDateFormat("yyMMdd").format(new Date()) + "-" + orderData.oid;
 			
@@ -497,8 +494,6 @@ public class MybatisDAO {
 		
 		String stuff = "주문번호:" + orderData.order_number + "/수거:" + orderData.pickup_date + "/배달:" + orderData.dropoff_date + "/주소:" + fullAddr + "/연락처:" + orderData.phone + "/총:" + orderData.price + "/품목:";
 		
-		System.out.println(stuff.length());
-		
 		if(stuff.length() > 80) {
 			set.setType("LMS");
 		}
@@ -522,8 +517,6 @@ public class MybatisDAO {
 		set.setFrom("07075521385"); // 보내는 사람 번호
 		
 		String stuff = "주문번호:" + order.order_number + "/수거:" + order.pickup_date + "/배달:" + order.dropoff_date + "/주소:" + fullAddr + "/연락처:" + order.phone + "/총:" + order.price + "/품목:";
-		
-		System.out.println(stuff.length());
 		
 		if(stuff.length() > 80) {
 			set.setType("LMS");
@@ -638,8 +631,6 @@ public class MybatisDAO {
 //				return false;
 //			}
 			
-			System.out.println(mileage + " / " + mapper.getMileage(uid));
-			
 			if (mapper.isAuthUser(uid) > 0) {
 				if (mileage > mapper.getMileage(uid)) {
 					return false;
@@ -745,7 +736,7 @@ public class MybatisDAO {
 			if (multiResult != null) {
 				List<Result> resultList = multiResult.getResults();
 				for (Result result : resultList) {
-					System.out.println("Result : " + result.getMessageId());
+					log.debug("Result : " + result.getMessageId());
 				}
 		}
 			
@@ -756,7 +747,6 @@ public class MybatisDAO {
 	
 	private void sendNewDeleteSMS(Order order, Integer uid) {
 		String address = mapper.getAddressForOrderId(order.oid);
-		System.out.println(address);
 		District districtObject = makeDistrict(address);
 
 		int dcid = 0;
@@ -954,7 +944,7 @@ public class MybatisDAO {
 		}
 		return delivererWorkLists;
 	}
-
+	
 	public ArrayList<DelivererWork> getDeliveryRequest(Integer delivererUid) {
 		ArrayList<DelivererWork> delivererWorkLists = mapper.getDeliveryRequest(delivererUid);
 		for (DelivererWork delivererWorkList : delivererWorkLists) {
@@ -978,12 +968,13 @@ public class MybatisDAO {
 		try {
 			OrderData orderData = getOrderByOrderId(oid);
 			int userId = orderData.uid;
-			
-			addPush(userId, oid, null, 0, Notification.FEEDBACK_ALARM);
-						
-			if (mapper.isAuthUser(userId) == 1) {
-				addTotal(userId, orderData.price);
+									
+			if (mapper.isAuthUser(userId) == 1 && mapper.checkMileage(uid, oid) == 0) {
+				if (mapper.selectRate(oid) == 0)
+					addPush(userId, oid, null, 0, Notification.FEEDBACK_ALARM);
+				
 				addMileage(userId, oid, (int) (orderData.price * getAccumulationRate(userId)));
+				addTotal(userId, orderData.price);
 				addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)), Notification.MILEAGE_ALARM);
 			}
 			
@@ -1273,7 +1264,7 @@ public class MybatisDAO {
 			authUser.code = random;
 			
 			if (mapper.getCountOfOrder(uid) > 0 && null != mapper.getTotalGrossOfUser(uid)) {
-				int initialMileage = (int) (mapper.getTotalGrossOfUser(uid) * 0.02);				
+				int initialMileage = (int) (mapper.getTotalGrossOfUser(uid) * 0.01);				
 				authUser.total = mapper.getTotalGrossOfUser(uid);
 				authUser.mileage = initialMileage;
 				mapper.addUseOfMileage(uid, null, 0, initialMileage);
@@ -1352,6 +1343,14 @@ public class MybatisDAO {
 				mapper.addItem(new ItemData(order.oid, item.item_code, price, item.count));
 			}
 			
+			ArrayList<Coupon> coupons = mapper.getCoupon(order.oid, uid);
+			for (Coupon c : coupons) {
+				order.price = order.price - c.value;
+			}
+			
+			int mileage = mapper.getMileageByOid(uid, order.oid);
+			order.price = order.price - mileage;
+			
 			if (!mapper.updateOrderData(order))
 				return Constant.ERROR;
 		}
@@ -1363,17 +1362,19 @@ public class MybatisDAO {
 	}
 
 	public Integer modifyOrderDate(Order order, Integer uid) {
+		if (order.uid != uid)
+			return Constant.ERROR;
+		
 		if (!mapper.updateOrderDateTime(order))
 			return Constant.ERROR;
 		
-		sendModifyDateSMS(order, uid);
+		sendModifyDateSMS(order);
 		
 		return Constant.SUCCESS;
 	}
 	
-	private void sendModifyDateSMS(Order order, int uid) {
+	private void sendModifyDateSMS(Order order) {
 		String address = mapper.getAddressForOrderId(order.oid);
-		System.out.println(address);
 		District districtObject = makeDistrict(address);
 
 		int dcid = 0;
@@ -1400,7 +1401,6 @@ public class MybatisDAO {
 
 	private void sendConfirmSMS(int oid) {
 		String address = mapper.getAddressForOrderId(oid);
-		System.out.println(address);
 		District districtObject = makeDistrict(address);
 
 		OrderData order = mapper.getOrderForSingle(oid);

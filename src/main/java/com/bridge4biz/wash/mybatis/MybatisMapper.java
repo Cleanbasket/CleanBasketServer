@@ -146,7 +146,7 @@ public interface MybatisMapper {
 	Integer getOrderState(@Param("oid") Integer oid, @Param("uid") Integer uid);
 
 //	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC")
-	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC")
+	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC LIMIT 500")
 	ArrayList<OrderStateData> getOrderStateData();
 
 	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE order_number LIKE #{search} OR email LIKE #{search} ORDER BY oid DESC")
@@ -158,7 +158,7 @@ public interface MybatisMapper {
 	@Select("SELECT COUNT(*) FROM orders WHERE state != 4")
 	Integer getOrderStateIncompleteCount();
 
-	@Select("SELECT oid, A.uid, order_number, pickup_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 0 OR (state = 1 AND A.rdate >= CURDATE()) ORDER BY state ASC, pickup_date ASC")
+	@Select("SELECT oid, A.uid, order_number, pickup_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 0 OR state = 1 ORDER BY state ASC, pickup_date ASC")
 	ArrayList<PickupStateData> getPickupStateData();
 
 	@Select("SELECT COUNT(*) FROM orders WHERE state = 1 AND rdate >= CURDATE()")
@@ -167,7 +167,7 @@ public interface MybatisMapper {
 	@Select("SELECT COUNT(*) FROM orders WHERE state = 0")
 	Integer getPickupStateIncompleteCount();
 
-	@Select("SELECT oid, A.uid, order_number, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 2 OR (state = 3 AND A.rdate >= CURDATE()) ORDER BY state ASC, dropoff_date ASC")
+	@Select("SELECT oid, A.uid, order_number, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 2 OR state = 3 ORDER BY state ASC, dropoff_date ASC")
 	ArrayList<DropoffStateData> getDropoffStateData();
 
 	@Select("SELECT COUNT(*) FROM orders WHERE state = 3 AND rdate >= CURDATE()")
@@ -203,7 +203,7 @@ public interface MybatisMapper {
 	@Select("SELECT SUM(price) FROM orders WHERE uid = #{uid}")
 	Integer getTotalPrice(@Param("uid") Integer uid);
 
-	@Select("SELECT SUM(price) FROM orders WHERE uid = #{uid} AND rdate > DATE_ADD(NOW(), INTERVAL -6 MONTH)")
+	@Select("SELECT SUM(price) FROM orders WHERE uid = #{uid} AND state = 4 AND rdate > DATE_ADD(NOW(), INTERVAL -6 MONTH)")
 	Integer getTotalPriceBySixMonth(@Param("uid") Integer uid);
 	
 	@Select("SELECT price FROM item_code WHERE item_code = #{item_code}")
@@ -420,11 +420,17 @@ public interface MybatisMapper {
 
 	@Select("SELECT mileage FROM auth_user WHERE uid = #{uid}")
 	Integer getMileage(@Param("uid") Integer uid);
+
+	@Select("SELECT count(*) FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
+	Integer checkMileage(@Param("oid") Integer oid, @Param("uid") Integer uid);
+	
+	@Select("SELECT mileage FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
+	Integer getMileageByOid(@Param("uid") Integer uid, @Param("oid") Integer oid);
 	
 	@Select("SELECT price FROM sale ORDER BY sid DESC LIMIT 1")
 	Integer getSale();
 
-	@Insert("INSERT INTO mileage (uid, oid, type, mileage) VALUES (#{uid}, #{oid}, #{type}, #{mileage})")
+	@Insert("INSERT INTO mileage (uid, oid, type, mileage, rdate) VALUES (#{uid}, #{oid}, #{type}, #{mileage}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "mid", before = false, resultType = Integer.class)	
 	Boolean addUseOfMileage(@Param("uid") Integer uid, @Param("oid") Integer oid, @Param("type") Integer type, @Param("mileage") Integer mileage);
 
@@ -539,5 +545,4 @@ public interface MybatisMapper {
 	
 	@Select("SELECT phone FROM district_alarm WHERE dcid = #{dcid}")
 	ArrayList<String> getDistrictPhones(@Param("dcid") Integer dcid);
-	
 }

@@ -290,7 +290,7 @@
 	<footer id="footer" class="footer">
 		<div>
 			<p>고객센터 : 070-7552-1385 (운영시간 10:00~24:00) &nbsp;E-mail : help@cleanbasket.co.kr</p>
-			<p>(주)워시앱 코리아 &nbsp;대표 : 임수일 &nbsp;사업자번호 : 220-88-86968</p>
+			<p>(주)워시앱 코리아 &nbsp;대표 : 김우진 &nbsp;사업자번호 : 220-88-86968</p>
 			<p>주소 : 서울 강남구 봉은사로24길 9 대암빌딩 104</p>
 			<p>Copyright Washapp Korea in Yeoksam</p>
 		</div>

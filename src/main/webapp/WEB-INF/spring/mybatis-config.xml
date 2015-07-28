@@ -10,13 +10,13 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="username" value="manager" />
 
-		<!-- 본서버 
-		<property name="url" value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
-		<property name="password" value="dhcjsaksdnjs!" />-->
-
 		<!-- 본서버 -->
+		<property name="url" value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
+		<property name="password" value="fastdel2015@" /> 
+
+		<!-- 본서버 
 		<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" />
-		<property name="password" value="fastdel2015@" />
+		<property name="password" value="fastdel2015@" /> -->
 
 		<!-- 개발서버 -->
 		<!-- <property name="url" value="jdbc:mysql://sevencore.iptime.org/wash?autoReconnect=true" /> -->
@@ -44,8 +44,14 @@
 
 	<bean id="dao" class="com.bridge4biz.wash.mybatis.MybatisDAO" />
 
+	<bean id="delivererMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.DelivererMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+
+	<bean id="delivererDao" class="com.bridge4biz.wash.mybatis.DelivererDAO" />
+
 	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-
 </beans>

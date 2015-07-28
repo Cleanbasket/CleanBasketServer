@@ -252,11 +252,7 @@
 			var tempState = 0;
 			var tempAddress = null;
 			for (var i = 0; i < stateDataSize; i++) {
-				if (data.stateData[i].addr_number != "") {
-					tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_number;
-				} else {
-					tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_building;
-				}
+				tempAddress = data.stateData[i].address + " " + data.stateData[i].addr_number + " " + data.stateData[i].addr_building;
 				data.stateData[i].address = '<a target="_blank" onfocus="this.blur()" href="http://map.naver.com/?query=' + tempAddress + '">' + tempAddress + " " + data.stateData[i].addr_remainder
 						+ '</a>';
 				tempState = data.stateData[i].state;
