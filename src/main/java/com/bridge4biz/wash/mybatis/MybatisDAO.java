@@ -3,12 +3,16 @@ package com.bridge4biz.wash.mybatis;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import kr.co.nicepay.module.lite.NicePayAppConnector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +32,7 @@ import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.OrderData;
 import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PassData;
+import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.gcm.Message;
@@ -56,6 +61,7 @@ import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderState;
+import com.bridge4biz.wash.service.PaymentResult;
 import com.bridge4biz.wash.service.PickupState;
 import com.bridge4biz.wash.sms.SendSMS;
 import com.bridge4biz.wash.sms.Set;
@@ -63,14 +69,15 @@ import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
 import com.bridge4biz.wash.util.RandomNumber;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 public class MybatisDAO {
 	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
 
 	private MybatisMapper mapper;
-	
+		
+	public MybatisDAO() {
+	}
+
 	@Autowired
 	private MybatisDAO(MybatisMapper mapper, PlatformTransactionManager platformTransactionManager) {
 		this.mapper = mapper;
@@ -660,7 +667,7 @@ public class MybatisDAO {
 			Integer state = mapper.getOrderState(orderData.oid, uid);
 			if (state == null) {
 				return Constant.ERROR;
-			} else if (state >= 2) {
+			} else if (state >= 1) {
 				return Constant.IMPOSSIBLE;
 			} else {
 				if (mapper.selectMileage(orderData.oid, uid, 1) != null) {
@@ -964,7 +971,7 @@ public class MybatisDAO {
 		}
 	}
 
-	public Boolean updateDeliveryRequestComplete(Integer uid, int oid, String note) {
+	public Boolean updateDeliveryRequestComplete(Integer uid, int oid, String note, String payment_method) {
 		try {
 			OrderData orderData = getOrderByOrderId(oid);
 			int userId = orderData.uid;
@@ -978,7 +985,7 @@ public class MybatisDAO {
 				addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)), Notification.MILEAGE_ALARM);
 			}
 			
-			return mapper.updateDeliveryRequestComplete(oid, note);
+			return mapper.updateDeliveryRequestComplete(oid, note, payment_method);
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -1326,7 +1333,7 @@ public class MybatisDAO {
 		set.setTo(phone); // 받는사람 번호
 		set.setFrom("07075521385"); // 보내는 사람 번호
 		set.setText("Clean Basket에서 보낸 인증 번호 [" + code + "]"); 
-
+				
 		new SendSMS(set).run();
 	}
 
@@ -1361,10 +1368,7 @@ public class MybatisDAO {
 		return Constant.SUCCESS;
 	}
 
-	public Integer modifyOrderDate(Order order, Integer uid) {
-		if (order.uid != uid)
-			return Constant.ERROR;
-		
+	public Integer modifyOrderDate(Order order, Integer uid) {		
 		if (!mapper.updateOrderDateTime(order))
 			return Constant.ERROR;
 		
@@ -1442,5 +1446,64 @@ public class MybatisDAO {
 
 	public ArrayList<District> getDistricts() {
 		return mapper.getDistricts();
+	}
+
+	public PaymentResult addPayment(int uid, PaymentData paymentData) {
+        HashMap<String, String> map = new HashMap<String, String>();
+
+        map.put("CardNo", paymentData.getCardNo());
+        map.put("ExpMonth", paymentData.getExpMonth());
+        map.put("ExpYear", paymentData.getExpYear());
+        map.put("IDNo", paymentData.getIDNo());
+        map.put("CardPw", paymentData.getCardPw());
+        map.put("SUB_ID", paymentData.getSUB_ID());
+        map.put("MID", "nictest04m");
+        map.put("EncodeKey", "b+zhZ4yOZ7FsH8pm5lhDfHZEb79tIwnjsdA0FBXh86yLc6BJeFVrZFXhAoJ3gEWgrWwN+lJMV0W4hvDdbe4Sjw==");
+        
+        try {
+			map.put("MallIP", java.net.InetAddress.getLocalHost().getHostAddress().toString());
+		} catch (UnknownHostException e) {
+			log.debug("Failure in get host address");
+		}
+        
+        map.put("actionType", "PY0");
+        map.put("PayMethod", "BILLKEY");
+		
+        NicePayAppConnector connector = new NicePayAppConnector();
+
+        connector.setRequestMap(map);
+
+        try {
+            connector.requestAction();
+        } catch (Exception e) {
+            return null;
+        }
+
+        if (connector.getResultData("ResultCode").equals("F100")) {
+        	PaymentResult paymentResult = new PaymentResult(
+        			connector.getResultData("BID"), 
+        			connector.getResultData("AuthDate"), 
+        			connector.getResultData("CardName"));
+        	
+        	// type 0 is Card
+        	mapper.addPayment(uid, 0, paymentResult.getBid(), paymentResult.getAuthDate(), paymentResult.getCardName());
+        	
+        	// 보안 이슈로 빌키는 전하지 않
+        	return new PaymentResult(
+        			"", 
+        			paymentResult.getAuthDate(), 
+        			paymentResult.getCardName());
+        } 
+        else {
+        	log.debug(connector.getResultData("ResultCode") + " / " + connector.getResultData("ResultMsg"));
+        	
+        	return new PaymentResult(
+        			"", "", "",
+        			connector.getResultData("ResultMsg"));
+        }
+	}
+
+	public Boolean removePayment(Integer uid) {
+		return mapper.removePayment(uid);
 	}
 }

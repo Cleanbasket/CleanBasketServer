@@ -1,7 +1,11 @@
 package com.bridge4biz.wash.sms;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public 	class SendSMS extends Thread {
 	private Set set;
+	private Logger log = LoggerFactory.getLogger(SendSMS.class);		
 	
 	public SendSMS(Set set) {
 		this.set = set;
@@ -18,18 +22,18 @@ public 	class SendSMS extends Thread {
 			/*
 			 *  메시지 보내기 성공 및 전송결과 출력
 			 */
-			System.out.println("성공");			
-			System.out.println(result.getGroup_id()); // 그룹아이디			
-			System.out.println(result.getResult_code()); // 결과코드
-			System.out.println(result.getResult_message());  // 결과 메시지
-			System.out.println(result.getSuccessCount()); // 성공개수
-			System.out.println(result.getErrorCount());  // 여러개 보낼시 오류난 메시지 수
+			log.info("성공");			
+			log.info(result.getGroup_id()); // 그룹아이디			
+			log.info(result.getResult_code()); // 결과코드
+			log.info(result.getResult_message());  // 결과 메시지
+			log.info(result.getSuccessCount()); // 성공개수
+			log.info(result.getErrorCount());  // 여러개 보낼시 오류난 메시지 수
 		} else {
 			/*
 			 * 메시지 보내기 실패
 			 */
-			System.out.println("실패");
-			System.out.println(result.getErrorString()); // 에러 메시지
+			log.info("실패");
+			log.info(result.getErrorString()); // 에러 메시지
 		}	
 	}
 }

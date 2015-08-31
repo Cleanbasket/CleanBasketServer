@@ -74,9 +74,9 @@ public class AppController {
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/code")
 	@ResponseBody
-	public Constant getAuthorizationCode(Constant constant, Gson gson, Authentication auth, @RequestBody String phone) {
-		AuthUser authUser = gson.fromJson(phone, AuthUser.class);
-		Boolean success = dao.getAuthorizationCode(dao.getUid(auth.getName()), authUser.phone);
+	public Constant getAuthorizationCode(Constant constant, Gson gson, Authentication auth, @RequestBody Order order) {
+		String phone = order.phone;
+		Boolean success = dao.getAuthorizationCode(dao.getUid(auth.getName()), phone);
 		if(success)
 			return constant.setConstant(Constant.SUCCESS, "인증코드 문자 전송 성공");
 		

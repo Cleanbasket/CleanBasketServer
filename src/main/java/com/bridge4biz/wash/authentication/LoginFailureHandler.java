@@ -20,6 +20,10 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 	private MybatisDAO dao;
 	private Constant constant = new Constant();
 
+	public LoginFailureHandler() {
+
+	}
+
 	@Autowired
 	private LoginFailureHandler(MybatisDAO dao) {
 		this.dao = dao;

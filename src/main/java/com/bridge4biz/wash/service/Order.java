@@ -16,6 +16,7 @@ public class Order {
 	public String addr_building = "";
 	public String addr_remainder = "";
 	public String memo = "";
+	public String note = "";
 	public Integer price = 0;
 	public Integer dropoff_price = 0;
 	public String pickup_date = "";

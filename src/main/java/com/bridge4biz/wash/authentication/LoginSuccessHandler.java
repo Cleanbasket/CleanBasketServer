@@ -26,6 +26,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	private Gson gson = new Gson();
 	private Constant constant = new Constant();
 
+	public LoginSuccessHandler() {
+
+	}
+
 	@Autowired
 	private LoginSuccessHandler(MybatisDAO dao) {
 		this.dao = dao;

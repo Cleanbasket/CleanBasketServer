@@ -43,6 +43,7 @@ import com.bridge4biz.wash.service.MemberOrderInfo;
 import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderItem;
+import com.bridge4biz.wash.service.PaymentResult;
 import com.google.gson.JsonElement;
 
 public interface MybatisMapper {
@@ -333,8 +334,8 @@ public interface MybatisMapper {
 	@Update("UPDATE orders SET state = 2, note = #{note}, rdate = NOW() WHERE oid = #{oid}")
 	Boolean updatePickupRequestComplete(@Param("oid") Integer oid, @Param("note") String note);
 
-	@Update("UPDATE orders SET state = 4, note = #{note}, rdate = NOW() WHERE oid = #{oid}")
-	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note);
+	@Update("UPDATE orders SET state = 4, note = #{note}, payment_method = #{payment_method}, rdate = NOW() WHERE oid = #{oid}")
+	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, String payment_method);
 
 	@Update("UPDATE orders SET address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder} WHERE (uid = #{uid} AND state = 0) OR (uid = #{uid} AND state = 2")
 	Boolean updateOrderAddress(Address address);
@@ -545,4 +546,13 @@ public interface MybatisMapper {
 	
 	@Select("SELECT phone FROM district_alarm WHERE dcid = #{dcid}")
 	ArrayList<String> getDistrictPhones(@Param("dcid") Integer dcid);
+
+
+	@Insert("INSERT INTO payment (uid, type, bid, authDate, cardName, rdate) VALUES (#{uid}, #{type}, #{bid}, #{authDate}, #{cardName}, NOW()) ON DUPLICATE KEY UPDATE uid = #{uid}, rdate = NOW()")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "pid", before = false, resultType = Integer.class)	
+	Boolean addPayment(@Param("uid") int uid, @Param("type") int type, @Param("bid") String bid, @Param("authDate") String authDate, @Param("cardName") String cardName);
+
+
+	@Delete("DELETE FROM payment WHERE uid = #{uid}")
+	Boolean removePayment(@Param("uid") Integer uid);
 }

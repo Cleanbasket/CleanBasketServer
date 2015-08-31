@@ -69,6 +69,11 @@ public class WebController {
 		return "term-of-use";
 	}
 
+	@RequestMapping(value = "/payment-term-of-use")
+	public String paymentTermOfUse() {
+		return "payment-term-of-use";
+	}
+	
 	@RequestMapping(value = "/privacy")
 	public String privacy() {
 		return "privacy";
