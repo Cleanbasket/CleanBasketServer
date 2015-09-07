@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bridge4biz.wash.data.DropoffStateData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
+import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
 
@@ -28,6 +29,9 @@ public class AdminWebController {
 	@Autowired
 	private MybatisDAO dao;
 	
+	@Autowired
+	private PaymentDAO paymentDao;
+
 	@RequestMapping(value = "/login")
 	public String login(HttpServletRequest request) {
 		String userAgent = request.getHeader("User-Agent");
@@ -339,4 +343,35 @@ public class AdminWebController {
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getLatestOrderId()));
 	}
 	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/payment", consumes = { "application/json" })
+	@ResponseBody
+	public Constant getPaymentInfo(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		int oid = Integer.valueOf(data.get("oid"));
+		int uid = Integer.valueOf(data.get("uid"));
+		
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentInfo(oid, uid)));
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.POST, value = "/payment/trigger", consumes = { "application/json" })
+	@ResponseBody
+	public Constant triggerPayment(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		int oid = Integer.valueOf(data.get("oid"));
+		int uid = Integer.valueOf(data.get("uid"));
+		
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.triggerPayment(oid, uid)));
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(method=RequestMethod.POST, value = "/payment/cancel", consumes = { "application/json" })
+	@ResponseBody
+	public Constant cancelPayment(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		int oid = Integer.valueOf(data.get("oid"));
+		int uid = Integer.valueOf(data.get("uid"));
+		String price = data.get("price");
+		String partialCancelCode = data.get("code");
+		
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.cancelPayment(oid, uid, price, partialCancelCode)));
+	}
 }

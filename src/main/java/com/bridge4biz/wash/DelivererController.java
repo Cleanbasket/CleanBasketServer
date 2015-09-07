@@ -40,7 +40,7 @@ public class DelivererController {
 		user.authority = "ROLE_DELIVERER";
 		user.enabled = false;
 		user.setDeliverer(request);
-		Integer value = dao.addUserForDeliverer(user, file);
+		Integer value = delivererDAO.addUserForDeliverer(user, file);
 		switch (value) {
 			case Constant.SUCCESS:
 	//			SocketIO.broadCast(new PushMessage(Constant.PUSH_DELIVERER_JOIN, user.uid, 0));

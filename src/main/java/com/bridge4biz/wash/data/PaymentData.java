@@ -13,7 +13,6 @@ public class PaymentData {
 	}
 
 	public PaymentData(String cardNo, String expMonth, String expYear, String iDNo, String cardPw, String sUB_ID) {
-		super();
 		CardNo = cardNo;
 		ExpMonth = expMonth;
 		ExpYear = expYear;

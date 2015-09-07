@@ -1,6 +1,10 @@
 package com.bridge4biz.wash.mybatis;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +14,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
 
@@ -29,6 +35,42 @@ public class DelivererDAO {
 		this.mapper = mapper;
 		this.delivererMapper = delivererMapper;
 	}
+	
+	public Integer addUserForDeliverer(UserData userData, MultipartFile file) {
+		// TransactionStatus status =
+		// platformTransactionManager.getTransaction(paramTransactionDefinition);
+		if (mapper.getUid(userData.email) != null) {
+			return Constant.ACCOUNT_DUPLICATION;
+		}
+		try {
+			mapper.addUser(userData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// platformTransactionManager.rollback(status);
+			return Constant.ERROR;
+		}
+		try {
+			userData.img = "images/deliverer/" + userData.uid + ".jpg";
+			File fileImage = new File(Constant.PATH + userData.img);
+			BufferedImage buffer = ImageIO.read(file.getInputStream());
+			ImageIO.write(buffer, "jpg", fileImage);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// platformTransactionManager.rollback(status);
+			return Constant.IMAGE_WRITE_ERROR;
+		}
+		try {
+			mapper.updateImageForUser(userData);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// platformTransactionManager.rollback(status);
+			return Constant.ERROR;
+		}
+		// platformTransactionManager.commit(status);
+		return Constant.SUCCESS;
+	}
+	
+	
 	
 	private Order additionalInfo(Order order) {
 		order.item = mapper.getItem(order.oid);

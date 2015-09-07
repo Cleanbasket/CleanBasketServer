@@ -13,6 +13,7 @@ public class OrderStateData {
 	public String phone = "";
 	public String memo = "";
 	public Integer price = 0;
+	public Integer payment_method = 0;
 	public Integer state = 0;
 	public String rdate = "";
 	public Integer count = 0;

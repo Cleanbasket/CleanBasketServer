@@ -17,6 +17,7 @@ import com.bridge4biz.wash.data.PassData;
 import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
+import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.bridge4biz.wash.service.Address;
 import com.bridge4biz.wash.service.AuthUser;
 import com.bridge4biz.wash.service.Feedback;
@@ -33,6 +34,9 @@ public class MemberContoller {
 	@Autowired
 	private MybatisDAO dao;
 	
+	@Autowired
+	private PaymentDAO paymentDao;
+
 
 	@RequestMapping(method=RequestMethod.POST, value = "/register")
 	@ResponseBody
@@ -371,11 +375,11 @@ public class MemberContoller {
 	@ResponseBody
 	public Constant addPayment(Constant constant, Authentication auth, Gson gson, @RequestBody PaymentData paymentData) {
 		Integer uid = dao.getUid(auth.getName());
-		PaymentResult paymentResult = dao.addPayment(uid, paymentData);
+		PaymentResult paymentResult = paymentDao.addPayment(uid, paymentData);
 		if (paymentResult.resultMsg.equals("")) {
 			return constant.setConstant(Constant.SUCCESS, "카드 등록 성공 : SUCCESS", gson.toJson(paymentResult));
 		} else {
-			return constant.setConstant(Constant.ERROR, "카드 등 실패 : ERROR", gson.toJson(paymentResult));
+			return constant.setConstant(Constant.ERROR, "카드 등록 실패 : ERROR", gson.toJson(paymentResult));
 		}
 	}
 	
@@ -384,11 +388,11 @@ public class MemberContoller {
 	@ResponseBody
 	public Constant removePayment(Constant constant, Authentication auth, Gson gson) {
 		Integer uid = dao.getUid(auth.getName());
-		Boolean success = dao.removePayment(uid);
+		Boolean success = paymentDao.removePayment(uid);
 		if (success) {
-			return constant.setConstant(Constant.SUCCESS, "카드 등록 성공 : SUCCESS");
+			return constant.setConstant(Constant.SUCCESS, "카드 삭제 성공 : SUCCESS");
 		} else {
-			return constant.setConstant(Constant.ERROR, "카드 등 실패 : ERROR");
+			return constant.setConstant(Constant.ERROR, "카드 삭제 실패 : ERROR");
 		}
 	}
 }

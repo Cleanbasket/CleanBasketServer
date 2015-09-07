@@ -69,6 +69,7 @@
 							<th>품목</th>																			
 							<th>쿠폰내역</th>
 							<th>주문현황</th>
+							<th>결제수단</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -96,7 +97,8 @@
 			<td><!= item !></td>
 			<td><!= orderInfo !></td>
 			<td><!= state !></td>
-		</tr>
+			<td><!= payment_method !></td>
+	</tr>
 	</script>
 	<script data-jui="#order" data-tpl="none" type="text/template">
 		<tr>
@@ -126,41 +128,13 @@
 		});
 		
 		$(window).ready(function() {
-			socket = webSocketIO();
-			socket.on('message', function(msg) {
-				receiveMessage(msg);
-			});
 			$('#search').keypress(function(event) {
 				if (event.keyCode == 13) {
 					orderStateSearch();
 				}
 			});
 			getOrderState();
-			startRefresher();
 		});
-
-		function receiveMessage(msg) {
-			switch (msg.constant) {
-			case constant.PUSH_ORDER_ADD:
-				getPickupState($('#search').val());
-				break;
-			case constant.PUSH_ORDER_CANCEL:
-				getPickupState($('#search').val());
-				break;
-			case constant.PUSH_ASSIGN_PICKUP:
-				getPickupState($('#search').val());
-				break;
-			case constant.PUSH_ASSIGN_DROPOFF:
-				getPickupState($('#search').val());
-				break;
-			case constant.PUSH_DROPOFF_COMPLETE:
-				getPickupState($('#search').val());
-				break;
-			case constant.PUSH_PICKUP_COMPLETE:
-				getPickupState($('#search').val());
-				break;
-			}
-		}
 
 		function getOrderState(search) {
 			if (search == undefined) {
@@ -208,21 +182,47 @@
 				data.stateData[i]['item'] = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" data-dropoff-price="' + data.stateData[i].dropoff_price + '" data-email="' + data.stateData[i].email + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="detail_item_link">품목</a>';
 				tempState = data.stateData[i].state;
 				switch (tempState) {
-				case 0:
-					data.stateData[i].state = "수거요청"
-					break;
-				case 1:
-					data.stateData[i].state = "수거요청"
-					break;
-				case 2:
-					data.stateData[i].state = "수거완료"
-					break;
-				case 3:
-					data.stateData[i].state = "배달대기"
-					break;
-				case 4:
-					data.stateData[i].state = "배달완료"
-					break;
+					case 0:
+						data.stateData[i].state = "수거요청"
+						break;
+					case 1:
+						data.stateData[i].state = "수거요청"
+						break;
+					case 2:
+						data.stateData[i].state = "수거완료"
+						break;
+					case 3:
+						data.stateData[i].state = "배달대기"
+						break;
+					case 4:
+						data.stateData[i].state = "배달완료"
+						break;
+				}
+
+				paymentMethod = data.stateData[i].payment_method;
+				switch (paymentMethod) {
+					case 0:
+						data.stateData[i].payment_method = "현장카드"
+						break;
+					case 1:
+						data.stateData[i].payment_method = "현장현금"
+						break;
+					case 2:
+						data.stateData[i].payment_method = "계좌이체"
+						break;
+					case 3:
+						data.stateData[i].payment_method = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" price="' + data.stateData[i].price + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="in_app_purchase_link">인앱결제</a>'; 
+						break;
+					case 4:
+						data.stateData[i].payment_method = "수령완료"
+						break;
+					case 5:
+						data.stateData[i].payment_method = "이체완료"
+						break;
+					case 6:
+						// data.stateData[i].payment_method = "인앱완료" 
+						data.stateData[i].payment_method = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" price="' + data.stateData[i].price + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="in_app_cancel_link">인앱완료</a>'; 
+						break;
 				}
 			}
 			order.update(data.stateData);
@@ -330,6 +330,142 @@
 					}
 				});
 			});
+
+			var in_app_purchase_link = $('.in_app_purchase_link').unbind('click');
+			in_app_purchase_link.click(function() {
+				var clicked = $(this);
+				var list_group = $('<div />', {
+					'class' : 'list-group'
+				});
+				bootbox.dialog({
+					title : "고객이 등록한 카드로 결제합니다.",
+					message : list_group,
+					buttons : {
+						confirm : {
+							closeButton : false,
+							label : "결제",
+							className : "btn-success",
+							callback: function() {
+								$.ajax({
+									type : 'POST',
+									url : '../admin/payment/trigger',
+									dataType : 'json',
+									contentType : "application/json",
+									async : true,
+									data : JSON.stringify({
+										oid : clicked.attr('oid'),
+										uid : clicked.attr('id')
+									}),
+									success : function(json) {
+										var data = JSON.parse(json.data);
+										if (data != null) {
+											alert(data.resultCode + ' / ' + data.resultMsg);
+										
+											if (data.resultCode == "F100") {
+												
+											}
+										}
+										else {
+											alert('서버 문제가 발생했습니다');	
+										}
+									},
+									error : function(request, status, error) {
+										console.log(request.responseText);
+										alert('문제가 발생했습니다');	
+									}
+								});
+							}
+						},
+						cancel : {
+							label : "취소",
+							className : "btn-cancel"
+						}	
+					}
+				});
+
+				$.ajax({
+					type : 'POST',
+					url : '../admin/payment',
+					dataType : 'json',
+					contentType : "application/json",
+					async : true,
+					data : JSON.stringify({
+						oid : clicked.attr('oid'),
+						uid : clicked.attr('id')
+					}),
+					success : function(json) {
+						var data = JSON.parse(json.data);
+						if (data != null) {
+								list_group.append('<a class="list-group-item"><h6 class="list-group-item-heading">카드사 : ' + data.cardName + '</h6><p class="list-group-item-text">결제금액 : '
+										+ clicked.attr('price') + '원</p></a>');
+						}
+						else {
+							list_group.append('등록된 카드가 없습니다.');
+						}
+					},
+					error : function(request, status, error) {
+						console.log(request.responseText);
+					}
+				});
+			});
+			
+			var in_app_cancel_link = $('.in_app_cancel_link').unbind('click');
+			in_app_cancel_link.click(function() {
+				var clicked = $(this);
+				var list_group = $('<div />', {
+					'class' : 'list-group'
+				});
+				
+				bootbox.prompt({
+					  title: "취소 금액을 입력합니다(값을 변경하면 부분 취소됩니다).",
+					  value: clicked.attr('price'),
+					  callback: function(result) {
+					    if (result === null) {
+
+					    } else {
+					    	price = clicked.attr('price')
+					    	code = 0
+					    	
+					    	if (result < price) {
+					    		code = 1
+					    	} else if (result > price) {
+					    		return;
+					    	}
+					    	
+							$.ajax({
+								type : 'POST',
+								url : '../admin/payment/cancel',
+								dataType : 'json',
+								contentType : "application/json",
+								async : true,
+								data : JSON.stringify({
+									oid : clicked.attr('oid'),
+									uid : clicked.attr('id'),
+									price : result,
+									code : code
+								}),
+								success : function(json) {
+									var data = JSON.parse(json.data);
+									if (data != null) {
+										alert(data.resultCode + ' / ' + data.resultMsg);
+									
+										if (data.resultCode == "2001") {
+											
+										}
+									}
+									else {
+										alert('서버 문제가 발생했습니다');	
+									}
+								},
+								error : function(request, status, error) {
+									console.log(request.responseText);
+									alert('문제가 발생했습니다');	
+								}
+							});							
+						}
+					}
+				});
+			});
 		}
 		
 		function startRefresher() {
@@ -361,10 +497,10 @@
 		
 		function orderResize() {
 			var th = $('.order_thead').find('th');
-			th.eq(0).css('width', '10%');
-			th.eq(1).css('width', '10%');
-			th.eq(2).css('width', '30%');
-			th.eq(3).css('width', '10%');
+			th.eq(0).css('width', '9%');
+			th.eq(1).css('width', '9%');
+			th.eq(2).css('width', '27%');
+			th.eq(3).css('width', '9%');
 			th.eq(4).css('width', '7%');
 			th.eq(5).css('width', '7%');
 			th.eq(6).css('width', '5%');
@@ -372,6 +508,7 @@
 			th.eq(8).css('width', '5%');
 			th.eq(9).css('width', '6%');
 			th.eq(10).css('width', '6%');
+			th.eq(11).css('width', '6%');
 		}
 	</script>
 </body>

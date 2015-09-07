@@ -21,6 +21,7 @@ import com.bridge4biz.wash.data.DropoffStateData;
 import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.OrderData;
 import com.bridge4biz.wash.data.OrderStateData;
+import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Address;
@@ -44,6 +45,7 @@ import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderItem;
 import com.bridge4biz.wash.service.PaymentResult;
+import com.bridge4biz.wash.service.PaymentTriggerResult;
 import com.google.gson.JsonElement;
 
 public interface MybatisMapper {
@@ -86,6 +88,8 @@ public interface MybatisMapper {
 	@Select("SELECT phone FROM user WHERE uid = #{uid}")
 	String getPhone(@Param("uid") Integer uid);
 
+	@Select("SELECT phone FROM orders WHERE uid = #{oid} LIMIT 1")
+	String getPhoneFromOrder(@Param("oid") Integer oid);
 
 	@Select("SELECT address FROM orders WHERE oid = #{oid}")
 	String getAddressForOrderId(@Param("oid") Integer oid);
@@ -146,8 +150,8 @@ public interface MybatisMapper {
 	@Select("SELECT state FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	Integer getOrderState(@Param("oid") Integer oid, @Param("uid") Integer uid);
 
-//	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC")
-	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC LIMIT 500")
+//	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, payment_method, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC")
+	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, payment_method, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC LIMIT 500")
 	ArrayList<OrderStateData> getOrderStateData();
 
 	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE order_number LIKE #{search} OR email LIKE #{search} ORDER BY oid DESC")
@@ -335,7 +339,7 @@ public interface MybatisMapper {
 	Boolean updatePickupRequestComplete(@Param("oid") Integer oid, @Param("note") String note);
 
 	@Update("UPDATE orders SET state = 4, note = #{note}, payment_method = #{payment_method}, rdate = NOW() WHERE oid = #{oid}")
-	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, String payment_method);
+	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, @Param("payment_method") String payment_method);
 
 	@Update("UPDATE orders SET address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder} WHERE (uid = #{uid} AND state = 0) OR (uid = #{uid} AND state = 2")
 	Boolean updateOrderAddress(Address address);
@@ -434,7 +438,6 @@ public interface MybatisMapper {
 	@Insert("INSERT INTO mileage (uid, oid, type, mileage, rdate) VALUES (#{uid}, #{oid}, #{type}, #{mileage}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "mid", before = false, resultType = Integer.class)	
 	Boolean addUseOfMileage(@Param("uid") Integer uid, @Param("oid") Integer oid, @Param("type") Integer type, @Param("mileage") Integer mileage);
-
 	
 	@Insert("INSERT INTO auth_user (uid, code, email, phone, mileage, total, user_class, agent, rdate) VALUES (#{uid}, #{code}, #{email}, #{phone}, #{mileage}, #{total}, #{user_class}, #{agent}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "auid", before = false, resultType = Integer.class)
@@ -454,7 +457,7 @@ public interface MybatisMapper {
 
 
 	
-	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
+	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, payment_method, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{payment_method}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
 	Boolean insertOrder(Order order);
 
@@ -546,13 +549,8 @@ public interface MybatisMapper {
 	
 	@Select("SELECT phone FROM district_alarm WHERE dcid = #{dcid}")
 	ArrayList<String> getDistrictPhones(@Param("dcid") Integer dcid);
-
-
-	@Insert("INSERT INTO payment (uid, type, bid, authDate, cardName, rdate) VALUES (#{uid}, #{type}, #{bid}, #{authDate}, #{cardName}, NOW()) ON DUPLICATE KEY UPDATE uid = #{uid}, rdate = NOW()")
-	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "pid", before = false, resultType = Integer.class)	
-	Boolean addPayment(@Param("uid") int uid, @Param("type") int type, @Param("bid") String bid, @Param("authDate") String authDate, @Param("cardName") String cardName);
-
-
-	@Delete("DELETE FROM payment WHERE uid = #{uid}")
-	Boolean removePayment(@Param("uid") Integer uid);
+	
+	
+	@Select("SELECT price FROM orders WHERE oid = #{oid} AND uid = #{uid}")
+	int getOrderPrice(@Param("oid") int oid, @Param("uid") int uid);
 }

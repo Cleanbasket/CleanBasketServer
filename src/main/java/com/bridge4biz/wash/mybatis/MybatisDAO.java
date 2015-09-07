@@ -1,26 +1,16 @@
 package com.bridge4biz.wash.mybatis;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import kr.co.nicepay.module.lite.NicePayAppConnector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.bridge4biz.wash.data.AddressData;
 import com.bridge4biz.wash.data.AreaAlarmData;
 import com.bridge4biz.wash.data.AreaData;
@@ -32,7 +22,6 @@ import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.OrderData;
 import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PassData;
-import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.gcm.Message;
@@ -61,7 +50,6 @@ import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderState;
-import com.bridge4biz.wash.service.PaymentResult;
 import com.bridge4biz.wash.service.PickupState;
 import com.bridge4biz.wash.sms.SendSMS;
 import com.bridge4biz.wash.sms.Set;
@@ -76,6 +64,7 @@ public class MybatisDAO {
 	private MybatisMapper mapper;
 		
 	public MybatisDAO() {
+		
 	}
 
 	@Autowired
@@ -216,39 +205,6 @@ public class MybatisDAO {
 		return Constant.SUCCESS;
 	}
 	
-	public Integer addUserForDeliverer(UserData userData, MultipartFile file) {
-		// TransactionStatus status =
-		// platformTransactionManager.getTransaction(paramTransactionDefinition);
-		if (mapper.getUid(userData.email) != null) {
-			return Constant.ACCOUNT_DUPLICATION;
-		}
-		try {
-			mapper.addUser(userData);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// platformTransactionManager.rollback(status);
-			return Constant.ERROR;
-		}
-		try {
-			userData.img = "images/deliverer/" + userData.uid + ".jpg";
-			File fileImage = new File(Constant.PATH + userData.img);
-			BufferedImage buffer = ImageIO.read(file.getInputStream());
-			ImageIO.write(buffer, "jpg", fileImage);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// platformTransactionManager.rollback(status);
-			return Constant.IMAGE_WRITE_ERROR;
-		}
-		try {
-			mapper.updateImageForUser(userData);
-		} catch (Exception e) {
-			e.printStackTrace();
-			// platformTransactionManager.rollback(status);
-			return Constant.ERROR;
-		}
-		// platformTransactionManager.commit(status);
-		return Constant.SUCCESS;
-	}
 	
 	private boolean checkEnglish(String str) {
 		for(int i = 0; i < str.length(); i++) {
@@ -1448,62 +1404,4 @@ public class MybatisDAO {
 		return mapper.getDistricts();
 	}
 
-	public PaymentResult addPayment(int uid, PaymentData paymentData) {
-        HashMap<String, String> map = new HashMap<String, String>();
-
-        map.put("CardNo", paymentData.getCardNo());
-        map.put("ExpMonth", paymentData.getExpMonth());
-        map.put("ExpYear", paymentData.getExpYear());
-        map.put("IDNo", paymentData.getIDNo());
-        map.put("CardPw", paymentData.getCardPw());
-        map.put("SUB_ID", paymentData.getSUB_ID());
-        map.put("MID", "nictest04m");
-        map.put("EncodeKey", "b+zhZ4yOZ7FsH8pm5lhDfHZEb79tIwnjsdA0FBXh86yLc6BJeFVrZFXhAoJ3gEWgrWwN+lJMV0W4hvDdbe4Sjw==");
-        
-        try {
-			map.put("MallIP", java.net.InetAddress.getLocalHost().getHostAddress().toString());
-		} catch (UnknownHostException e) {
-			log.debug("Failure in get host address");
-		}
-        
-        map.put("actionType", "PY0");
-        map.put("PayMethod", "BILLKEY");
-		
-        NicePayAppConnector connector = new NicePayAppConnector();
-
-        connector.setRequestMap(map);
-
-        try {
-            connector.requestAction();
-        } catch (Exception e) {
-            return null;
-        }
-
-        if (connector.getResultData("ResultCode").equals("F100")) {
-        	PaymentResult paymentResult = new PaymentResult(
-        			connector.getResultData("BID"), 
-        			connector.getResultData("AuthDate"), 
-        			connector.getResultData("CardName"));
-        	
-        	// type 0 is Card
-        	mapper.addPayment(uid, 0, paymentResult.getBid(), paymentResult.getAuthDate(), paymentResult.getCardName());
-        	
-        	// 보안 이슈로 빌키는 전하지 않
-        	return new PaymentResult(
-        			"", 
-        			paymentResult.getAuthDate(), 
-        			paymentResult.getCardName());
-        } 
-        else {
-        	log.debug(connector.getResultData("ResultCode") + " / " + connector.getResultData("ResultMsg"));
-        	
-        	return new PaymentResult(
-        			"", "", "",
-        			connector.getResultData("ResultMsg"));
-        }
-	}
-
-	public Boolean removePayment(Integer uid) {
-		return mapper.removePayment(uid);
-	}
 }
