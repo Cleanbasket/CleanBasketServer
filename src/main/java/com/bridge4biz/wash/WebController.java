@@ -1,6 +1,5 @@
 package com.bridge4biz.wash;
 
-import java.net.InetAddress;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -8,11 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,14 +17,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.bridge4biz.wash.data.DropoffStateData;
-import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.util.Constant;
-import com.google.gson.Gson;
 
 @Controller
 public class WebController {
@@ -194,45 +187,6 @@ public class WebController {
 		return "home";
 		// }
 	}
-
-	// @Scheduled(cron = "0 0 0 * * *")
-	// public void backupSchedule() {
-	// String hostName = null;
-	// try {
-	// hostName = InetAddress.getLocalHost().getHostName();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// if (hostName.matches(".*qsh-2627.*")) {
-	// commandStart("/data/mysql-backup", "manager", "fastdel2015@", "wash");
-	// commandStart("/data/tomcat-backup");
-	// }
-	// }
-	//
-	// public void commandStart(String... command) {
-	// Process process = null;
-	// try {
-	// process = new ProcessBuilder(command).start();
-	// process.waitFor();
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// } finally {
-	// if (null != process) {
-	// IOUtils.closeQuietly(process.getInputStream());
-	// IOUtils.closeQuietly(process.getOutputStream());
-	// IOUtils.closeQuietly(process.getErrorStream());
-	// process.destroy();
-	// }
-	// }
-	// }
-
-	// @Secured("ROLE_ADMIN")
-	// @RequestMapping(value = "/backup")
-	// @ResponseBody
-	// public String backup() {
-	// backupSchedule();
-	// return "SUCCESS";
-	// }
 
 	@RequestMapping(value = "/refresh")
 	@ResponseBody

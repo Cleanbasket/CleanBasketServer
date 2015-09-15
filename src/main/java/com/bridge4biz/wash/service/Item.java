@@ -12,4 +12,17 @@ public class Item {
 	public String img = "";
 	public String rdate = "";
 	public double discount_rate = 0;
+	
+	public Item() {
+		
+	}
+	
+	public Item(ItemCode itemCode) {
+		this.item_code = itemCode.item_code;
+		this.category = itemCode.category;
+		this.name = itemCode.name;
+		this.descr = itemCode.descr;
+		this.price = itemCode.price;
+		this.img = itemCode.img;
+	}
 }

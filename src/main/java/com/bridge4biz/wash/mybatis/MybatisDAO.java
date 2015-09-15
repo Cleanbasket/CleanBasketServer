@@ -196,8 +196,9 @@ public class MybatisDAO {
 		try {
 			mapper.addUser(userData);
 
+			
+			
 		} catch (Exception e) {
-			e.printStackTrace();
 			// platformTransactionManager.rollback(status);
 			return Constant.ERROR;
 		}
@@ -298,6 +299,8 @@ public class MybatisDAO {
 			
 			sendNewSMS(order, order.address + " " + order.addr_building, phones);
 		} catch (Exception e) {
+			e.printStackTrace();
+			
 			return Constant.ERROR;
 		}
 		
@@ -564,7 +567,7 @@ public class MybatisDAO {
 		return true;
 	}
 
-	private Boolean priceCheck(Order orderData, Integer uid) {
+	public Boolean priceCheck(Order orderData, Integer uid) {
 		Integer sumPrice = 0;
 		Integer couponPrice = 0;
 		Integer dropoffPrice = 2000;
@@ -576,11 +579,11 @@ public class MybatisDAO {
 				item_price = (int) (mapper.getItemPrice(item.item_code) * (1 - item.discount_rate));
 				sumPrice += item_price * item.count;
 			}
-			
+
 			if (sumPrice >= 20000) {
 				dropoffPrice = 0;
 			}
-			
+
 			if (orderData.coupon.size() != 0) {
 				couponPrice = mapper.getCouponPrice(uid, orderData.coupon.get(0).cpid);
 				if (couponPrice == null) {
@@ -589,21 +592,16 @@ public class MybatisDAO {
 					return false;
 				}
 			}
-			
-//			if (sale != mapper.getSale()) {
-//				return false;
-//			}
-			
+
 			if (mapper.isAuthUser(uid) > 0) {
-				if (mileage > mapper.getMileage(uid)) {
+				if (mileage > mapper.getMileage(uid)) 
 					return false;
-				}
 			}
-			
+
 			if (!String.valueOf(orderData.dropoff_price).equals(String.valueOf(dropoffPrice))) {
 				return false;
 			}
-			
+
 			if (!String.valueOf(orderData.price).equals(String.valueOf(sumPrice + dropoffPrice - couponPrice - mileage))) {
 				return false;
 			}
@@ -1238,11 +1236,7 @@ public class MybatisDAO {
 			authUser.uid = uid;
 			
 			if (mapper.addAuthUser(authUser))  {
-				ArrayList<CouponCodeData> codeDatas = mapper.getOrderCoupon();
-				for (CouponCodeData data : codeDatas) {
-					mapper.addCoupon(new CouponData(uid, data.coupon_code, data.value, null, null));
-					addPush(uid, 0, null, data.value, Notification.COUPON_ALARM);
-				}
+				addCouponForRegister(uid);
 				
 				updateUser(uid);
 				
@@ -1251,11 +1245,34 @@ public class MybatisDAO {
 			else
 				return Constant.ERROR;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return Constant.ERROR;
 		}
 	}
+	
+//	public Integer addAuthUserWithRegister(AuthUser authUser, Integer uid) {
+//		try {
+//			if (mapper.addAuthUser(authUser))  {
+//				addCouponForRegister(uid);
+//				
+//				updateUser(uid);
+//				
+//				return Constant.SUCCESS;
+//			}
+//			else
+//				return Constant.ERROR;
+//		} catch (Exception e) {
+//			return Constant.ERROR;
+//		}
+//	}
 
+	private void addCouponForRegister(int uid) { 
+		ArrayList<CouponCodeData> codeDatas = mapper.getOrderCoupon();
+		for (CouponCodeData data : codeDatas) {
+			mapper.addCoupon(new CouponData(uid, data.coupon_code, data.value, null, null));
+			addPush(uid, 0, null, data.value, Notification.COUPON_ALARM);
+		}
+	}
+	
 	public AuthUser isAuthUser(Integer uid) {		
 		return mapper.getAuthUser(uid);
 	}
@@ -1294,6 +1311,8 @@ public class MybatisDAO {
 	}
 
 	public Integer modifyOrderItem(Order order, Integer uid) {
+		System.out.println(order.price + " / " + order.dropoff_price);
+		
 		if (order.state > 1)
 			return Constant.ERROR;
 		
@@ -1311,13 +1330,17 @@ public class MybatisDAO {
 				order.price = order.price - c.value;
 			}
 			
-			int mileage = mapper.getMileageByOid(uid, order.oid);
-			order.price = order.price - mileage;
+			if (mapper.isAuthUser(uid) > 0) {
+				int mileage = mapper.getMileageByOid(uid, order.oid);
+				order.price = order.price - mileage;
+			}
 			
 			if (!mapper.updateOrderData(order))
 				return Constant.ERROR;
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+			
 			return Constant.ERROR;
 		}
 		

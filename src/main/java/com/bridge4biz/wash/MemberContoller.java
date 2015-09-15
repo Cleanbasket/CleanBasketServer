@@ -86,24 +86,24 @@ public class MemberContoller {
 		Integer uid = dao.getUid(auth.getName());
 		Integer value = dao.addAuthUser(authUser, uid);
 		switch (value) {
-		case Constant.SUCCESS:
-			constant.setConstant(Constant.SUCCESS, "인증회원 가입 성공 : SUCCESS");
-			break;
-		case Constant.ERROR:
-			constant.setConstant(Constant.ERROR, "인증회원 가입 실패 : ERROR");
-			break;
-		case Constant.AUTH_CODE_TIME:
-			constant.setConstant(Constant.AUTH_CODE_TIME, "인증회원 가입 실패 : ERROR");
-			break;
-		case Constant.AUTH_CODE_INVALID:
-			constant.setConstant(Constant.AUTH_CODE_INVALID, "인증회원 가입 실패 : ERROR");
-			break;
-		case Constant.ACCOUNT_DUPLICATION:
-			constant.setConstant(Constant.ACCOUNT_DUPLICATION, "인증회원 가입 실패 : ERROR");
-			break;
-		case Constant.DUPLICATION:
-			constant.setConstant(Constant.DUPLICATION, "인증회원 가입 실패 : ERROR");
-			break;
+			case Constant.SUCCESS:
+				constant.setConstant(Constant.SUCCESS, "인증회원 가입 성공 : SUCCESS");
+				break;
+			case Constant.ERROR:
+				constant.setConstant(Constant.ERROR, "인증회원 가입 실패 : ERROR");
+				break;
+			case Constant.AUTH_CODE_TIME:
+				constant.setConstant(Constant.AUTH_CODE_TIME, "인증회원 가입 실패 : ERROR");
+				break;
+			case Constant.AUTH_CODE_INVALID:
+				constant.setConstant(Constant.AUTH_CODE_INVALID, "인증회원 가입 실패 : ERROR");
+				break;
+			case Constant.ACCOUNT_DUPLICATION:
+				constant.setConstant(Constant.ACCOUNT_DUPLICATION, "인증회원 가입 실패 : ERROR");
+				break;
+			case Constant.DUPLICATION:
+				constant.setConstant(Constant.DUPLICATION, "인증회원 가입 실패 : ERROR");
+				break;
 		}
 		
 		return constant;
@@ -143,10 +143,10 @@ public class MemberContoller {
 		Integer uid = dao.getUid(auth.getName());
 		Integer value = dao.modifyOrderItem(order, uid);
 		if (value == Constant.SUCCESS) {
-			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS");
+			return constant.setConstant(Constant.SUCCESS, "일반회원 변경 성공 : SUCCESS");
 		} 
 		else {
-			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
+			return constant.setConstant(Constant.ERROR, "일반회원 변경 실패 : ERROR");
 		}
 	}
 
