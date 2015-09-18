@@ -2,8 +2,7 @@
 ### versionName 1.1.5
 ##### 2015. 9. 18
 + 인앱결제 추가
-+ 
-# LaundryServer
+
 ### versionName 1.1.3
 ##### 2015. 7. 29
 + 배달자 앱과 호환
