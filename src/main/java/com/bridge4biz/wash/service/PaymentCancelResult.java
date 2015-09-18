@@ -7,14 +7,16 @@ public class PaymentCancelResult {
 	public String cancelDate = "";
 	public String cancelTime = "";
 	public String cancelNum = "";
+	public String TID = "";
 	
-	public PaymentCancelResult(String resultCode, String resultMsg, String cancelAmt, String cancelDate, String cancelTime, String cancelNum) {
+	public PaymentCancelResult(String resultCode, String resultMsg, String cancelAmt, String cancelDate, String cancelTime, String cancelNum, String TID) {
 		this.resultCode = resultCode;
 		this.resultMsg = resultMsg;
 		this.cancelAmt = cancelAmt;
 		this.cancelDate = cancelDate;
 		this.cancelTime = cancelTime;
 		this.cancelNum = cancelNum;
+		this.TID = TID;
 	}
 
 	public String getResultCode() {
@@ -39,5 +41,13 @@ public class PaymentCancelResult {
 
 	public String getCancelNum() {
 		return cancelNum;
+	}
+
+	public String getTID() {
+		return TID;
+	}
+
+	public void setTID(String tID) {
+		TID = tID;
 	}
 }

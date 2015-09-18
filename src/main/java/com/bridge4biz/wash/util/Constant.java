@@ -27,6 +27,8 @@ public class Constant {
 	public static final int AUTH_CODE_INVALID = 20;
 	public static final int AUTH_CODE_TIME = 21;
 	public static final int DUPLICATION_FEEDBACK = 22;
+	public static final int TOO_EARLY_TIME = 23;
+    public static final int TOO_LATE_TIME = 24;
 
 	public static final int PUSH_ASSIGN_PICKUP = 100;
 	public static final int PUSH_ASSIGN_DROPOFF = 101;
@@ -45,6 +47,11 @@ public class Constant {
 	public static final int INVALID = 208;
 
 	public static final String PATH = "/var/lib/tomcat7/webapps/";
+
+	
+	public static final int OPERATION_START_HOUR = 10;
+	public static final int OPERATION_END_HOUR = 23;
+	public static final int OPERATION_END_MINUTE = 30;
 
 	public Constant() {
 

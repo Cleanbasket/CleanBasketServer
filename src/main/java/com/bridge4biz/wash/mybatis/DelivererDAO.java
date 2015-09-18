@@ -79,7 +79,7 @@ public class DelivererDAO {
 		order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
 		
 		if (mapper.checkMileage(order.oid, order.uid) > 0)
-			order.mileage = mapper.getMileageByOid(order.oid, order.uid);
+			order.mileage = mapper.getMileageByOid(order.oid);
 		else
 			order.mileage = 0;
 		
@@ -171,5 +171,25 @@ public class DelivererDAO {
 			return Constant.ERROR;
 
 		return Constant.SUCCESS;
+	}
+
+	public Order getOrderByOid(String oid) {
+		Order order = mapper.getOrderForSingle(Integer.parseInt(oid));
+		
+		if (order != null)
+			additionalInfo(order);
+		
+		return order;
+	}
+
+	public ArrayList<Order> getOrderByPhone(String phone) {
+		ArrayList<Order> orders = mapper.getOrderByPhone(phone);
+		
+		if (orders != null) {
+			for (Order order : orders)
+				additionalInfo(order);
+		}
+			
+		return orders;
 	}
 }

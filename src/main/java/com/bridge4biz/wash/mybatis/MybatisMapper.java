@@ -256,7 +256,7 @@ public interface MybatisMapper {
 	ArrayList<String> getPhones(@Param("acid") Integer acid);
 	
 	@Select("SELECT * FROM orders WHERE oid = #{oid}")
-	OrderData getOrderForSingle(@Param("oid") Integer oid);
+	Order getOrderForSingle(@Param("oid") Integer oid);
 
 	
 	
@@ -429,8 +429,8 @@ public interface MybatisMapper {
 	@Select("SELECT count(*) FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
 	Integer checkMileage(@Param("oid") Integer oid, @Param("uid") Integer uid);
 	
-	@Select("SELECT mileage FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
-	Integer getMileageByOid(@Param("uid") Integer uid, @Param("oid") Integer oid);
+	@Select("SELECT mileage FROM mileage WHERE oid = #{oid} LIMIT 1")
+	Integer getMileageByOid(@Param("oid") Integer oid);
 	
 	@Select("SELECT price FROM sale ORDER BY sid DESC LIMIT 1")
 	Integer getSale();
@@ -553,4 +553,7 @@ public interface MybatisMapper {
 	
 	@Select("SELECT price FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	int getOrderPrice(@Param("oid") int oid, @Param("uid") int uid);
+
+	@Select("SELECT * FROM orders WHERE phone = #{phone}")
+	ArrayList<Order> getOrderByPhone(@Param("phone") String phone);	
 }

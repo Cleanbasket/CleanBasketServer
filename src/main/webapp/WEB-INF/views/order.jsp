@@ -110,6 +110,10 @@
 			<label class="text text-small">메모</label>		
 			<label class="text text-small"><!= memo !></label>
 		</div>
+		<div class="memo">
+			<label class="text text-small">마일리지</label>		
+			<label class="text text-small"><!= mileage !></label>
+		</div>
 	</script>
 
 	<script>

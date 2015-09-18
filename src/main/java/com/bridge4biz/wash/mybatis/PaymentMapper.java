@@ -19,13 +19,13 @@ public interface PaymentMapper {
 	Boolean removePayment(@Param("uid") Integer uid);
 
 	@Select("SELECT * FROM payment WHERE uid = #{uid}")
-	PaymentResult getPaymentInfo(@Param("oid") Integer oid, @Param("uid") Integer uid);
+	PaymentResult getPaymentInfo(@Param("uid") Integer uid);
 
 	@Insert("INSERT INTO payment_result (oid, uid, code, msg, tid, authDate, rdate) VALUES (#{oid}, #{uid}, #{resultCode}, #{resultMsg}, #{TID}, #{AuthDate}, NOW())")
 	Boolean addPaymentResult(@Param("oid") int oid, @Param("uid") int uid, @Param("resultCode") String resultCode, @Param("resultMsg") String resultMsg, @Param("TID") String TID, @Param("AuthDate") String AuthDate);
 
-	@Insert("INSERT INTO payment_cancel (oid, uid, code, msg, cancelAmt, cancelDate, cancelTime, cancelNum, rdate) VALUES (#{oid}, #{uid}, #{resultCode}, #{resultMsg}, #{cancelAmt}, #{cancelDate}, #{cancelTime}, #{cancelNum}, NOW())")
-	Boolean addCancelResult(@Param("oid") int oid, @Param("uid") int uid, @Param("resultCode") String resultCode, @Param("resultMsg") String resultMsg, @Param("cancelAmt") String cancelAmt, @Param("cancelDate") String cancelDate, @Param("cancelTime") String cancelTime, @Param("cancelNum") String cancelNum);
+	@Insert("INSERT INTO payment_cancel (oid, uid, code, msg, cancelAmt, cancelDate, cancelTime, cancelNum, TID, rdate) VALUES (#{oid}, #{uid}, #{resultCode}, #{resultMsg}, #{cancelAmt}, #{cancelDate}, #{cancelTime}, #{cancelNum}, #{TID}, NOW())")
+	Boolean addCancelResult(@Param("oid") int oid, @Param("uid") int uid, @Param("resultCode") String resultCode, @Param("resultMsg") String resultMsg, @Param("cancelAmt") String cancelAmt, @Param("cancelDate") String cancelDate, @Param("cancelTime") String cancelTime, @Param("cancelNum") String cancelNum, @Param("TID") String TID);
 	
 	@Select("SELECT bid FROM payment WHERE uid = #{uid}")
 	String getBillKey(@Param("uid") int uid);
@@ -38,4 +38,7 @@ public interface PaymentMapper {
 
 	@Select("SELECT tid FROM payment_result WHERE oid = #{oid} LIMIT 1")
 	String getTID(@Param("oid") int oid);
+
+
+	void getPaymentMethod(Integer uid);
 }

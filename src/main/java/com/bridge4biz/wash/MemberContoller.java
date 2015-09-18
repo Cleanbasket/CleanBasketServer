@@ -382,9 +382,18 @@ public class MemberContoller {
 			return constant.setConstant(Constant.ERROR, "카드 등록 실패 : ERROR", gson.toJson(paymentResult));
 		}
 	}
-	
+
 	@Secured("ROLE_MEMBER")
 	@RequestMapping(method=RequestMethod.GET, value = "/payment")
+	@ResponseBody
+	public Constant getPaymentInfo(Constant constant, Authentication auth, Gson gson) {
+		Integer uid = dao.getUid(auth.getName());
+
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentInfo(uid)));
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/payment/remove")
 	@ResponseBody
 	public Constant removePayment(Constant constant, Authentication auth, Gson gson) {
 		Integer uid = dao.getUid(auth.getName());

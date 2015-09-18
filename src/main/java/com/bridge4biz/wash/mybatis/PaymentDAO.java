@@ -11,16 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.bridge4biz.wash.data.PaymentData;
+import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.PaymentCancelResult;
 import com.bridge4biz.wash.service.PaymentResult;
 import com.bridge4biz.wash.service.PaymentTriggerResult;
+import com.bridge4biz.wash.util.PushMessage;
 
 public class PaymentDAO {
 	private static final Logger log = LoggerFactory.getLogger(PaymentDAO.class);		
 
 	private MybatisMapper mapper;
 	private PaymentMapper paymentMapper;
-	
+		
 	public PaymentDAO() {
 		
 	}
@@ -31,19 +33,26 @@ public class PaymentDAO {
 		this.paymentMapper = paymentMapper;
 	}
 
-	public PaymentResult getPaymentInfo(Integer oid, Integer uid) {
-		return paymentMapper.getPaymentInfo(oid, uid);
+	public NicePayWebConnector initNicePayWebConnector() {
+		NicePayWebConnector connector = new NicePayWebConnector();
+		connector.setLogHome("/var/lib/tomcat/logs");
+		connector.setNicePayHome("/var/lib/tomcat/logs");
+		
+		return connector;
 	}
 	
-	public PaymentResult addPayment(int uid, PaymentData paymentData) {
-        NicePayWebConnector connector = new NicePayWebConnector();
-
-        connector.setLogHome("/var/lib/tomcat7/logs");
-        connector.setNicePayHome("/var/lib/tomcat7/logs");
-      
-//        connector.setLogHome("/Users/Shared");
-//        connector.setNicePayHome("/Users/Shared");
-      
+	public PaymentResult getPaymentInfo(Integer uid) {
+		PaymentResult payment = paymentMapper.getPaymentInfo(uid);
+		
+		if (payment == null) {
+			payment = new PaymentResult("", "", "", "");
+		}
+		
+		return payment; 
+	}
+	
+	public PaymentResult addPayment(int uid, PaymentData paymentData) { 
+		NicePayWebConnector connector = initNicePayWebConnector();
         connector.addRequestData("CardNo", paymentData.getCardNo());
         connector.addRequestData("ExpMonth", paymentData.getExpMonth());
         connector.addRequestData("ExpYear", paymentData.getExpYear());
@@ -61,10 +70,6 @@ public class PaymentDAO {
         
         connector.addRequestData("actionType", "PY0");
         connector.addRequestData("PayMethod", "BILLKEY");
-
-//        NicePayAppConnector connector = new NicePayAppConnector();
-        
-//        connector.setRequestMap(map);
 
         try {
             connector.requestAction();
@@ -100,15 +105,8 @@ public class PaymentDAO {
 		return paymentMapper.removePayment(uid);
 	}
 	
-	public PaymentTriggerResult triggerPayment(int oid, int uid) {
-        NicePayWebConnector connector = new NicePayWebConnector();
-      
-        connector.setLogHome("/var/lib/tomcat7/logs");
-        connector.setNicePayHome("/var/lib/tomcat7/logs");
-        
-//        connector.setLogHome("/Users/Shared");
-//        connector.setNicePayHome("/Users/Shared");
-        
+	public PaymentTriggerResult triggerPayment(int oid, int uid) {      
+		NicePayWebConnector connector = initNicePayWebConnector();
         connector.addRequestData("MID", "cleanbsk1m");
         connector.addRequestData("EncodeKey", "StY2m0Iz9APoJYsEo4f4joxytEwTqidenr3yaFsTR9y4Mz8ywSUQvRiAN9cvT9SbptcoZAOosK1PAzNjSI8Mew==");
         connector.addRequestData("CardInterest", "0");
@@ -151,6 +149,8 @@ public class PaymentDAO {
         	paymentMapper.addPaymentResult(oid, uid, ptr.getResultCode(), ptr.getResultMsg(), ptr.getTID(), ptr.getAuthDate());
         	paymentMapper.setUpdatePaymentStatus(oid, 6);
         	
+        	PushMessage.addPush(uid, oid, ptr.getTID(), price, Notification.PAYMENT_ALARM, mapper.getRegid(uid));
+        	
         	// 보안 이슈로 빌키는 전하지 않음
         	return new PaymentTriggerResult(
         			connector.getResultData("ResultCode"), 
@@ -165,12 +165,8 @@ public class PaymentDAO {
         }
 	}
 	
-	public PaymentTriggerResult cancelPayment(int oid, int uid, String price, String partialCancelCode) {
-        NicePayWebConnector connector = new NicePayWebConnector();
-        
-        connector.setLogHome("/var/lib/tomcat7/logs");
-        connector.setNicePayHome("/var/lib/tomcat7/logs");
-		
+	public PaymentTriggerResult cancelPayment(int oid, int uid, String price, String partialCancelCode) {     
+		NicePayWebConnector connector = initNicePayWebConnector();
         connector.addRequestData("MID", "cleanbsk1m");
         connector.addRequestData("TID", paymentMapper.getTID(oid));
     	connector.addRequestData("PartialCancelCode", partialCancelCode);
@@ -207,11 +203,14 @@ public class PaymentDAO {
         			connector.getResultData("CancelAmt"), 
         			connector.getResultData("CancelDate"), 
         			connector.getResultData("CancelTime"),
-        			connector.getResultData("CancelNum"));
+        			connector.getResultData("CancelNum"),
+        			connector.getResultData("TID"));
         	
         	// type 0 is Card
-        	paymentMapper.addCancelResult(oid, uid, pcr.getResultCode(), pcr.getResultMsg(), pcr.getCancelAmt(), pcr.getCancelDate(), pcr.getCancelTime(), pcr.getCancelNum());
+        	paymentMapper.addCancelResult(oid, uid, pcr.getResultCode(), pcr.getResultMsg(), pcr.getCancelAmt(), pcr.getCancelDate(), pcr.getCancelTime(), pcr.getCancelNum(), pcr.getTID());
         	paymentMapper.setUpdatePaymentStatus(oid, 3);
+        	
+        	PushMessage.addPush(uid, oid, pcr.getTID(), Integer.parseInt(price), Notification.PAYMENT_CANCEL_ALARM, mapper.getRegid(uid));
         	
         	// 보안 이슈로 빌키는 전하지 않음
         	return new PaymentTriggerResult(

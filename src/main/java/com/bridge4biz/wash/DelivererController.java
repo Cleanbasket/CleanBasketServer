@@ -1,5 +1,6 @@
 package com.bridge4biz.wash;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -204,5 +206,31 @@ public class DelivererController {
 	@ResponseBody
 	public Constant delivererManage(Constant constant, Gson gson) {
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getDelivererAll()));
+	}
+	
+	
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.GET, value = "/order/{oid}")
+	@ResponseBody
+	public Constant getOrderByOid(Constant constant, Gson gson, @PathVariable String oid) {
+		Order order = delivererDAO.getOrderByOid(oid);
+		
+		if (order != null)
+			return constant.setConstant(Constant.SUCCESS, "", gson.toJson(order));
+		else
+			return constant.setConstant(Constant.ERROR, "");
+	}
+	
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.POST, value = "/order/phone")
+	@ResponseBody
+	public Constant getOrderByPhone(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
+		String phone = data.get("phone");
+		ArrayList<Order> orders = delivererDAO.getOrderByPhone(phone);
+		
+		if (orders != null)
+			return constant.setConstant(Constant.SUCCESS, "", gson.toJson(orders));
+		else
+			return constant.setConstant(Constant.ERROR, "");
 	}
 }

@@ -16,6 +16,7 @@ public class DelivererWork {
 	public String memo = "";
 	public Integer price = 0;
 	public Integer dropoff_price = 0;
+	public Integer mileage = 0;
 	public String pickup_date = "";
 	public String dropoff_date = "";
 	public String rdate = "";

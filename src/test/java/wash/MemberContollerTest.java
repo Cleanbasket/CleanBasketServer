@@ -3,6 +3,7 @@ package wash;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,7 @@ import com.bridge4biz.wash.service.ItemCode;
 import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
+import com.bridge4biz.wash.util.TimeCheck;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations="file:src/main/webapp/WEB-INF/spring/mybatis-config.xml")
@@ -47,7 +49,7 @@ public class MemberContollerTest {
 	public void setUp() {		
 		// User Setting
 		user = new UserData();
-		user.email = "test1115@test.com";
+		user.email = "test1116@test.com";
 		user.phone = "01000000000";
 
 		int constant = mybatisDAO.registerUserForMember(user);
@@ -58,14 +60,21 @@ public class MemberContollerTest {
 		this.uid = member.uid;
 		
 		// Order Setting
+		Calendar c = Calendar.getInstance();
+		
 		order = new Order();
 		order.address = "서울특별시 도봉구 역삼동";
 		order.addr_building = "대암빌딩 104호";
 		order.price = 12000;
 		order.dropoff_price = 2000;
 		order.coupon = new ArrayList<Coupon>();
-		order.pickup_date = "2015-01-01 10:00:00";
-		order.dropoff_date = "2015-02-01 10:00:00";
+		
+		c.add(Calendar.HOUR_OF_DAY, 1);
+		c.add(Calendar.MINUTE, 45);
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+		
+		c.add(Calendar.DAY_OF_MONTH, 2);
+		order.dropoff_date =  TimeCheck.getStringDateTime(c.getTime());
 		
 		ArrayList<Item> items = new ArrayList<Item>();
 		ArrayList<ItemCode> itemCode = mapper.getItemCode();
@@ -83,7 +92,7 @@ public class MemberContollerTest {
 	@Transactional
 	public void testMemberNewJoin() {
 		UserData user2 = new UserData();
-		user2.email = "test1115@test.com";
+		user2.email = "test1116@test.com";
 		user2.phone = "01000000000";
 		
 		int constant = mybatisDAO.registerUserForMember(user2);
@@ -104,6 +113,36 @@ public class MemberContollerTest {
 	@Transactional
 	public void testAddNewOrder() {
 		int constant = mybatisDAO.addNewOrder(order, uid);
+		assertEquals(Constant.SUCCESS, constant);
+		
+		Calendar c = Calendar.getInstance();
+		c.setTime(TimeCheck.getDate(order.pickup_date));
+		
+		if (c.get(Calendar.MINUTE) < 45) {
+			c.add(Calendar.HOUR_OF_DAY, -2);
+			c.add(Calendar.MINUTE, +15);
+		}
+		else {
+			c.add(Calendar.HOUR_OF_DAY, -1);
+			c.add(Calendar.MINUTE, -45);
+		}
+		
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+		constant = mybatisDAO.addNewOrder(order, uid);
+		assertEquals(Constant.TOO_EARLY_TIME, constant);
+		
+		c.set(Calendar.HOUR_OF_DAY, 24);
+		c.set(Calendar.MINUTE, 0);
+		
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+		constant = mybatisDAO.addNewOrder(order, uid);
+		assertEquals(Constant.TOO_LATE_TIME, constant);
+		
+		c.set(Calendar.HOUR_OF_DAY, 23);
+		c.set(Calendar.MINUTE, 29);
+		
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+		constant = mybatisDAO.addNewOrder(order, uid);
 		assertEquals(Constant.SUCCESS, constant);
 	}
 	

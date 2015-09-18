@@ -1,16 +1,14 @@
 package com.bridge4biz.wash.mybatis;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.transaction.PlatformTransactionManager;
+
 import com.bridge4biz.wash.data.AddressData;
 import com.bridge4biz.wash.data.AreaAlarmData;
 import com.bridge4biz.wash.data.AreaData;
@@ -24,10 +22,6 @@ import com.bridge4biz.wash.data.OrderStateData;
 import com.bridge4biz.wash.data.PassData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
-import com.bridge4biz.wash.gcm.Message;
-import com.bridge4biz.wash.gcm.MulticastResult;
-import com.bridge4biz.wash.gcm.Result;
-import com.bridge4biz.wash.gcm.Sender;
 import com.bridge4biz.wash.service.Address;
 import com.bridge4biz.wash.service.AppInfo;
 import com.bridge4biz.wash.service.Area;
@@ -56,7 +50,9 @@ import com.bridge4biz.wash.sms.Set;
 import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
+import com.bridge4biz.wash.util.PushMessage;
 import com.bridge4biz.wash.util.RandomNumber;
+import com.bridge4biz.wash.util.TimeCheck;
 
 public class MybatisDAO {
 	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
@@ -241,6 +237,14 @@ public class MybatisDAO {
 	public Integer addNewOrder(Order order, Integer uid) {
 		if (priceCheck(order, uid) == false) {
 			return Constant.ERROR;
+		}
+		
+		if (TimeCheck.isTooEarly(order.pickup_date)) {
+			return Constant.TOO_EARLY_TIME;
+		}
+		
+		if (TimeCheck.isTooLate(order.pickup_date)) {
+			return Constant.TOO_LATE_TIME;
 		}
 		
 		try {
@@ -678,33 +682,6 @@ public class MybatisDAO {
 
 		return Constant.SUCCESS;
 	}
-
-	
-	private void addPush(int uid, int oid, String msg, int value, int type) {
-		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
-		String regId = mapper.getRegid(uid);
-		Message message = new Message.Builder()
-		.addData("oid", String.valueOf(oid))
-		.addData("uid", String.valueOf(uid))
-		.addData("message", msg)
-		.addData("type", String.valueOf(type))
-		.addData("value", String.valueOf(value)).build();
-		List<String> list = new ArrayList<String>();
-		list.add(regId);
-		MulticastResult multiResult;
-		try {
-			multiResult = sender.send(message, list, 3);
-			if (multiResult != null) {
-				List<Result> resultList = multiResult.getResults();
-				for (Result result : resultList) {
-					log.debug("Result : " + result.getMessageId());
-				}
-		}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	private void sendNewDeleteSMS(Order order, Integer uid) {
 		String address = mapper.getAddressForOrderId(order.oid);
@@ -721,7 +698,7 @@ public class MybatisDAO {
 		
 		ArrayList<String> phones = mapper.getDistrictPhones(dcid);
 				
-		OrderData orderData = mapper.getOrderForSingle(order.oid);
+		Order orderData = mapper.getOrderForSingle(order.oid);
 		
 		Set set = new Set();
 		set.setTo(phones.toArray(new String[phones.size()])); // 받는사람 번호
@@ -735,7 +712,7 @@ public class MybatisDAO {
 	}
 	
 	private void sendDeleteSMS(OrderData orderData, Integer uid) {
-		OrderData order = mapper.getOrderForSingle(orderData.oid);
+		Order order = mapper.getOrderForSingle(orderData.oid);
 		String district = order.address;
 		String[] districts = district.split(" ");
 		String addr = districts[0] + " " + districts[1];
@@ -902,6 +879,7 @@ public class MybatisDAO {
 		for (DelivererWork delivererWorkList : delivererWorkLists) {
 			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
 			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
+			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
 		}
 		return delivererWorkLists;
 	}
@@ -911,6 +889,7 @@ public class MybatisDAO {
 		for (DelivererWork delivererWorkList : delivererWorkLists) {
 			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
 			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
+			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
 		}
 		return delivererWorkLists;
 	}
@@ -927,16 +906,16 @@ public class MybatisDAO {
 
 	public Boolean updateDeliveryRequestComplete(Integer uid, int oid, String note, String payment_method) {
 		try {
-			OrderData orderData = getOrderByOrderId(oid);
+			Order orderData = getOrderByOrderId(oid);
 			int userId = orderData.uid;
 									
 			if (mapper.isAuthUser(userId) == 1 && mapper.checkMileage(uid, oid) == 0) {
 				if (mapper.selectRate(oid) == 0)
-					addPush(userId, oid, null, 0, Notification.FEEDBACK_ALARM);
+					PushMessage.addPush(userId, oid, null, 0, Notification.FEEDBACK_ALARM, mapper.getRegid(uid));
 				
 				addMileage(userId, oid, (int) (orderData.price * getAccumulationRate(userId)));
 				addTotal(userId, orderData.price);
-				addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)), Notification.MILEAGE_ALARM);
+				PushMessage.addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)), Notification.MILEAGE_ALARM, mapper.getRegid(uid));
 			}
 			
 			return mapper.updateDeliveryRequestComplete(oid, note, payment_method);
@@ -947,7 +926,7 @@ public class MybatisDAO {
 		}
 	}
 
-	private OrderData getOrderByOrderId(int oid) {
+	private Order getOrderByOrderId(int oid) {
 		return mapper.getOrderForSingle(oid);
 	}
 
@@ -1023,7 +1002,17 @@ public class MybatisDAO {
 		OrderState orderState = new OrderState();
 		orderState.stateData = mapper.getOrderStateData();
 		for (OrderStateData data : orderState.stateData) {
-			data.count = mapper.getSumCountForItem(data.oid);
+			Integer count = mapper.getSumCountForItem(data.oid);
+			if (count != null)
+				data.count = count;
+			else
+				data.count = 0;
+			
+			Integer mileage = mapper.getMileageByOid(data.oid);
+			if (mileage != null)
+				data.mileage = mileage;
+			else
+				data.mileage = 0;
 		}
 		orderState.complete = mapper.getOrderStateCompleteCount();
 		orderState.incomplete = mapper.getOrderStateIncompleteCount();
@@ -1221,7 +1210,7 @@ public class MybatisDAO {
 					break;
 				}
 			}
-			
+
 			authUser.code = random;
 			
 			if (mapper.getCountOfOrder(uid) > 0 && null != mapper.getTotalGrossOfUser(uid)) {
@@ -1234,7 +1223,7 @@ public class MybatisDAO {
 				authUser.total = 0;
 						
 			authUser.uid = uid;
-			
+
 			if (mapper.addAuthUser(authUser))  {
 				addCouponForRegister(uid);
 				
@@ -1245,6 +1234,7 @@ public class MybatisDAO {
 			else
 				return Constant.ERROR;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return Constant.ERROR;
 		}
 	}
@@ -1269,7 +1259,7 @@ public class MybatisDAO {
 		ArrayList<CouponCodeData> codeDatas = mapper.getOrderCoupon();
 		for (CouponCodeData data : codeDatas) {
 			mapper.addCoupon(new CouponData(uid, data.coupon_code, data.value, null, null));
-			addPush(uid, 0, null, data.value, Notification.COUPON_ALARM);
+			PushMessage.addPush(uid, 0, null, data.value, Notification.COUPON_ALARM, mapper.getRegid(uid));
 		}
 	}
 	
@@ -1331,7 +1321,7 @@ public class MybatisDAO {
 			}
 			
 			if (mapper.isAuthUser(uid) > 0) {
-				int mileage = mapper.getMileageByOid(uid, order.oid);
+				int mileage = mapper.getMileageByOid(order.oid);
 				order.price = order.price - mileage;
 			}
 			
@@ -1386,7 +1376,7 @@ public class MybatisDAO {
 		String address = mapper.getAddressForOrderId(oid);
 		District districtObject = makeDistrict(address);
 
-		OrderData order = mapper.getOrderForSingle(oid);
+		Order order = mapper.getOrderForSingle(oid);
 		
 		int dcid = 0;
 		

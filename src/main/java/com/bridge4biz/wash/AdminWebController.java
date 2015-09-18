@@ -347,10 +347,9 @@ public class AdminWebController {
 	@RequestMapping(value = "/payment", consumes = { "application/json" })
 	@ResponseBody
 	public Constant getPaymentInfo(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
-		int oid = Integer.valueOf(data.get("oid"));
 		int uid = Integer.valueOf(data.get("uid"));
 		
-		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentInfo(oid, uid)));
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentInfo(uid)));
 	}
 	
 	@Secured("ROLE_ADMIN")

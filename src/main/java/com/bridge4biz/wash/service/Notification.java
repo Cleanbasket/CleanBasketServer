@@ -9,6 +9,8 @@ public class Notification {
     public static final int FEEDBACK_ALARM = 5;
     public static final int MODIFY_ALARM = 6;
     public static final int MILEAGE_ALARM = 7;
+    public static final int PAYMENT_ALARM = 8;
+    public static final int PAYMENT_CANCEL_ALARM = 9;
 
 	public int nid;
 	public int uid;
