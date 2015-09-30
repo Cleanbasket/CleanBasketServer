@@ -1321,8 +1321,10 @@ public class MybatisDAO {
 			}
 			
 			if (mapper.isAuthUser(uid) > 0) {
-				int mileage = mapper.getMileageByOid(order.oid);
-				order.price = order.price - mileage;
+				if (mapper.getMileageByOid(order.oid) != null) {
+					int mileage = mapper.getMileageByOid(order.oid);
+					order.price = order.price - mileage;
+				}
 			}
 			
 			if (!mapper.updateOrderData(order))

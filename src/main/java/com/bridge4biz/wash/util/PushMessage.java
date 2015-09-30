@@ -41,4 +41,29 @@ public class PushMessage {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void addPush(int uid, int oid, String msg, int value, int type, ArrayList<String> regIds) {
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
+		Message message = new Message.Builder()
+		.addData("oid", String.valueOf(oid))
+		.addData("uid", String.valueOf(uid))
+		.addData("message", msg)
+		.addData("type", String.valueOf(type))
+		.addData("value", String.valueOf(value)).build();
+		List<String> list = new ArrayList<String>();
+		list.addAll(regIds);
+		MulticastResult multiResult;
+		try {
+			multiResult = sender.send(message, list, 3);
+			if (multiResult != null) {
+				List<Result> resultList = multiResult.getResults();
+				for (Result result : resultList) {
+					log.debug("Result : " + result.getMessageId());
+				}
+		}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

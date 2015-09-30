@@ -132,3 +132,22 @@ td[id ^= "EXPAND"], td[id ^= "EXPAND"]:hover {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
+
+body {
+  font: 10px sans-serif;
+}
+
+.bar rect {
+  fill: steelblue;
+  shape-rendering: crispEdges;
+}
+
+.bar text {
+  fill: #fff;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}

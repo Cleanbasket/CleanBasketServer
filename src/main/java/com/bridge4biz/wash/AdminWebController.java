@@ -90,6 +90,12 @@ public class AdminWebController {
 	}	
 	
 	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/dashboard")
+	public String dashboard() {
+		return "dashboard";
+	}	
+	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value = "/order", consumes = { "application/json" })
 	@ResponseBody
 	public Constant orderState(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
@@ -151,7 +157,7 @@ public class AdminWebController {
 	}
 	
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(method=RequestMethod.POST, value = "/admin/date", consumes = { "application/json" })
+	@RequestMapping(method=RequestMethod.POST, value = "/date", consumes = { "application/json" })
 	@ResponseBody
 	public Constant insertDate(Constant constant, Gson gson, @RequestBody Map<String, String> data) {		
 		String acidStr = data.get("acid");

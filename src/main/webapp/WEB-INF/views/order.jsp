@@ -39,7 +39,8 @@
 					<li><a href="../admin/dropoff" onfocus="this.blur()">배달관리</a></li>
 					<li><a href="../admin/member" onfocus="this.blur()">회원관리</a></li>
 					<li><a href="../admin/deliverer" onfocus="this.blur()">배달자관리</a></li>
-					<li><a href="../admin/area" onfocus="this.blur()">지역관리</a></li>																									
+					<li><a href="../admin/area" onfocus="this.blur()">지역관리</a></li>	
+					<li><a href="../admin/dashboard" onfocus="this.blur()">대시보드</a></li>																																																	
 					<li><a href="../logout" onfocus="this.blur()">로그아웃</a></li>
 				</ul>
 			</div>
@@ -102,7 +103,7 @@
 	</script>
 	<script data-jui="#order" data-tpl="none" type="text/template">
 		<tr>
-			<td colspan="10" class="none">데이터가 없습니다.</td>
+			<td colspan="12" class="none">데이터가 없습니다.</td>
 		</tr>
 	</script>
 	<script data-jui="#order" data-tpl="expand" type="text/template">
@@ -224,7 +225,6 @@
 						data.stateData[i].payment_method = "이체완료"
 						break;
 					case 6:
-						// data.stateData[i].payment_method = "인앱완료" 
 						data.stateData[i].payment_method = '<a href="" onclick="return false" id="' + data.stateData[i].uid + '" price="' + data.stateData[i].price + '" oid="' + data.stateData[i].oid + '" onfocus="this.blur()" class="in_app_cancel_link">인앱완료</a>'; 
 						break;
 				}
@@ -470,33 +470,6 @@
 					}
 				});
 			});
-		}
-		
-		function startRefresher() {
-			$(window).ready(function() {
-				setInterval(function() {
-					$.ajax({
-						url : '../admin/refresh',
-						async : true,
-						success : function(json) {
-							var data = JSON.parse(json);
-							var num = $("#order td")[1];
-							var oid = num.outerText.split('-')[1];
-							if(parseInt(data.data) > parseInt(oid)) {
-								playSound();
-							};
-						},
-						error : function(request, status, error) {
-							console.log(request.responseText);
-						}
-					});
-				}, 30000);
-			});
-		}
-		
-		function playSound() {
-			var snd = new Audio('../resources/sounds/alarm.mp3'); // buffers automatically when created
-			snd.play();
 		}
 		
 		function orderResize() {
