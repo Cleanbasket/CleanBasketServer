@@ -46,21 +46,11 @@
 	<script>
 		function drawDailyPickup(data) {
 			var body = d3.select("body");
-			body.append("h2")
+			body.append("h3")
 				.text("Daily Number of Pick-up");
-			body.append("div")
-				.attr("class", "top-label age-label")
-				.append("p")
-				.text("Date");
-			body.append("div")
-				.attr("class", "top-label")
-				.append("p")
-				.text("Count");
-			body.append("div")
-				.attr("class", "clearfix");
 			
 			var margin = {top: 30, right: 0, bottom: 0, left: 100};
-			var width = 500 - margin.left - margin.right,
+			var width = 960 - margin.left - margin.right,
 				height = 450 - margin.top - margin.bottom,
 				translateText = "translate(" + margin.left + ", " + margin.top + ")";
 			
@@ -73,28 +63,37 @@
 				.attr("class", "bar");
 			var barLabelGroup = svg.append("g")
 				.attr("class", "bar-label")
-			
-			var x = d3.scale.linear()
+
+			var x = d3.scale.ordinal()
+				.domain(data.map(function(element) { return element.date }))
+				.rangeBands([0, width], 0.2);
+
+			var yForAxis = d3.scale.linear()
 				.domain([0, d3.max(data, function(element) { return element.data })])
-				.range([0, width]);
+				.range([height, 0]);
 			
-			var y = d3.scale.ordinal()
-				.domain(data.map(function(element) { return element.date } ))
-				.rangeBands([0, height], 0.2);
-			
-			d3.max(data, function(element) { return element.value })
-			
+			var y = d3.scale.linear()
+				.domain([0, d3.max(data, function(element) { return element.data })])
+				.range([0, height]);
+						
 			var xAxis = d3.svg.axis()
 				.scale(x)
-				.orient("top")
+				.orient("bottom")
 				.ticks(5);
-			
+
 			svg.append("g")
 				.call(xAxis)
-				.attr("class", "axis");
-			
+				.attr("class", "axis")
+				.attr("transform", "translate(0, " + height + ")")
+			  .selectAll("text")
+			  	.attr("y", 0)
+			    .attr("x", 9)
+			    .attr("dy", ".35em")
+			    .attr("transform", "rotate(-90)")
+			    .style("text-anchor", "start");
+			  
 			var yAxis = d3.svg.axis()
-				.scale(y)
+				.scale(yForAxis)
 				.orient("left");
 
 			svg.append("g")
@@ -104,9 +103,13 @@
 			barGroup.selectAll("rect")
 				.data(data)
 				.enter().append("rect")
-				.attr("height", y.rangeBand())
-				.attr("width", function(d) { return x(d.data) })
-				.attr("y", function(d, i) { return y(d.date) })	
+				.attr("height", function(d) { return y(d.data) })
+				.attr("width", x.rangeBand())
+				.attr("x", function(d, i) { return x(d.date) })	
+				.attr("y", function(d, i) { return height - y(d.data) });	
+				
+			body.append("div")
+				.attr("class", "clearfix");
 		}
 		
 		$(window).ready(function() {
@@ -121,9 +124,8 @@
 				async : true,
 				success : function(json) {
 					var data = JSON.parse(json.data);
-					data.sort
-					console.log(data)
-					drawDailyPickup(data)
+					data.reverse();
+					drawDailyPickup(data);
 				},
 				error : function(request, status, error) {
 					console.log(request.responseText);
