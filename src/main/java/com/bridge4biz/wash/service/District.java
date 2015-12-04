@@ -15,4 +15,28 @@ public class District {
 		this.district = district;
 		this.dong = dong;
 	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public String getDong() {
+		return dong;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public void setDong(String dong) {
+		this.dong = dong;
+	}
 }

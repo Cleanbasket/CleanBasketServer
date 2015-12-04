@@ -133,7 +133,3 @@ td[id ^= "EXPAND"], td[id ^= "EXPAND"]:hover {
 	border-top-right-radius: 0;
 }
 
-body {
-  font: 10px sans-serif;
-}
-

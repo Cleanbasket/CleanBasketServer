@@ -38,7 +38,4 @@ public interface PaymentMapper {
 
 	@Select("SELECT tid FROM payment_result WHERE oid = #{oid} LIMIT 1")
 	String getTID(@Param("oid") int oid);
-
-
-	void getPaymentMethod(Integer uid);
 }

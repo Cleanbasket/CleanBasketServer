@@ -6,6 +6,8 @@ public class ItemCode {
 	public String name = "";
 	public String descr = "";
 	public Integer price = 0;
+	public Integer scope = 0;
 	public String img = "";
+	public Integer info = 0;
 	public String rdate = "";
 }

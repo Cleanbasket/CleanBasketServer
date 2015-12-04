@@ -8,9 +8,11 @@ public class Item {
 	public String name = "";
 	public String descr = "";
 	public Integer price = 0;
+	public Integer scope = 0;
 	public Integer count = 0;
 	public String img = "";
 	public String rdate = "";
+	public Integer info = 0;
 	public double discount_rate = 0;
 	
 	public Item() {
@@ -23,6 +25,7 @@ public class Item {
 		this.name = itemCode.name;
 		this.descr = itemCode.descr;
 		this.price = itemCode.price;
+		this.scope = itemCode.scope;
 		this.img = itemCode.img;
 	}
 }

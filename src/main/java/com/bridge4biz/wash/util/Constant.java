@@ -46,7 +46,7 @@ public class Constant {
 	public static final int DUPLICATION = 207;
 	public static final int INVALID = 208;
 
-	public static final String PATH = "/var/lib/tomcat7/webapps/";
+	public static final String PATH = "/var/lib/tomcat/webapps/";
 
 	
 	public static final int OPERATION_START_HOUR = 10;

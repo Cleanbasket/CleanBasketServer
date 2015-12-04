@@ -45,9 +45,28 @@
 
 	<script>
 		function drawDailyPickup(data) {
+			var buttonTypes = ["Daily", "Weekly", "Monthly"];
+			var type = "Daily"
+
 			var body = d3.select("body");
 			body.append("h3")
-				.text("Daily Number of Pick-up");
+				.text("Number of Pickup");
+						
+			var buttons = 
+				body.append("div")
+				.attr("class", "buttons-container")
+				.selectAll("div").data(buttonTypes)
+				.enter().append("div")
+				.text(function(d) { return d; })
+				.attr("class", function(d) {
+					if(d == type)
+						return "button selected";
+					else
+						return "button";
+				})
+			
+			body.append("div")
+				.attr("class", "clearfix");
 			
 			var margin = {top: 30, right: 0, bottom: 0, left: 100};
 			var width = 960 - margin.left - margin.right,
@@ -61,6 +80,8 @@
 				.attr("transform", translateText);
 			var barGroup = svg.append("g")
 				.attr("class", "bar");
+			var firstGroup = svg.append("g")
+				.attr("class", "first");
 			var barLabelGroup = svg.append("g")
 				.attr("class", "bar-label")
 
@@ -68,22 +89,25 @@
 				.domain(data.map(function(element) { return element.date }))
 				.rangeBands([0, width], 0.2);
 
-			var yForAxis = d3.scale.linear()
-				.domain([0, d3.max(data, function(element) { return element.data })])
-				.range([height, 0]);
-			
 			var y = d3.scale.linear()
 				.domain([0, d3.max(data, function(element) { return element.data })])
 				.range([0, height]);
-						
+
+			var yForAxis = d3.scale.linear()
+				.domain([0, d3.max(data, function(element) { return element.data })])
+				.range([height, 0]);
+				
 			var xAxis = d3.svg.axis()
 				.scale(x)
-				.orient("bottom")
-				.ticks(5);
+				.orient("bottom");
+
+			var yAxis = d3.svg.axis()
+				.scale(yForAxis)
+				.orient("left");
 
 			svg.append("g")
 				.call(xAxis)
-				.attr("class", "axis")
+				.attr("class", "x axis")
 				.attr("transform", "translate(0, " + height + ")")
 			  .selectAll("text")
 			  	.attr("y", 0)
@@ -92,24 +116,167 @@
 			    .attr("transform", "rotate(-90)")
 			    .style("text-anchor", "start");
 			  
-			var yAxis = d3.svg.axis()
-				.scale(yForAxis)
-				.orient("left");
-
 			svg.append("g")
 				.call(yAxis)
-				.attr("class", "axis");
+				.attr("class", "y axis");
 			
 			barGroup.selectAll("rect")
 				.data(data)
-				.enter().append("rect")
+			  .enter().append("rect")
 				.attr("height", function(d) { return y(d.data) })
 				.attr("width", x.rangeBand())
+				.attr("x", function(d) { return x(d.date) })	
+				.attr("y", function(d) { return height - y(d.data) })
+				.attr("fill", "#83dbd1")
+			    .on("mouseover", function() {
+					d3.select(this)
+						.attr("fill", "orange")
+				})
+				.on("mouseout", function() {
+					d3.select(this)
+						.attr("fill", "#83dbd1");
+				})
+			  .append("title")
+				.text(function(d) {
+					return "Pickup : " + d.data;
+				});	
+			
+			firstGroup.selectAll("rect")
+				.data(data)
+			  .enter().append("rect")
+				.attr("height", function(d) { return y(d.data2) })
+				.attr("width", x.rangeBand() * 0.8)
 				.attr("x", function(d, i) { return x(d.date) })	
-				.attr("y", function(d, i) { return height - y(d.data) });	
-				
+				.attr("y", function(d, i) { return height - y(d.data2) })
+				.attr("fill", "#7FBCE8")
+			    .on("mouseover", function() {
+			    	d3.select(this)
+		    			.attr("fill", "orange");
+				})
+			    .on("mouseout", function() {
+				d3.select(this)
+					.attr("fill", "#7FBCE8");
+				})
+			  .append("title")
+				.text(function(d) {
+					return "New Pickup : " + d.data2;
+				});
+			  
 			body.append("div")
 				.attr("class", "clearfix");
+			
+			var callback = function(type, popData) {
+				x = d3.scale.ordinal()
+					.domain(popData.map(function(element) { return element.date }))
+					.rangeBands([0, width], 0.2);
+
+				y = d3.scale.linear()
+					.domain([0, d3.max(popData, function(element) { return element.data })])
+					.range([0, height]);
+				
+				yForAxis = d3.scale.linear()
+					.domain([0, d3.max(popData, function(element) { return element.data })])
+					.range([height, 0]);
+				
+				xAxis = d3.svg.axis()
+					.scale(x)
+					.orient("bottom");
+
+				yAxis = d3.svg.axis()
+					.scale(yForAxis)
+					.orient("left");
+				
+				svg.selectAll("g.x.axis")
+					.call(xAxis)
+				  .selectAll("text")
+				  	.attr("y", 0)
+				    .attr("x", 9)
+				    .attr("dy", ".35em")
+					.attr("transform", "rotate(-90)")
+				    .style("text-anchor", "start");
+				
+				svg.selectAll("g.y.axis")
+					.call(yAxis);
+				
+				if (type == "d" || type == "w") {
+					barGroup.selectAll("rect").data(popData).enter().append("rect").attr("fill", "#83dbd1")
+							.on("mouseover", function() {
+								d3.select(this)
+									.attr("fill", "orange")
+							})
+							.on("mouseout", function() {
+								d3.select(this)
+									.attr("fill", "#83dbd1");
+							})
+							.append("title")
+							.text(function(d) {
+								return "Pickup : " + d.data;
+							});	
+					
+					firstGroup.selectAll("rect").data(popData).enter().append("rect").attr("fill", "#7FBCE8")
+							.on("mouseover", function() {
+								d3.select(this)
+									.attr("fill", "orange")
+							})
+							.on("mouseout", function() {
+								d3.select(this)
+									.attr("fill", "#7FBCE8");
+							})
+							.append("title")
+							.text(function(d) {
+								return "Pickup : " + d.data2;
+							});	
+				}
+				
+				barGroup.selectAll("rect")
+					.data(popData)
+					.transition()
+					.duration(500)
+					.attr("height", function(d) { return y(d.data) })
+					.attr("width", x.rangeBand())
+					.attr("x", function(d, i) { return x(d.date) })	
+					.attr("y", function(d, i) { return height - y(d.data) })
+					.attr("fill", "#83dbd1")
+				  .select("title")
+					.text(function(d) {
+						return "Pickup : " + d.data;
+					});	
+				  
+				firstGroup.selectAll("rect")
+					.data(popData)
+					.transition()
+					.duration(500)
+					.attr("height", function(d) { return y(d.data2) })
+					.attr("width", x.rangeBand() * 0.8)
+					.attr("x", function(d, i) { return x(d.date) })	
+					.attr("y", function(d, i) { return height - y(d.data2) })
+					.attr("fill", "#7FBCE8")
+				  .select("title")
+					.text(function(d) {
+						return "Pickup : " + d.data2;
+					});	
+				
+				if (type == "m") {
+					barGroup.selectAll("rect").data(popData).exit().remove();
+					firstGroup.selectAll("rect").data(popData).exit().remove();
+				}
+			}
+			
+			buttons.on("click", function(d) {
+				d3.select(".selected")
+					.classed("selected", false);
+				d3.select(this)
+					.classed("selected", true);
+				
+				type = d;
+								
+				if (d == "Daily") 
+					popData = getData("d", callback);
+				else if (d == "Weekly")
+					popData = getData("w", callback);
+				else if (d == "Monthly")
+					popData = getData("m", callback);
+			});
 		}
 		
 		$(window).ready(function() {
@@ -119,7 +286,7 @@
 		function getDailyPickup() {
 			$.ajax({
 				type : 'GET',
-				url : '../dash/daily/pickup/30',
+				url : '../dash/pickup/d/30',
 				dataType : 'json',
 				async : true,
 				success : function(json) {
@@ -129,11 +296,26 @@
 				},
 				error : function(request, status, error) {
 					console.log(request.responseText);
-					errorCheck(request.responseText);
+				}
+			});
+		}
+		
+		function getData(type, callback) {
+			$.ajax({
+				type : 'GET',
+				url : '../dash/pickup/' + type + '/30',
+				dataType : 'json',
+				async : true,
+				success : function(json) {
+					var data = JSON.parse(json.data);
+					data.reverse();
+					callback(type, data);
+				},
+				error : function(request, status, error) {
+					console.log(request.responseText);
 				}
 			});
 		}
 	</script>
-	
 </body>
 </html>

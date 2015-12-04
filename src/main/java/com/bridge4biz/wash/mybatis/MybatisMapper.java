@@ -21,7 +21,6 @@ import com.bridge4biz.wash.data.DropoffStateData;
 import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.OrderData;
 import com.bridge4biz.wash.data.OrderStateData;
-import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Address;
@@ -38,15 +37,14 @@ import com.bridge4biz.wash.service.District;
 import com.bridge4biz.wash.service.Feedback;
 import com.bridge4biz.wash.service.Item;
 import com.bridge4biz.wash.service.ItemCode;
+import com.bridge4biz.wash.service.ItemInfo;
 import com.bridge4biz.wash.service.Member;
 import com.bridge4biz.wash.service.MemberInfo;
 import com.bridge4biz.wash.service.MemberOrderInfo;
 import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderItem;
-import com.bridge4biz.wash.service.PaymentResult;
-import com.bridge4biz.wash.service.PaymentTriggerResult;
-import com.google.gson.JsonElement;
+import com.bridge4biz.wash.service.OrderItemInfo;
 
 public interface MybatisMapper {
 	@Select("SELECT 1")
@@ -123,7 +121,7 @@ public interface MybatisMapper {
 
 	
 	
-	@Select("SELECT * FROM item_code")
+	@Select("SELECT A.*, IF(B.item_code IS NULL, 0, A.item_code) AS info FROM item_code A LEFT JOIN item_info B ON A.item_code = B.item_code")
 	ArrayList<ItemCode> getItemCode();
 
 	@Select("SELECT cpid, name, descr, type, kind, infinite, A.value, img, A.start_date, A.end_date, A.rdate FROM coupon AS A INNER JOIN coupon_code AS B ON A.coupon_code = B.coupon_code WHERE (uid = #{uid} AND used = 0 AND enabled = 1 AND A.end_date > NOW()) OR (uid = #{uid} AND used = 0 AND enabled = 1 AND infinite = 1)")
@@ -132,10 +130,16 @@ public interface MybatisMapper {
 	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE uid = #{uid} AND state != 4")
 	ArrayList<Order> getOrder(@Param("uid") Integer uid);
 
-	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE (state = 1 AND pickup_man = #{uid}) OR (state = 2 AND rdate >= CURDATE() AND pickup_man = #{uid}) ORDER BY state ASC, pickup_date ASC, oid ASC")
+	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE uid = #{uid} ORDER BY oid DESC")
+	ArrayList<Order> getAllOrder(@Param("uid") Integer uid);
+	
+	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE uid = #{uid} AND  state != 4 ORDER BY oid DESC LIMIT 1")
+	ArrayList<Order> getRecentOrder(@Param("uid") Integer uid);
+	
+	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 1 AND pickup_man = #{uid}) OR (state = 2 AND rdate >= CURDATE() AND pickup_man = #{uid}) ORDER BY state ASC, pickup_date ASC, oid ASC")
 	ArrayList<DelivererWork> getPickupRequest(@Param("uid") Integer uid);
 
-	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE (state = 3 AND dropoff_man = #{uid}) OR (state = 4 AND rdate >= CURDATE() AND dropoff_man = #{uid}) ORDER BY state ASC, dropoff_date ASC, oid ASC")
+	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 3 AND dropoff_man = #{uid}) OR (state = 4 AND rdate >= CURDATE() AND dropoff_man = #{uid}) ORDER BY state ASC, dropoff_date ASC, oid ASC")
 	ArrayList<DelivererWork> getDeliveryRequest(@Param("uid") Integer uid);
 
 	@Select("SELECT itid, oid, A.item_code, name, descr, A.price, count, img, A.rdate FROM item AS A INNER JOIN item_code AS B ON A.item_code = B.item_code WHERE oid = #{oid}")
@@ -154,7 +158,7 @@ public interface MybatisMapper {
 	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, payment_method, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC LIMIT 500")
 	ArrayList<OrderStateData> getOrderStateData();
 
-	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE order_number LIKE #{search} OR email LIKE #{search} ORDER BY oid DESC")
+	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, payment_method, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE order_number LIKE #{search} OR email LIKE #{search} ORDER BY oid DESC")
 	ArrayList<OrderStateData> getOrderStateDataSearch(@Param("search") String search);
 
 	@Select("SELECT COUNT(*) FROM orders WHERE state = 4")
@@ -187,10 +191,12 @@ public interface MybatisMapper {
 	
 	
 	
-	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER'")
+	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid WHERE authority = 'ROLE_MEMBER' ORDER BY count DESC")
 	ArrayList<MemberInfo> getMemberInfo();
 
-	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search}")
+//	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search}")
+//	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid WHERE authority = 'ROLE_MEMBER' ORDER BY count DESC")
+	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid  WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search} ORDER BY count DESC")
 	ArrayList<MemberInfo> getMemberInfoSearch(@Param("search") String search);
 
 	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER' AND uid = #{uid}")
@@ -257,8 +263,6 @@ public interface MybatisMapper {
 	
 	@Select("SELECT * FROM orders WHERE oid = #{oid}")
 	Order getOrderForSingle(@Param("oid") Integer oid);
-
-	
 	
 	@Insert("INSERT INTO user (email, password, name, phone, img, birthday, enabled, authority, rdate) VALUES(#{email}, SHA(#{password}), #{name}, #{phone}, #{img}, #{birthday}, #{enabled}, #{authority}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "uid", before = false, resultType = Integer.class)
@@ -341,6 +345,9 @@ public interface MybatisMapper {
 	@Update("UPDATE orders SET state = 4, note = #{note}, payment_method = #{payment_method}, rdate = NOW() WHERE oid = #{oid}")
 	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, @Param("payment_method") String payment_method);
 
+	@Update("UPDATE orders SET state = 4, note = #{note}, rdate = NOW() WHERE oid = #{oid}")
+	Boolean updateDeliveryRequest(@Param("oid") Integer oid, @Param("note") String note);
+	
 	@Update("UPDATE orders SET address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder} WHERE (uid = #{uid} AND state = 0) OR (uid = #{uid} AND state = 2")
 	Boolean updateOrderAddress(Address address);
 
@@ -429,7 +436,7 @@ public interface MybatisMapper {
 	@Select("SELECT count(*) FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
 	Integer checkMileage(@Param("oid") Integer oid, @Param("uid") Integer uid);
 	
-	@Select("SELECT mileage FROM mileage WHERE oid = #{oid} LIMIT 1")
+	@Select("SELECT mileage FROM mileage WHERE oid = #{oid} AND type = 1 LIMIT 1")
 	Integer getMileageByOid(@Param("oid") Integer oid);
 	
 	@Select("SELECT price FROM sale ORDER BY sid DESC LIMIT 1")
@@ -554,6 +561,9 @@ public interface MybatisMapper {
 	@Select("SELECT price FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	int getOrderPrice(@Param("oid") int oid, @Param("uid") int uid);
 
-	@Select("SELECT * FROM orders WHERE phone = #{phone}")
-	ArrayList<Order> getOrderByPhone(@Param("phone") String phone);	
+	@Select("SELECT * FROM orders WHERE phone = #{phone} ORDER BY oid DESC")
+	ArrayList<Order> getOrderByPhone(@Param("phone") String phone);
+
+	@Select("SELECT * FROM item_info WHERE item_code = #{info}")
+	OrderItemInfo getItemInfo(@Param("info") Integer info);	
 }

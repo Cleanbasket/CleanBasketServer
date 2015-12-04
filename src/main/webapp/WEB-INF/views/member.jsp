@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../resources/bootstrap.min.css">
 <link rel="stylesheet" href="../resources/animate.min.css">
 <link rel="stylesheet" href="../resources/common.css">
+<link rel="stylesheet" href="../resources/member.css">
 </head>
 <body>
 	<div class="navbar navbar-default navbar-fixed-top">
@@ -54,9 +55,12 @@
 					<thead class="member_thead">
 						<tr>
 							<th>순번</th>
+							<th>주소</th>
 							<th>이메일</th>
 							<th>연락처</th>
-							<th>누적주문금액</th>
+							<th>평균금액</th>	
+							<th>누적금액</th>
+							<th>주문횟수</th>
 							<th>주문내역</th>
 						</tr>
 					</thead>
@@ -71,18 +75,22 @@
 	<script src="../resources/jui.min.js"></script>
 	<script src="../resources/socket.io.js"></script>
 	<script src="../resources/common.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
 	<script data-jui="#member" data-tpl="row" type="text/template">
 		<tr>
 			<td><!= rownum !></td>
+			<td><!= address !></td>
 			<td><!= email !></td>
 			<td><!= phone !></td>
+			<td><!= avgPrice !></td>
 			<td><!= accruePrice !></td>
+			<td><!= count !></td>
 			<td><!= orderInfo !></td>
 		</tr>
 	</script>
 	<script data-jui="#member" data-tpl="none" type="text/template">
 		<tr>
-			<td colspan="5" class="none">회원정보가 없습니다.</td>
+			<td colspan="8" class="none">회원정보가 없습니다.</td>
 		</tr>
 	</script>
 	<script data-jui="#detail" data-tpl="none" type="text/template">
@@ -158,10 +166,6 @@
 		});
 
 		$(window).ready(function() {
-			socket = webSocketIO();
-			socket.on('message', function(msg) {
-				receiveMessage(msg);
-			});
 			$('#search').keypress(function(event) {
 				if (event.keyCode == 13) {
 					memberInfoSearch();
@@ -299,8 +303,7 @@
 					$('.pagination').css('margin', '0px').css('margin-top', '12px');
 					detailResize();
 
-					getDetailInfo(clicked.attr('id'));
-
+					getDetailInfo(clicked.attr('id'))
 				} else {
 					clicked.closest('tr').removeClass('active');
 					member.hideExpand();
@@ -531,15 +534,91 @@
 			detail.update(data);
 			paging.reload(detail.count());
 			setDetailButtonEvent();
+			drawMemberGraph(data);
 		}
 
+		function drawMemberGraph(data) {
+			var body = d3.select(".table_panel");
+			var margin = {top: 50, right: 0, bottom: 0, left: 10};
+			var width = 960 - margin.left - margin.right,
+				height = 150 - margin.top - margin.bottom,
+				translateText = "translate(" + margin.left + ", " + margin.top + ")";
+
+			var svg = body.append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", translateText);
+			
+			var circleGroup = svg.append("g")
+				.attr("class", "circle");
+
+			var circleLabelGroup = svg.append("g")
+				.attr("class", "circle-label")
+			
+			var parseDate = d3.time.format("%Y-%m-%d %H:%M:%S.%L").parse
+				
+			var x = d3.time.scale()
+				.domain([parseDate(data[0].pickup_date), new Date()])
+				.range([0, width]);
+			
+			var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient("bottom");
+			
+			var tooltip = d3.select(".table_panel")
+			    .append("div")
+			    .data(data)
+			    .style("position", "absolute")
+			    .style("z-index", "10")
+			    .style("visibility", "hidden");
+			
+			svg.append("g")
+				.call(xAxis)
+				.attr("class", "x axis")
+				.attr("transform", "translate(0, " + height + ")")
+			  .selectAll("text")
+			  	.attr("y", 0)
+			    .attr("x", 9)
+			    .attr("dy", ".35em")
+			    .attr("transform", "rotate(-90)")
+			    .style("text-anchor", "start");
+			
+			circleGroup.selectAll("circle")
+				.data(data)
+				.enter().append("circle")
+				.attr("r", function(d) { return Math.sqrt(d.price / 1000); })
+				.attr("cx", function(d) { return x(parseDate(d.pickup_date)) })
+				.attr("cy", function(d) { return 10 })
+				.attr("fill", "#83dbd1")
+				.style("opacity", 0.5)
+				.on("mouseover", function(d) {
+					d3.select(this)
+						.attr("fill", "orange");
+						
+					return tooltip.style("visibility", "visible").text(d.price + "원 / " + d.pickup_date);
+				})
+				.on("mousemove", function(){
+						return tooltip.style("top", (d3.event.pageY-100)+"px").style("left", (d3.event.pageX-100)+"px");
+				})
+				.on("mouseout", function(d) {
+					d3.select(this)
+						.attr("fill", "#83dbd1");
+					
+					return tooltip.style("visibility", "hidden").text(d.price + "원 / " + d.pickup_date);
+				})
+		}
+		
 		function memberResize() {
 			var th = $('.member_thead').find('th');
-			th.eq(0).css('width', '10%');
-			th.eq(1).css('width', '30%');
-			th.eq(2).css('width', '20%');
-			th.eq(3).css('width', '20%');
-			th.eq(4).css('width', '20%');
+			th.eq(0).css('width', '5%');
+			th.eq(1).css('width', '36%');
+			th.eq(2).css('width', '15%');
+			th.eq(3).css('width', '10%');
+			th.eq(4).css('width', '7%');
+			th.eq(5).css('width', '7%');
+			th.eq(6).css('width', '5%');
+			th.eq(7).css('width', '15%');
 		}
 
 		function detailResize() {

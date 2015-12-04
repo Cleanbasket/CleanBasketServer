@@ -19,9 +19,9 @@ public class DashBoardController {
 	private DashBoardDAO dao;
 	
 	@Secured("ROLE_ADMIN")
-	@RequestMapping(value = "/daily/pickup/{limit}")
+	@RequestMapping(value = "/pickup/{type}/{limit}")
 	@ResponseBody
-	public Constant getItemList(Constant constant, Gson gson, @PathVariable int limit) {
-		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getDailyPickup(limit)));		
+	public Constant getItemList(Constant constant, Gson gson, @PathVariable("type") String type, @PathVariable("limit") int limit) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getBoardDatas(type, limit)));
 	} 
 }

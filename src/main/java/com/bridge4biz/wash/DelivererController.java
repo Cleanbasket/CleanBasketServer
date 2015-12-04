@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -29,7 +31,6 @@ import com.google.gson.Gson;
 @Controller
 @RequestMapping(value = "/deliverer")
 public class DelivererController {
-
 	@Autowired
 	private MybatisDAO dao;
 	
@@ -105,17 +106,17 @@ public class DelivererController {
 	@ResponseBody
 	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
 		String payment_method;
+		Boolean success = false;
+		Integer uid = dao.getUid(auth.getName());
 		
-		try {
+		if (data.containsKey("payment_method")) {
 			payment_method = data.get("payment_method");
-		} catch (Exception e) {
-			payment_method = "0";
+			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), payment_method);
+		} else {
+			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), null);
 		}
 		
-		Integer uid = dao.getUid(auth.getName());
-		Boolean success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), payment_method);
 		if (success) {
-//			SocketIO.broadCast(new PushMessage(Constant.PUSH_DROPOFF_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");

@@ -3,6 +3,7 @@ package com.bridge4biz.wash.mybatis;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +44,19 @@ import com.bridge4biz.wash.service.MemberOrderInfo;
 import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.Order;
+import com.bridge4biz.wash.service.OrderItemInfo;
 import com.bridge4biz.wash.service.OrderState;
 import com.bridge4biz.wash.service.PickupState;
 import com.bridge4biz.wash.sms.SendSMS;
 import com.bridge4biz.wash.sms.Set;
+import com.bridge4biz.wash.util.AddressParser;
 import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
 import com.bridge4biz.wash.util.PushMessage;
 import com.bridge4biz.wash.util.RandomNumber;
 import com.bridge4biz.wash.util.TimeCheck;
+import com.fasterxml.jackson.databind.DeserializationConfig;
 
 public class MybatisDAO {
 	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
@@ -202,48 +206,16 @@ public class MybatisDAO {
 		return Constant.SUCCESS;
 	}
 	
-	
-	private boolean checkEnglish(String str) {
-		for(int i = 0; i < str.length(); i++) {
-			if(Character.getType(str.charAt(i)) == 5) {
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	private District makeDistrict(String address) {
-		address = address.replaceAll(",", "");
-		String[] districts = address.split(" ");
-		String city;
-		String dong;
-		
-		if (checkEnglish(districts[0])) {
-			city = districts[2];
-			dong = districts[0];
-		}
-		else {
-			city = districts[0];
-			dong = districts[2];
-		}
-		
-		String district = districts[1];
-
-		
-		return new District(city, district, dong);
-	}
-	
 	public Integer addNewOrder(Order order, Integer uid) {
 		if (priceCheck(order, uid) == false) {
 			return Constant.ERROR;
 		}
 		
-		if (TimeCheck.isTooEarly(order.pickup_date)) {
+		if (TimeCheck.isTooEarly(order.pickup_date) || TimeCheck.isTooEarly(order.dropoff_date)) {
 			return Constant.TOO_EARLY_TIME;
 		}
 		
-		if (TimeCheck.isTooLate(order.pickup_date)) {
+		if (TimeCheck.isTooLate(order.pickup_date) || TimeCheck.isTooLate(order.dropoff_date)) {
 			return Constant.TOO_LATE_TIME;
 		}
 		
@@ -251,7 +223,7 @@ public class MybatisDAO {
 			order.uid = uid;
 			String address = order.address;
 
-			District districtObject = makeDistrict(address);
+			District districtObject = AddressParser.makeDistrict(address);
 			
 			Integer dcid = 0;
 			
@@ -685,7 +657,7 @@ public class MybatisDAO {
 	
 	private void sendNewDeleteSMS(Order order, Integer uid) {
 		String address = mapper.getAddressForOrderId(order.oid);
-		District districtObject = makeDistrict(address);
+		District districtObject = AddressParser.makeDistrict(address);
 
 		int dcid = 0;
 		
@@ -778,6 +750,42 @@ public class MybatisDAO {
 		return orders;
 	}
 
+	public ArrayList<Order> getAllOrder(Integer uid) {
+		ArrayList<Order> orders = mapper.getAllOrder(uid);
+		for (Order order : orders) {
+			order.pickupInfo = mapper.getDeliverer(order.pickup_man);
+			order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
+			order.item = mapper.getItem(order.oid);
+			order.coupon = mapper.getCoupon(order.oid, uid);
+			
+			if (mapper.selectMileage(order.oid, uid, 1) != null) {
+				int mileage = mapper.selectMileage(order.oid, uid, 1);
+				if (mileage > 0)
+					order.mileage = mileage;
+			}
+		}
+		
+		return orders;
+	}
+
+	public ArrayList<Order> getRecentOrder(Integer uid) {
+		ArrayList<Order> orders = mapper.getRecentOrder(uid);
+		for (Order order : orders) {
+			order.pickupInfo = mapper.getDeliverer(order.pickup_man);
+			order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
+			order.item = mapper.getItem(order.oid);
+			order.coupon = mapper.getCoupon(order.oid, uid);
+			
+			if (mapper.selectMileage(order.oid, uid, 1) != null) {
+				int mileage = mapper.selectMileage(order.oid, uid, 1);
+				if (mileage > 0)
+					order.mileage = mileage;
+			}
+		}
+		
+		return orders;
+	}
+	
 	public ArrayList<Item> getItem(Integer oid) {
 		return mapper.getItem(oid);
 	}
@@ -918,12 +926,16 @@ public class MybatisDAO {
 				PushMessage.addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)), Notification.MILEAGE_ALARM, mapper.getRegid(uid));
 			}
 			
-			return mapper.updateDeliveryRequestComplete(oid, note, payment_method);
+			if (payment_method != null)
+				return mapper.updateDeliveryRequestComplete(oid, note, payment_method);
+			else 
+				return mapper.updateDeliveryRequest(oid, note);
 		} catch (Exception e) {
 			e.printStackTrace();
 			
 			return false;
 		}
+
 	}
 
 	private Order getOrderByOrderId(int oid) {
@@ -1073,10 +1085,7 @@ public class MybatisDAO {
 
 	public ArrayList<MemberInfo> getMemberInfo() {
 		ArrayList<MemberInfo> memberInfos = mapper.getMemberInfo();
-		for (MemberInfo memberInfo : memberInfos) {
-			Integer accruePrice = mapper.getTotalPrice(memberInfo.uid);
-			memberInfo.accruePrice = accruePrice != null ? accruePrice : 0;
-		}
+		
 		return memberInfos;
 	}
 
@@ -1300,9 +1309,7 @@ public class MybatisDAO {
 		new SendSMS(set).run();
 	}
 
-	public Integer modifyOrderItem(Order order, Integer uid) {
-		System.out.println(order.price + " / " + order.dropoff_price);
-		
+	public Integer modifyOrderItem(Order order, Integer uid) {	
 		if (order.state > 1)
 			return Constant.ERROR;
 		
@@ -1350,7 +1357,7 @@ public class MybatisDAO {
 	
 	private void sendModifyDateSMS(Order order) {
 		String address = mapper.getAddressForOrderId(order.oid);
-		District districtObject = makeDistrict(address);
+		District districtObject = AddressParser.makeDistrict(address);
 
 		int dcid = 0;
 		
@@ -1376,7 +1383,7 @@ public class MybatisDAO {
 
 	private void sendConfirmSMS(int oid) {
 		String address = mapper.getAddressForOrderId(oid);
-		District districtObject = makeDistrict(address);
+		District districtObject = AddressParser.makeDistrict(address);
 
 		Order order = mapper.getOrderForSingle(oid);
 		
@@ -1419,4 +1426,7 @@ public class MybatisDAO {
 		return mapper.getDistricts();
 	}
 
+	public OrderItemInfo getItemInfo(int info) {
+		return mapper.getItemInfo(info);
+	}
 }

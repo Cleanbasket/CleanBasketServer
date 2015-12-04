@@ -10,13 +10,13 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="username" value="manager" />
 
-		<!-- 본서버 -->
+		<!-- 본서버
 		<property name="url" value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
-		<property name="password" value="fastdel2015@" />
-
-		<!-- 본서버 
-		<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" />
 		<property name="password" value="fastdel2015@" /> -->
+
+		<!-- 본서버 -->
+		<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" />
+		<property name="password" value="fastdel2015@" /> 
 
 		<!-- 개발서버 
 		<property name="url" value="jdbc:mysql://sevencore.iptime.org/wash?autoReconnect=true" />->

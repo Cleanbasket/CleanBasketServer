@@ -63,7 +63,7 @@ public class MemberContollerTest {
 		Calendar c = Calendar.getInstance();
 		
 		order = new Order();
-		order.address = "서울특별시 도봉구 역삼동";
+		order.address = "서울특별시 강남구 역삼동";
 		order.addr_building = "대암빌딩 104호";
 		order.price = 12000;
 		order.dropoff_price = 2000;

@@ -70,8 +70,6 @@ public class DelivererDAO {
 		return Constant.SUCCESS;
 	}
 	
-	
-	
 	private Order additionalInfo(Order order) {
 		order.item = mapper.getItem(order.oid);
 		order.coupon = mapper.getCoupon(order.oid, order.uid);

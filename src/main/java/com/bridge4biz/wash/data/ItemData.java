@@ -5,6 +5,7 @@ public class ItemData {
 	public Integer oid = 0;
 	public Integer item_code = 0;
 	public Integer price = 0;
+	public Integer scope = 0;
 	public Integer count = 0;
 	public String rdate = "";
 

@@ -198,4 +198,14 @@ public class WebController {
 	public void databaseRefresh() {
 		dao.selectTest();
 	}
+	
+	@RequestMapping(value = "/syrup/{type}")
+	public String syrupContent(@PathVariable String type) {
+		if (type.equals("a"))
+			return "syrup_a";
+		else if (type.equals("b"))
+			return "syrup_b";
+		else
+			return "syrup_c";
+	}
 }

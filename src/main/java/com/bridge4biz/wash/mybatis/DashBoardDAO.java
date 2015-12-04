@@ -22,7 +22,16 @@ public class DashBoardDAO {
 		this.dashBoardMapper = dashBoardMapper;
 	}
 	
-	public ArrayList<DashBoardData> getDailyPickup(int limit) {
-		return dashBoardMapper.getDailyPickUp(limit);
+	public ArrayList<DashBoardData> getBoardDatas(String type, int limit) {
+		ArrayList<DashBoardData> dashBoardDatas = null;
+		
+		if (type.equals("d")) 
+			dashBoardDatas = dashBoardMapper.getDailyPickUp(limit);
+		else if (type.equals("w")) 
+			dashBoardDatas = dashBoardMapper.getWeeklyPickup(limit);
+		else if (type.equals("m"))
+			dashBoardDatas = dashBoardMapper.getMonthlyPickup(limit);
+
+		return dashBoardDatas;
 	}
 }

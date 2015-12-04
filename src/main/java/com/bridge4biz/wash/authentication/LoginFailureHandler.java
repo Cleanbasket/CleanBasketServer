@@ -32,7 +32,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 		Integer reason = dao.loginFailureCheck(request.getParameter("email"), request.getParameter("password"));
-		System.out.println(request.getParameter("email") + request.getParameter("password"));
+
 		switch (reason) {
 		case Constant.ACCOUNT_DISABLED:
 			constant.setConstant(Constant.ACCOUNT_DISABLED, "계정정보가 비활성화 되어있습니다. 관리자에게 문의하세요. : ACCOUNT_DISABLED");

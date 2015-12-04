@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -115,6 +116,21 @@ public class MemberContoller {
 	public Constant memberOrder(Constant constant, Gson gson, Authentication auth) {
 		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getOrder(dao.getUid(auth.getName()))));
 	}
+
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(value = "/order/all")
+	@ResponseBody
+	public Constant memberAllOrder(Constant constant, Gson gson, Authentication auth) {
+		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getAllOrder(dao.getUid(auth.getName()))));
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(value = "/order/recent")
+	@ResponseBody
+	public Constant memberRecentOrder(Constant constant, Gson gson, Authentication auth) {
+		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getRecentOrder(dao.getUid(auth.getName()))));
+	}
+
 	
 	@Secured("ROLE_MEMBER")
 	@RequestMapping(method=RequestMethod.POST, value = "/order/add/new")
@@ -132,7 +148,7 @@ public class MemberContoller {
 			return constant.setConstant(Constant.DATE_UNAVAILABLE, "해당 수거배달일 서비스 안 함 : ERROR");
 		}
 		else {
-			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
+			return constant.setConstant(value, "일반회원 주문 실패 : ERROR");
 		}
 	}
 	
@@ -382,7 +398,14 @@ public class MemberContoller {
 			return constant.setConstant(Constant.ERROR, "카드 등록 실패 : ERROR", gson.toJson(paymentResult));
 		}
 	}
-
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/item/{info}")
+	@ResponseBody
+	public Constant getItemInfo(Constant constant, Authentication auth, Gson gson, @PathVariable int info) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getItemInfo(info)));
+	}
+	
 	@Secured("ROLE_MEMBER")
 	@RequestMapping(method=RequestMethod.GET, value = "/payment")
 	@ResponseBody
@@ -390,6 +413,15 @@ public class MemberContoller {
 		Integer uid = dao.getUid(auth.getName());
 
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentInfo(uid)));
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.POST, value = "/payment/result")
+	@ResponseBody
+	public Constant getPaymentResult(Constant constant, Authentication auth, Gson gson, @RequestBody Map<String, String> data) {
+		int oid = Integer.parseInt(data.get("oid"));
+
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(paymentDao.getPaymentResult(oid)));
 	}
 	
 	@Secured("ROLE_MEMBER")

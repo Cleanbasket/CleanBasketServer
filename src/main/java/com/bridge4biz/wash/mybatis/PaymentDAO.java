@@ -12,10 +12,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.service.Notification;
+import com.bridge4biz.wash.service.OrderItemInfo;
 import com.bridge4biz.wash.service.PaymentCancelResult;
 import com.bridge4biz.wash.service.PaymentResult;
 import com.bridge4biz.wash.service.PaymentTriggerResult;
 import com.bridge4biz.wash.util.PushMessage;
+import com.google.gson.JsonElement;
 
 public class PaymentDAO {
 	private static final Logger log = LoggerFactory.getLogger(PaymentDAO.class);		
@@ -224,5 +226,9 @@ public class PaymentDAO {
         			connector.getResultData("ResultCode"), 
         			connector.getResultData("ResultMsg"));
         }
+	}
+
+	public String getPaymentResult(int oid) {
+		return paymentMapper.getTID(oid);
 	}
 }
