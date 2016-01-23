@@ -15,6 +15,7 @@ public class Address {
 	}
 	
 	public Address(int uid, String address, String addr_building) {
+		this.uid = uid;
 		this.address = address;
 		this.addr_building = addr_building;
 	}

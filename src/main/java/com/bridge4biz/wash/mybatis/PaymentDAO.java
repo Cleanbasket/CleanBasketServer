@@ -1,8 +1,6 @@
 package com.bridge4biz.wash.mybatis;
 
 import java.net.UnknownHostException;
-import java.util.HashMap;
-
 import kr.co.nicepay.module.lite.NicePayWebConnector;
 
 import org.slf4j.Logger;
@@ -12,12 +10,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.bridge4biz.wash.data.PaymentData;
 import com.bridge4biz.wash.service.Notification;
-import com.bridge4biz.wash.service.OrderItemInfo;
 import com.bridge4biz.wash.service.PaymentCancelResult;
 import com.bridge4biz.wash.service.PaymentResult;
 import com.bridge4biz.wash.service.PaymentTriggerResult;
 import com.bridge4biz.wash.util.PushMessage;
-import com.google.gson.JsonElement;
 
 public class PaymentDAO {
 	private static final Logger log = LoggerFactory.getLogger(PaymentDAO.class);		

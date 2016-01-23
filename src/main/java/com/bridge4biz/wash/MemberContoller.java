@@ -336,7 +336,7 @@ public class MemberContoller {
 	}
 	
 	@Secured("ROLE_MEMBER")
-	@RequestMapping(value = "/address/update")
+	@RequestMapping(method=RequestMethod.POST, value = "/address/update")
 	@ResponseBody
 	public Constant updateMemberAddress(Constant constant, Gson gson, Authentication auth, @RequestBody Address address) {
 		Boolean success = dao.updateMemberAddress(address, dao.getUid(auth.getName()));
@@ -435,5 +435,19 @@ public class MemberContoller {
 		} else {
 			return constant.setConstant(Constant.ERROR, "카드 삭제 실패 : ERROR");
 		}
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/pickup")
+	@ResponseBody
+	public Constant getPickupTime(Constant constant, Authentication auth, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getPickupDate()));
+	}
+	
+	@Secured("ROLE_MEMBER")
+	@RequestMapping(method=RequestMethod.GET, value = "/dropoff/{dropoff_time}")
+	@ResponseBody
+	public Constant getDropoffTime(Constant constant, Authentication auth, Gson gson, @PathVariable String dropoff_time) {
+		return constant.setConstant(Constant.SUCCESS, "", dao.getDropoffInterval(dropoff_time));
 	}
 }

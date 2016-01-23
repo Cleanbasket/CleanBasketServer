@@ -169,7 +169,7 @@ function initIUBind(){
 					$(inputdiv).val(0);
 				}
 			}
-			else if ($(this).hasClass('IUTabHeaderItem')){
+			else if ($(this).hasClass('IUTabHeaderItem') || $(this).hasClass('IUSimpleTabButton')){
 				clickTabHeaderItem(this, event);
 			}
                      
@@ -239,20 +239,21 @@ $(window).resize(function() {
                  
 	//iuframe.js
 	//resizeCollection();
+    makefullSizeSection();
 	reframeCenter();
 	lazyReframeCenter();
-	initScrollAnimator();
+	initScrollAnimator(true);
 	runScrollAnimator();
 
 	resetSlideInnerBarWidth();
-	makefullSizeSection();
+	
 	//iu.js
 	reloadTextMediaQuery();
                  
 	//iuboxes.js
 	resizeCarousel();
 	resetPanelPosition();
-	resetPopUpPostTop();
+	rePositionCurrentDisplayPopUp();
 	
 	setTimeout(function(){
 		reframeCenter();
@@ -292,7 +293,7 @@ $(window).load(function(){
 	initMobileMouseHover();
 	
 	//init presentation mode
-	if ($("[presentation='1']").length > 0){
+	if ($(".IUPresentation").length > 0){
 		initPresentationMode();
 	}
 	
@@ -306,8 +307,7 @@ $(window).load(function(){
 	lazyReframeCenter();
 	reframeCenter();
 	initAfterCenter();
-	autoPlayIUWebMovieDuringFocusing();
-	autoPlayIUMovieDuringFocusing();
+	autoPlayAllIUMovieDuringFocusing();
 	resizeCarousel();
 	
 	//check select code
@@ -322,8 +322,8 @@ $(window).load(function(){
 
 
 $(window).scroll(function(){
-	autoPlayIUWebMovieDuringFocusing();
-	autoPlayIUMovieDuringFocusing();
+	autoPlayAllIUWebMovieDuringFocusing();
+	autoPlayAllIUMovieDuringFocusing();
 	runScrollAnimator();
 	runScrollEventMachine();
 });

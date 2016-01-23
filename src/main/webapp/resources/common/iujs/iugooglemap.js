@@ -65,13 +65,13 @@ function initIUGoogleMap(iu){
 		map.setCenter(center);
 	});	
 	
-	allGoogleMaps[$(iu).attr('id')] = map;
+	$(iu).data('googleMap', map);
 }
 
 function resizeIUGoogleMap(iu){
 	var latitude = parseFloat( $(iu).attr('latitude') );
 	var longitude = parseFloat( $(iu).attr('longitude') );
-	var map = allGoogleMaps[$(iu).attr('id')];
+	var map = $(iu).data('googleMap');
 	var center = new google.maps.LatLng(latitude, longitude);
 	google.maps.event.trigger(map, "resize");
 	map.setCenter(center);

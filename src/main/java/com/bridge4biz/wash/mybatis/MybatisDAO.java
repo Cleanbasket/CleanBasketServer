@@ -47,6 +47,7 @@ import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderItemInfo;
 import com.bridge4biz.wash.service.OrderState;
 import com.bridge4biz.wash.service.PickupState;
+import com.bridge4biz.wash.service.PickupTime;
 import com.bridge4biz.wash.sms.SendSMS;
 import com.bridge4biz.wash.sms.Set;
 import com.bridge4biz.wash.util.AddressParser;
@@ -56,7 +57,6 @@ import com.bridge4biz.wash.util.EmailService;
 import com.bridge4biz.wash.util.PushMessage;
 import com.bridge4biz.wash.util.RandomNumber;
 import com.bridge4biz.wash.util.TimeCheck;
-import com.fasterxml.jackson.databind.DeserializationConfig;
 
 public class MybatisDAO {
 	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
@@ -874,7 +874,10 @@ public class MybatisDAO {
 	public Boolean updateMemberAddress(Address address, Integer uid) {
 		try {
 			address.uid = uid;
-			return mapper.updateMemberAddress(address);
+			if (mapper.getNumberOfAddressByUid(uid) > 0)
+				return mapper.updateMemberAddress(address);
+			else
+				return mapper.addAddress2(address);
 		} catch (Exception e) {
 			e.printStackTrace();
 			
@@ -1428,5 +1431,24 @@ public class MybatisDAO {
 
 	public OrderItemInfo getItemInfo(int info) {
 		return mapper.getItemInfo(info);
+	}
+
+	public ArrayList<PickupTime> getPickupDate() {
+		return mapper.getPickupTime();
+	}
+
+	public String getDropoffInterval(String dropoffTime) {
+		Integer interval = mapper.getDropoffTime(dropoffTime);
+		interval += 2;
+		
+		return String.valueOf(interval);
+	}
+
+	public Boolean addPickupType(PickupTime data) {		
+		return mapper.addPickupTime(data.datetime, data.type);
+	}
+
+	public Boolean addDropoff(PickupTime data) {
+		return mapper.addDropoffTime(data.datetime);
 	}
 }

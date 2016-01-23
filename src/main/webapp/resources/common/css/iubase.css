@@ -327,11 +327,11 @@
     list-style-type: none;
 }
 
-.WPWidget {
+.WPSidebarWidget {
     position: relative;
 }
 
-.WPWidgetBody {
+.WPSidebarWidgetBody {
     display: block;
 }
 
@@ -347,5 +347,9 @@
 
 .stop-scrolling{
     overflow: hidden !important;
-    position: fixed !important;
+}
+.fixed-one-size{
+    position:fixed !important;
+    height:100% !important;
+    width:100% !important;
 }

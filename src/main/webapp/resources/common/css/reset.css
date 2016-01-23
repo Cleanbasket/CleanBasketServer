@@ -121,10 +121,17 @@ hr {
     padding:0;
 }
 
+input[type=text] {
+    padding:0;
+}
+
+input[type=radio], input[type=checkbox] {
+    margin:0;
+}
+
 input, select {
     vertical-align:middle;
     border-style:none;
-    
 }
 
 input[type=submit], input[type=button], input[type=reset] {

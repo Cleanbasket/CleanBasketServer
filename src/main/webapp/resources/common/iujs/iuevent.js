@@ -176,90 +176,61 @@ function toggleShowIU(iu, toggle, animation, duration, option, callback){
 /**************************************
 Scroll Animator
 ***************************************/
+var prevMediaQuery = 0;
 
-var postCenterY = {};
-var postHCenter = {};
-var postVCenter = {};
-
-function initScrollAnimator(){
-	if (isMobile() == false) {
-		// Initialize position with pre and save y position (if there is post y position, save it. else save the first y position)
-		$('.IUScrollAnimator').each(function(){
-			var viewport = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-			var jsonStr = $(this).attr('scrollAnimator').replace(/\'/g,'\"');
-			var jsonData = JSON.parse(jsonStr);
-			var mediaQueryArray = Object.keys(jsonData);
-			var animatorKey = null;
-			var mediaQueryArray = Object.keys(jsonData).reverse();
-			var animatorKey = null;
-			for (var i = 0; i < mediaQueryArray.length; i++) {
-				if (parseInt(mediaQueryArray[i]) <= viewport) {
-					animatorKey = mediaQueryArray[i];
-					break;
-				}
-			}
-			if (animatorKey == null || animatorKey == undefined) {
-				animatorKey = mediaQueryArray[mediaQueryArray.length-1];
-			}
-			var scrollAnimatorData = jsonData[animatorKey];
-			var propertyKeys = Object.keys(scrollAnimatorData); //scrollAnimatorX, scrollAnimatorY, scrollOpacity
-			postCenterY[$(this).attr('id')] = $(this).offset().top + $(this).outerHeight()/2;
-                                                                                         
-			for(var i=0; i<propertyKeys.length; i++){
-				var propertyKey = propertyKeys[i];
-				var pre = parseInt(scrollAnimatorData[propertyKey]['pre']);
-				var post = parseInt(scrollAnimatorData[propertyKey]['post']);
-				var unit = scrollAnimatorData[propertyKey]['unit'];
-				if(propertyKey == "scrollAnimatorX"){
-					if ($(this).css('left') == 'auto') {
-						$(this).css('right', pre + unit);
-					}
-					else {
-						$(this).css('left', pre + unit);
-					}
-				}else if(propertyKey == "scrollAnimatorY"){
-					if ($(this).css('top') == 'auto') {
-						$(this).css('bottom', pre + unit);
-					}
-					else {
-						$(this).css('top', pre + unit);
-					}
-				}else if(propertyKey == "scrollOpacity"){
-					$(this).css('opacity', pre);
-				}
-			}
-		});
-	}
+function initScrollAnimator(resize){
+    // Initialize position with pre and save y position (if there is post y position, save it. else save the first y position)
+    $('.IUScrollAnimator').each(function(){
+        var viewport = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        var jsonStr = $(this).attr('scrollAnimator').replace(/\'/g,'\"');
+        var jsonData = JSON.parse(jsonStr);
+        var mediaQueryArray = Object.keys(jsonData);
+        var animatorKey = null;
+        var mediaQueryArray = Object.keys(jsonData).reverse();
+        var animatorKey = null;
+        for (var i = 0; i < mediaQueryArray.length; i++) {
+            if (parseInt(mediaQueryArray[i]) <= viewport) {
+	            prevMediaQuery = parseInt(mediaQueryArray[i]);
+                animatorKey = mediaQueryArray[i];
+                break;
+            }
+        }
+        if (animatorKey == null || animatorKey == undefined) {
+            animatorKey = mediaQueryArray[mediaQueryArray.length-1];
+        }
+        if (resize && (prevMediaQuery == parseInt(mediaQueryArray[i])) ) {
+	        return;
+        }
+        
+        var scrollAnimatorData = jsonData[animatorKey];
+        var propertyKeys = Object.keys(scrollAnimatorData); //scrollAnimatorX, scrollAnimatorY, scrollOpacity
+        $(this).data('postCenterY', $(this).offset().top + $(this).outerHeight()/2);
+                                                                                     
+        for(var i=0; i<propertyKeys.length; i++){
+            var propertyKey = propertyKeys[i];
+            var pre = parseInt(scrollAnimatorData[propertyKey]['pre']);
+            var post = parseInt(scrollAnimatorData[propertyKey]['post']);
+            var unit = scrollAnimatorData[propertyKey]['unit'];
+            if(propertyKey == "scrollAnimatorX"){
+                if ($(this).css('left') == 'auto') {
+                    $(this).css('right', pre + unit);
+                }
+                else {
+                    $(this).css('left', pre + unit);
+                }
+            }else if(propertyKey == "scrollAnimatorY"){
+                if ($(this).css('top') == 'auto') {
+                    $(this).css('bottom', pre + unit);
+                }
+                else {
+                    $(this).css('top', pre + unit);
+                }
+            }else if(propertyKey == "scrollOpacity"){
+                $(this).css('opacity', pre);
+            }
+        }
+    });
 }
-                                    
-/*
-function resetScrollAnimatorPostCenterY(){
-if (isMobile() == false) {
-$('.IUScrollAnimator').each(function(){
-var viewport = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-var jsonStr = $(this).attr('scrollAnimator').replace(/\'/g,'\"');
-var jsonData = JSON.parse(jsonStr);
-var mediaQueryArray = Object.keys(jsonData);
-var animatorKey = null;
-var mediaQueryArray = Object.keys(jsonData).reverse();
-var animatorKey = null;
-for (var i = 0; i < mediaQueryArray.length; i++) {
-if (parseInt(mediaQueryArray[i]) <= viewport) {
-animatorKey = mediaQueryArray[i];
-break;
-}
-}
-if (animatorKey == null || animatorKey == undefined) {
-animatorKey = mediaQueryArray[mediaQueryArray.length-1];
-}
-var scrollAnimatorData = jsonData[animatorKey];
-var propertyKeys = Object.keys(scrollAnimatorData); //scrollAnimatorX, scrollAnimatorY, scrollOpacity
-postCenterY[$(this).attr('id')] = $(this).offset().top + $(this).outerHeight()/2;
-console.log($(this).attr('id') + ": " + postCenterY[$(this).attr('id')]);
-});
-}
-}
-*/
                                     
 function calcScrollAnimatorValue(aPropertyKey, moveDistanceOfView, animationBound, pre, post){
                                     
@@ -282,19 +253,6 @@ function calcScrollAnimatorValue(aPropertyKey, moveDistanceOfView, animationBoun
 			return post;
 		}
 	}
-}
-                                    
-function setPostCenterYForScrollAnimator(iu, post) {
-	postCenterY[$(iu).attr('id')] = post;
-}
-                                    
-function setPostHCenterForScrollAnimatorX(iu, post) {
-	postHCenter[$(iu).attr('id')] = post;
-}
-                                    
-function setPostVCenterForScrollAnimatorY(iu, post) {
-                                    
-	postVCenter[$(iu).attr('id')] = post;
 }
                                     
 function getScrollAnimatorPropertyKeys(iu) {
@@ -321,7 +279,7 @@ function getScrollAnimatorPropertyKeys(iu) {
 function getScrollAnimatorValue(widget, aPropertyKey, pre, post, animationEndY){
 	var viewHeight = $(window).height();
 	var animationBound = viewHeight/2;
-	var viewAndWidgetDistance = postCenterY[$(widget).attr('id')] - animationEndY;
+	var viewAndWidgetDistance = $(widget).data('postCenterY') - animationEndY;
 	var moveDistanceOfView;
 	var animationValue = null;
                                                                                        
@@ -337,86 +295,84 @@ function getScrollAnimatorValue(widget, aPropertyKey, pre, post, animationEndY){
 	}
 	return animationValue;
 }
-                                                                                       
+                                                       
 function runScrollAnimator(){
 	/* make scroll animator data */
-	if (isMobile() == false) {
-		$('.IUScrollAnimator').each(function(){
-			var currScrollTop = $(window).scrollTop();
-			var viewport = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-			var viewHeight = $(window).height();
-			var viewCenterY = viewHeight/2 + currScrollTop;
-			var viewBottomY = viewHeight + currScrollTop;
-			var documentHeight = $(document).height();
-			var bottomAnimationBound = documentHeight - viewHeight/2;
-			var topAnimationBound = viewHeight;
-			var postWidgetCenterY = postCenterY[$(this).attr('id')];
-                                                                                                                   
-			var jsonStr = $(this).attr('scrollAnimator').replace(/\'/g,'\"');
-			var jsonData = JSON.parse(jsonStr);
-			var mediaQueryArray = Object.keys(jsonData).reverse();
-			var animatorKey = null;
-			for (var i = 0; i < mediaQueryArray.length; i++) {
-				if (parseInt(mediaQueryArray[i]) <= viewport) {
-					animatorKey = mediaQueryArray[i];
-					break;
-				}
-			}
-			if (animatorKey == null || animatorKey == undefined) {
-				animatorKey = mediaQueryArray[mediaQueryArray.length-1];
-			}
-			var scrollAnimatorData = jsonData[animatorKey];
-			var propertyKeys = Object.keys(scrollAnimatorData); //scrollAnimatorX, scrollAnimatorY, scrollOpacity
-                                                                                                                                                                        
-			for(var i=0; i<propertyKeys.length; i++){
-				var animationValue = null;	
-				var aPropertyKey = propertyKeys[i];
-				var pre = parseFloat(scrollAnimatorData[aPropertyKey]['pre']);
-				var post = scrollAnimatorData[aPropertyKey]['post'];
-				var unit = scrollAnimatorData[aPropertyKey]['unit'];
-				if (post == "horizontalcenter"){
-					post = postHCenter[$(this).attr('id')];
-				}
-				else if (post == "verticalcenter"){
-					post = postVCenter[$(this).attr('id')];
-				}
-				else {
-					post = parseFloat(scrollAnimatorData[aPropertyKey]['post']);
-				}
-                                                                                                                                                                        
-				if (topAnimationBound > postWidgetCenterY){
-					animationValue = post;
-				}
-				else if (bottomAnimationBound < postWidgetCenterY){
-					var widgetAndDocumentDistance = $(document).height() - postWidgetCenterY;
-					animationValue = getScrollAnimatorValue(this, aPropertyKey, pre, post, viewBottomY - widgetAndDocumentDistance);
-				}
-				else {
-					animationValue = getScrollAnimatorValue(this, aPropertyKey, pre, post, viewCenterY);
-				}
-                                                                                                                                                                        
-				if(animationValue!=null){
-					if(aPropertyKey == "scrollAnimatorX"){ 
-						if ($(this).css('left') == 'auto') {
-							$(this).css('right', animationValue + unit);
-						}
-						else {
-							$(this).css('left', animationValue + unit);
-						}
-					}else if(aPropertyKey == "scrollAnimatorY"){
-						if ($(this).css('top') == 'auto') {
-							$(this).css('bottom', animationValue + unit);
-						}
-						else {
-							$(this).css('top', animationValue + unit);
-						}
-					}else if(aPropertyKey == "scrollOpacity"){
-						$(this).css('opacity', animationValue);
-					}  
-				}
-			}
-		});
-	}
+    $('.IUScrollAnimator').each(function(){
+        var currScrollTop = $(window).scrollTop();
+        var viewport = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        var viewHeight = $(window).height();
+        var viewCenterY = viewHeight/2 + currScrollTop;
+        var viewBottomY = viewHeight + currScrollTop;
+        var documentHeight = $(document).height();
+        var bottomAnimationBound = documentHeight - viewHeight/2;
+        var topAnimationBound = viewHeight;
+        var postWidgetCenterY = $(this).data('postCenterY');
+                                                                                                               
+        var jsonStr = $(this).attr('scrollAnimator').replace(/\'/g,'\"');
+        var jsonData = JSON.parse(jsonStr);
+        var mediaQueryArray = Object.keys(jsonData).reverse();
+        var animatorKey = null;
+        for (var i = 0; i < mediaQueryArray.length; i++) {
+            if (parseInt(mediaQueryArray[i]) <= viewport) {
+                animatorKey = mediaQueryArray[i];
+                break;
+            }
+        }
+        if (animatorKey == null || animatorKey == undefined) {
+            animatorKey = mediaQueryArray[mediaQueryArray.length-1];
+        }
+        var scrollAnimatorData = jsonData[animatorKey];
+        var propertyKeys = Object.keys(scrollAnimatorData); //scrollAnimatorX, scrollAnimatorY, scrollOpacity
+                                                                                                                                                                    
+        for(var i=0; i<propertyKeys.length; i++){
+            var animationValue = null;	
+            var aPropertyKey = propertyKeys[i];
+            var pre = parseFloat(scrollAnimatorData[aPropertyKey]['pre']);
+            var post = scrollAnimatorData[aPropertyKey]['post'];
+            var unit = scrollAnimatorData[aPropertyKey]['unit'];
+            if (post == "horizontalcenter"){
+                post = $(this).data('postHCenter');
+            }
+            else if (post == "verticalcenter"){
+                post = $(this).data('postVCenter');
+            }
+            else {
+                post = parseFloat(scrollAnimatorData[aPropertyKey]['post']);
+            }
+                                                                                                                                                                    
+            if (topAnimationBound > postWidgetCenterY){
+                animationValue = post;
+            }
+            else if (bottomAnimationBound < postWidgetCenterY){
+                var widgetAndDocumentDistance = $(document).height() - postWidgetCenterY;
+                animationValue = getScrollAnimatorValue(this, aPropertyKey, pre, post, viewBottomY - widgetAndDocumentDistance);
+            }
+            else {
+                animationValue = getScrollAnimatorValue(this, aPropertyKey, pre, post, viewCenterY);
+            }
+                                                                                                                                                                    
+            if(animationValue!=null){
+                if(aPropertyKey == "scrollAnimatorX"){ 
+                    if ($(this).css('left') == 'auto') {
+                        $(this).css('right', animationValue + unit);
+                    }
+                    else {
+                        $(this).css('left', animationValue + unit);
+                    }
+                }else if(aPropertyKey == "scrollAnimatorY"){
+                    if ($(this).css('top') == 'auto') {
+                        $(this).css('bottom', animationValue + unit);
+                    }
+                    else {
+                        $(this).css('top', animationValue + unit);
+                    }
+                }else if(aPropertyKey == "scrollOpacity"){
+                    $(this).css('opacity', animationValue);
+                }  
+            }
+        }
+    });
 }
                                                                                                                    
 /**************************************

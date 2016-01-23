@@ -184,7 +184,7 @@ public class WebController {
 		// "redirect:https://play.google.com/store/apps/details?id=com.bridge4biz.laundry";
 		// }
 		// } else {
-		return "home";
+		return "index";
 		// }
 	}
 
@@ -197,15 +197,5 @@ public class WebController {
 	@Scheduled(fixedDelay = 60000)
 	public void databaseRefresh() {
 		dao.selectTest();
-	}
-	
-	@RequestMapping(value = "/syrup/{type}")
-	public String syrupContent(@PathVariable String type) {
-		if (type.equals("a"))
-			return "syrup_a";
-		else if (type.equals("b"))
-			return "syrup_b";
-		else
-			return "syrup_c";
 	}
 }

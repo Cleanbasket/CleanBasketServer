@@ -45,6 +45,7 @@ import com.bridge4biz.wash.service.Notice;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.service.OrderItem;
 import com.bridge4biz.wash.service.OrderItemInfo;
+import com.bridge4biz.wash.service.PickupTime;
 
 public interface MybatisMapper {
 	@Select("SELECT 1")
@@ -278,6 +279,12 @@ public interface MybatisMapper {
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adrid", before = false, resultType = Integer.class)
 	Boolean addAddress(AddressData addressData);
 
+
+	@Insert("INSERT INTO address (uid, type, address, addr_number, addr_building, addr_remainder, rdate) VALUES(#{uid}, #{type}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, NOW())")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adrid", before = false, resultType = Integer.class)
+	Boolean addAddress2(Address addressData);
+
+	
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
 	Boolean addOrder(OrderData orderData);
@@ -462,7 +469,6 @@ public interface MybatisMapper {
 	@Select("SELECT * FROM auth_user WHERE uid = #{uid}")
 	AuthUser getAuthUser(@Param("uid") Integer uid);
 
-
 	
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, payment_method, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{payment_method}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
@@ -565,5 +571,17 @@ public interface MybatisMapper {
 	ArrayList<Order> getOrderByPhone(@Param("phone") String phone);
 
 	@Select("SELECT * FROM item_info WHERE item_code = #{info}")
-	OrderItemInfo getItemInfo(@Param("info") Integer info);	
+	OrderItemInfo getItemInfo(@Param("info") Integer info);
+
+	@Select("SELECT datetime, type FROM pickuptime_type WHERE datetime >= NOW()")
+	ArrayList<PickupTime> getPickupTime();
+
+	@Select("SELECT COUNT(*) FROM dropofftime WHERE datetime > #{dropoffTime}")
+	Integer getDropoffTime(@Param("dropoffTime") String dropoffTime);
+
+	@Insert("INSERT INTO pickuptime_type (datetime, type, rdate) VALUES (#{datetime}, #{type}, NOW())")
+	Boolean addPickupTime(@Param("datetime") String datetime, @Param("type") Integer type);	
+
+	@Insert("INSERT INTO dropofftime (datetime, rdate) VALUES (#{datetime}, NOW())")
+	Boolean addDropoffTime(@Param("datetime") String datetime);	
 }

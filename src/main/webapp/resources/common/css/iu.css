@@ -7,10 +7,6 @@
     cursor: pointer;
 }
 
-.IUTransitionItem:first-child{
-    display:block;
-}
-
 .IUCarousel-wrapper{
     height:100%;
 }
@@ -102,7 +98,7 @@
     cursor: pointer;
 }
 
-.iuPanelButton, .iuPopUpButton{
+.iuPanelButton, .iuPopUpButton, .IUPopUp-closeButton, .IUSimpleTabButton{
     cursor: pointer;
 }
 

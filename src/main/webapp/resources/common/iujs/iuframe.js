@@ -71,7 +71,7 @@ Resize
 
 
 function makefullSizeSection(){
-	var respc = $('[enableFullSize="1"]').toArray();
+	var respc = $('.IUFullSize').toArray();
 	var windowHeight = window.innerHeight;
 	
 	$.each(respc, function(){
@@ -112,17 +112,17 @@ function reframeCenterIU(iu){
 
 	console.timeStart("reframeCenterIU");
 	var ius = [];
-	if($(iu).attr('horizontalcenter')=='1' || $(iu).attr('lazyhorizontalcenter')=='1'){
+	if($(iu).hasClass('IUHCenter') || $(iu).hasClass('IULazyHCenter')){
 		ius.push($(iu));
 	}
-	ius = $.merge(ius, $(iu).find('[horizontalcenter="1"]').toArray());
-	ius = $.merge(ius, $(iu).find('[lazyhorizontalcenter="1"]').toArray());
+	ius = $.merge(ius, $(iu).find('.IUHCenter').toArray());
+	ius = $.merge(ius, $(iu).find('.IULazyHCenter').toArray());
 
-	if($(iu).attr('verticalcenter')=='1' || $(iu).attr('lazyverticalcenter')=='1'){
+	if($(iu).hasClass('IUVCenter') || $(iu).hasClass('IULazyVCenter')){
 		ius.push($(iu));
 	}
-	ius = $.merge(ius, $(iu).find('[verticalcenter="1"]').toArray());
-	ius = $.merge(ius, $(iu).find('[lazyverticalcenter="1"]').toArray());
+	ius = $.merge(ius, $(iu).find('.IUVCenter').toArray());
+	ius = $.merge(ius, $(iu).find('.IULazyVCenter').toArray());
 	    
 	$(ius).each(function(){
 		calculateCenterPosition(this);
@@ -144,8 +144,8 @@ function calculateCenterPosition(iu){
 	}
 	
 	var id  = iu.id;
-	var isHorizontal = iu.hasAttribute('horizontalCenter') || iu.hasAttribute('lazyHorizontalCenter');
-	var isVertical = iu.hasAttribute('verticalCenter') || iu.hasAttribute('lazyVerticalCenter');
+	var isHorizontal = $(iu).hasClass('IUHCenter') || $(iu).hasClass('IULazyHCenter');
+	var isVertical = $(iu).hasClass('IUVCenter') || $(iu).hasClass('IULazyVCenter');
 	var parentSize = iu.offsetParent == undefined ? {'width':window.innerWidth, 'height':window.innerHeight} :  {'width':iu.offsetParent.clientWidth, 'height' : iu.offsetParent.clientHeight};
 	
 	
@@ -163,12 +163,12 @@ function calculateCenterPosition(iu){
 			
 			if (keyIndexForX > -1 || keyIndexForY > -1) {
 				if (isHorizontal && keyIndexForX > -1) {
-					setPostHCenterForScrollAnimatorX(iu, hCenter);
+					$(iu).data('postHCenter', hCenter);
 				}
 				
 				if (isVertical && keyIndexForY > -1){
-					setPostVCenterForScrollAnimatorY(iu, vCenter);
-					setPostCenterYForScrollAnimator(iu, vCenter + $(iu).outerHeight()/2);
+					$(iu).data('postVCenter', vCenter);
+					$(iu).data('postCenterY', vCenter + $(iu).outerHeight()/2);
 				}
 			}
 			else { // only opacity
@@ -213,8 +213,8 @@ function calculateCenterPosition(iu){
 
 function calculateCenter(){
 	console.timeStart("caculateCenter");
-	var horizontalCenterIUs = $('[horizontalCenter="1"]').toArray();
-	var verticalCenterIUs = $('[verticalCenter="1"]').toArray();
+	var horizontalCenterIUs = $('.IUHCenter').toArray();
+	var verticalCenterIUs = $('.IUVCenter').toArray();
     
 	var centerIUs = horizontalCenterIUs.concat(verticalCenterIUs);
     
@@ -228,8 +228,8 @@ function calculateCenter(){
 
 function calculateLazyCenter(){
 	console.timeStart("calculateLazyCenter");
-	var horizontalCenterIUs = $('[lazyhorizontalCenter="1"]').toArray();
-	var verticalCenterIUs = $('[lazyverticalCenter="1"]').toArray();
+	var horizontalCenterIUs = $('.IULazyHCenter').toArray();
+	var verticalCenterIUs = $('.IULazyVCenter').toArray();
     
 	var centerIUs = horizontalCenterIUs.concat(verticalCenterIUs);
     
@@ -286,7 +286,7 @@ function setFrameForIU(frame, iu){
 
 function applyCenter(ius) {
 	for (var i=0; i<ius.length; i++) {
-		setFrameForIU($(ius[i]).data('centerPosition'), ius[i]);
+		setFrameForIU($(ius[i]).data('centerPosition'), $(ius[i])[0]);
 	}
 }
 
