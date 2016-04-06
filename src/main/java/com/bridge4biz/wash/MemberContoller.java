@@ -147,6 +147,12 @@ public class MemberContoller {
 		else if (value == Constant.DATE_UNAVAILABLE) {
 			return constant.setConstant(Constant.DATE_UNAVAILABLE, "해당 수거배달일 서비스 안 함 : ERROR");
 		}
+		else if (value == Constant.TOO_EARLY_TIME) {
+			return constant.setConstant(Constant.TOO_EARLY_TIME, "주문 시간이 너무 이릅니다 : ERROR");
+		}
+		else if (value == Constant.TOO_LATE_TIME) {
+			return constant.setConstant(Constant.TOO_LATE_TIME, "주문 시간이 너무 늦습니다 : ERROR");
+		}
 		else {
 			return constant.setConstant(value, "일반회원 주문 실패 : ERROR");
 		}

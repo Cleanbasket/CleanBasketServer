@@ -149,6 +149,33 @@ public class MemberContollerTest {
 
 	@Test
 	@Transactional
+	public void testOrderAddTemp() {
+		Calendar c = Calendar.getInstance();
+
+		Order order = new Order();
+		order.address = "서울특별시 강남구 역삼동";
+		order.addr_building = "대암빌딩 104호";
+		order.price = 2000;
+		order.dropoff_price = 2000;
+		order.coupon = new ArrayList<Coupon>();
+
+		c.add(Calendar.HOUR_OF_DAY, 1);
+		c.add(Calendar.MINUTE, 45);
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+
+		c.add(Calendar.DAY_OF_MONTH, 2);
+		order.dropoff_date = TimeCheck.getStringDateTime(c.getTime());
+
+		order.item = new ArrayList<Item>();
+		
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+		
+		int constant = mybatisDAO.addNewOrder(order, uid);
+		assertEquals(Constant.SUCCESS, constant);
+	}
+	
+	@Test
+	@Transactional
 	public void testModifyMemberOrderItem() {
 		int constant = mybatisDAO.addNewOrder(order, uid);
 		assertEquals(Constant.SUCCESS, constant);
