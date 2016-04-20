@@ -1,0 +1,121 @@
+ /* Font Definitions */
+#headers {
+	text-align: right;
+	font-size:10px;
+	font-family: "맑은 고딕";
+}
+#header2 {
+	font-size:small;
+	font-family: "맑은 고딕";
+}
+
+#content {
+	margin-left:10px;
+	margin-right:10px
+	}
+
+#footers {
+	font-size:small;
+	font-family: "맑은 고딕";
+	margin-left:10px;
+	margin-right:10px;
+	text-align: center;
+	}
+@font-face
+	{font-family:굴림;
+	panose-1:2 11 6 0 0 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"맑은 고딕";
+	panose-1:2 11 5 3 2 0 0 2 0 4;}
+@font-face
+	{font-family:"\@맑은 고딕";
+	panose-1:2 11 5 3 2 0 0 2 0 4;}
+@font-face
+	{font-family:"\@굴림";
+	panose-1:2 11 6 0 0 1 1 1 1 1;}
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	text-autospace:none;
+	word-break:break-hangul;
+	font-size:10.0pt;
+	font-family:"맑은 고딕";}
+h1
+	{mso-style-link:"제목 1 Char";
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:24.0pt;
+	font-family:굴림;
+	font-weight:bold;}
+p.MsoHeader, li.MsoHeader, div.MsoHeader
+	{mso-style-link:"머리글 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	layout-grid-mode:char;
+	text-autospace:none;
+	word-break:break-hangul;
+	font-size:10.0pt;
+	font-family:"맑은 고딕";}
+p.MsoFooter, li.MsoFooter, div.MsoFooter
+	{mso-style-link:"바닥글 Char";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	layout-grid-mode:char;
+	text-autospace:none;
+	word-break:break-hangul;
+	font-size:10.0pt;
+	font-family:"맑은 고딕";}
+span.1Char
+	{mso-style-name:"제목 1 Char";
+	mso-style-link:"제목 1";
+font-family:굴림;
+	font-weight:bold;}
+p.ls2, li.ls2, div.ls2
+	{mso-style-name:ls2;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:굴림;}
+p.lh6, li.lh6, div.lh6
+	{mso-style-name:lh6;
+	margin-right:0cm;
+	margin-left:0cm;
+	font-size:12.0pt;
+	font-family:굴림;}
+span.Char
+	{mso-style-name:"머리글 Char";
+	mso-style-link:머리글;}
+span.Char0
+	{mso-style-name:"바닥글 Char";
+	mso-style-link:바닥글;}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:3.0cm 72.0pt 72.0pt 72.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+h4{
+	font-family:"맑은 고딕";
+}	
+ul {list-style: none;}
+nav li {
+		display: inline;
+		}
+nav li a{
+		margin-right: 10px;
+		text-decoration: none;
+		}
+a {
+	color:#333333;
+	font-family:"맑은 고딕";
+	}
