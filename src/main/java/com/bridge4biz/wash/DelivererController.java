@@ -31,31 +31,33 @@ import com.google.gson.Gson;
 public class DelivererController {
 	@Autowired
 	private MybatisDAO dao;
-	
+
 	@Autowired
 	private DelivererDAO delivererDAO;
-	
+
 	@RequestMapping(value = "/join")
 	@ResponseBody
-	public Constant delivererJoin(HttpServletRequest request, UserData user, Constant constant, @RequestParam(value = "file") MultipartFile file) {
+	public Constant delivererJoin(HttpServletRequest request, UserData user, Constant constant,
+			@RequestParam(value = "file") MultipartFile file) {
 		user.authority = "ROLE_DELIVERER";
 		user.enabled = false;
 		user.setDeliverer(request);
 		Integer value = delivererDAO.addUserForDeliverer(user, file);
 		switch (value) {
-			case Constant.SUCCESS:
-	//			SocketIO.broadCast(new PushMessage(Constant.PUSH_DELIVERER_JOIN, user.uid, 0));
-				constant.setConstant(Constant.SUCCESS, "배달자 회원가입 성공 : SUCCESS");
-				break;
-			case Constant.ERROR:
-				constant.setConstant(Constant.ERROR, "배달자 회원가입 실패 : ERROR");
-				break;
-			case Constant.IMAGE_WRITE_ERROR:
-				constant.setConstant(Constant.IMAGE_WRITE_ERROR, "배달자 이미지 쓰기 실패 : IMAGE_WRITE_ERROR");
-				break;
-			case Constant.ACCOUNT_DUPLICATION:
-				constant.setConstant(Constant.ACCOUNT_DUPLICATION, "배달자 이메일 중복 : ACCOUNT_DUPLICATION");
-				break;
+		case Constant.SUCCESS:
+			// SocketIO.broadCast(new PushMessage(Constant.PUSH_DELIVERER_JOIN,
+			// user.uid, 0));
+			constant.setConstant(Constant.SUCCESS, "배달자 회원가입 성공 : SUCCESS");
+			break;
+		case Constant.ERROR:
+			constant.setConstant(Constant.ERROR, "배달자 회원가입 실패 : ERROR");
+			break;
+		case Constant.IMAGE_WRITE_ERROR:
+			constant.setConstant(Constant.IMAGE_WRITE_ERROR, "배달자 이미지 쓰기 실패 : IMAGE_WRITE_ERROR");
+			break;
+		case Constant.ACCOUNT_DUPLICATION:
+			constant.setConstant(Constant.ACCOUNT_DUPLICATION, "배달자 이메일 중복 : ACCOUNT_DUPLICATION");
+			break;
 		}
 		return constant;
 	}
@@ -63,29 +65,34 @@ public class DelivererController {
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/order")
 	@ResponseBody
-	public Constant delivererOrder(Constant constant, Authentication auth, Gson gson, @RequestBody Map<String, String> data) {
+	public Constant delivererOrder(Constant constant, Authentication auth, Gson gson,
+			@RequestBody Map<String, String> data) {
 		int oid = 0;
-		
+
 		if (!data.get("oid").equals("(null)"))
 			oid = Integer.parseInt(data.get("oid"));
-		
-		return constant.setConstant(Constant.SUCCESS, "수거요청 정보 가져오기 성공 : SUCCESS", gson.toJson(delivererDAO.getRecentOrder(oid)));
+
+		return constant.setConstant(Constant.SUCCESS, "수거요청 정보 가져오기 성공 : SUCCESS",
+				gson.toJson(delivererDAO.getRecentOrder(oid)));
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/pickup")
 	@ResponseBody
 	public Constant delivererPickup(Constant constant, Authentication auth, Gson gson) {
-		return constant.setConstant(Constant.SUCCESS, "수거요청 정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getPickupRequest(dao.getUid(auth.getName()))));
+		return constant.setConstant(Constant.SUCCESS, "수거요청 정보 가져오기 성공 : SUCCESS",
+				gson.toJson(dao.getPickupRequest(dao.getUid(auth.getName()))));
 	}
 
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/pickup/complete")
 	@ResponseBody
-	public Constant delivererPickupComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
+	public Constant delivererPickupComplete(Constant constant, Authentication auth,
+			@RequestBody Map<String, String> data) {
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-//			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
+			// SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE,
+			// 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "수거완료 처리 실패 : ERROR");
@@ -96,24 +103,27 @@ public class DelivererController {
 	@RequestMapping(value = "/dropoff")
 	@ResponseBody
 	public Constant delivererDropOff(Constant constant, Authentication auth, Gson gson) {
-		return constant.setConstant(Constant.SUCCESS, "배달요청 정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getDeliveryRequest(dao.getUid(auth.getName()))));
+		return constant.setConstant(Constant.SUCCESS, "배달요청 정보 가져오기 성공 : SUCCESS",
+				gson.toJson(dao.getDeliveryRequest(dao.getUid(auth.getName()))));
 	}
 
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/dropoff/complete")
 	@ResponseBody
-	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
+	public Constant delivererDropOffComplete(Constant constant, Authentication auth,
+			@RequestBody Map<String, String> data) {
 		String payment_method;
 		Boolean success = false;
 		Integer uid = dao.getUid(auth.getName());
-		
+
 		if (data.containsKey("payment_method")) {
 			payment_method = data.get("payment_method");
-			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), payment_method);
+			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"),
+					payment_method);
 		} else {
 			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), null);
 		}
-		
+
 		if (success) {
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS");
 		} else {
@@ -159,77 +169,94 @@ public class DelivererController {
 			constant.setConstant(Constant.ERROR, "");
 		}
 		return constant;
-	}	
-	
+	}
+
 	@Secured("ROLE_DELIVERER")
-	@RequestMapping(method=RequestMethod.POST, value = "/assign/cancel")
+	@RequestMapping(method = RequestMethod.POST, value = "/assign/cancel")
 	@ResponseBody
 	public Constant assignCancel(Constant constant, @RequestBody Order order, Authentication auth) {
 		Integer value = delivererDAO.cancelAssign(order);
 		if (value == Constant.SUCCESS) {
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS");
-		} 
-		else {
+		} else {
 			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
 		}
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
-	@RequestMapping(method=RequestMethod.POST, value = "/order/date")
+	@RequestMapping(method = RequestMethod.POST, value = "/order/date")
 	@ResponseBody
 	public Constant modifyMemberOrderDate(Constant constant, @RequestBody Order order, Authentication auth) {
 		Integer value = delivererDAO.modifyOrderDate(order);
 		if (value == Constant.SUCCESS) {
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS");
-		} 
-		else {
+		} else {
 			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
 		}
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
-	@RequestMapping(method=RequestMethod.POST, value = "/order/total")
+	@RequestMapping(method = RequestMethod.POST, value = "/order/total")
 	@ResponseBody
 	public Constant modifyMemberOrderTotal(Constant constant, @RequestBody Order order, Authentication auth) {
 		Integer value = delivererDAO.modifyOrderTotal(order);
 		if (value == Constant.SUCCESS) {
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS");
-		} 
-		else {
+		} else {
 			return constant.setConstant(Constant.ERROR, "일반회원 주문 실패 : ERROR");
 		}
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/list")
 	@ResponseBody
 	public Constant delivererManage(Constant constant, Gson gson) {
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getDelivererAll()));
 	}
-	
-	
+
 	@Secured("ROLE_DELIVERER")
-	@RequestMapping(method=RequestMethod.GET, value = "/order/{oid}")
+	@RequestMapping(method = RequestMethod.GET, value = "/order/{oid}")
 	@ResponseBody
 	public Constant getOrderByOid(Constant constant, Gson gson, @PathVariable String oid) {
 		Order order = delivererDAO.getOrderByOid(oid);
-		
+
 		if (order != null)
 			return constant.setConstant(Constant.SUCCESS, "", gson.toJson(order));
 		else
 			return constant.setConstant(Constant.ERROR, "");
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
-	@RequestMapping(method=RequestMethod.POST, value = "/order/phone")
+	@RequestMapping(method = RequestMethod.POST, value = "/order/phone")
 	@ResponseBody
 	public Constant getOrderByPhone(Constant constant, Gson gson, @RequestBody Map<String, String> data) {
 		String phone = data.get("phone");
 		ArrayList<Order> orders = delivererDAO.getOrderByPhone(phone);
-		
+
 		if (orders != null)
 			return constant.setConstant(Constant.SUCCESS, "", gson.toJson(orders));
 		else
 			return constant.setConstant(Constant.ERROR, "");
 	}
+
+	// gingerAebi
+	// 오늘의 수거 정보를 모두 가져오기 
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method = RequestMethod.POST, value = "/order/pickup/today")
+	@ResponseBody
+	public Constant getTodayPickUp(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "오늘의 수거요청 정보 가져오기 성공 : SUCCESS",
+				gson.toJson(delivererDAO.getTodayPickupOrder()));
+
+	}
+	// 오늘의 배 정보를 모두 가져오기 
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method = RequestMethod.POST, value = "/order/dropoff/today")
+	@ResponseBody
+	public Constant getTodayDropOffUp(Constant constant, Gson gson) {
+		return constant.setConstant(Constant.SUCCESS, "오늘의 배달요청 정보 가져오기 성공 : SUCCESS",
+				gson.toJson(delivererDAO.getTodayDropOffOrder()));
+		
+	}
+
 }
