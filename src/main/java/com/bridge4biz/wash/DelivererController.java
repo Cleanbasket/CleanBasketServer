@@ -249,7 +249,7 @@ public class DelivererController {
 				gson.toJson(delivererDAO.getTodayPickupOrder()));
 
 	}
-	// 오늘의 배 정보를 모두 가져오기 
+	// 오늘의 배달 정보를 모두 가져오기 
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method = RequestMethod.POST, value = "/order/dropoff/today")
 	@ResponseBody
