@@ -4,8 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.bridge4biz</groupId>
 	<artifactId>wash</artifactId>
-	<name>ROOT</name>
+	<name>wash</name>
 	<packaging>war</packaging>
+	<version>1.1.8</version>
 	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
