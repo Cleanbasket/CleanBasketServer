@@ -46,47 +46,47 @@ public class MemberContollerTest {
 	/*
 	 * 테스트 전 주문 하나를 생성
 	 */
-//	@Before
-//	@Transactional
-//	public void setUp() {
-//		// User Setting
-//		user = new UserData();
-//		user.email = "test1116@test.com";
-//		user.phone = "01000000000";
-//
-//		int constant = mybatisDAO.registerUserForMember(user);
-//		assertEquals(Constant.SUCCESS, constant);
-//
-//		Member member = mapper.getMember(user.email);
-//
-//		this.uid = member.uid;
-//
-//		// Order Setting
-//		Calendar c = Calendar.getInstance();
-//
-//		order = new Order();
-//		order.address = "서울특별시 강남구 역삼동";
-//		order.addr_building = "대암빌딩 104호";
-//		order.price = 12000;
-//		order.dropoff_price = 2000;
-//		order.coupon = new ArrayList<Coupon>();
-//
-//		c.add(Calendar.HOUR_OF_DAY, 1);
-//		c.add(Calendar.MINUTE, 45);
-//		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
-//
-//		c.add(Calendar.DAY_OF_MONTH, 2);
-//		order.dropoff_date = TimeCheck.getStringDateTime(c.getTime());
-//
-//		ArrayList<Item> items = new ArrayList<Item>();
-//		ArrayList<ItemCode> itemCode = mapper.getItemCode();
-//
-//		Item shirts = new Item(itemCode.get(0));
-//		shirts.count = 5;
-//		items.add(shirts);
-//		order.item = items;
-//	}
-//
+	@Before
+	@Transactional
+	public void setUp() {
+		// User Setting
+		user = new UserData();
+		user.email = "test1116@test.com";
+		user.phone = "01000000000";
+
+		int constant = mybatisDAO.registerUserForMember(user);
+		assertEquals(Constant.SUCCESS, constant);
+
+		Member member = mapper.getMember(user.email);
+
+		this.uid = member.uid;
+
+		// Order Setting
+		Calendar c = Calendar.getInstance();
+
+		order = new Order();
+		order.address = "서울특별시 강남구 역삼동";
+		order.addr_building = "대암빌딩 104호";
+		order.price = 12000;
+		order.dropoff_price = 2000;
+		order.coupon = new ArrayList<Coupon>();
+
+		c.add(Calendar.HOUR_OF_DAY, 1);
+		c.add(Calendar.MINUTE, 45);
+		order.pickup_date = TimeCheck.getStringDateTime(c.getTime());
+
+		c.add(Calendar.DAY_OF_MONTH, 2);
+		order.dropoff_date = TimeCheck.getStringDateTime(c.getTime());
+
+		ArrayList<Item> items = new ArrayList<Item>();
+		ArrayList<ItemCode> itemCode = mapper.getItemCode();
+
+		Item shirts = new Item(itemCode.get(0));
+		shirts.count = 5;
+		items.add(shirts);
+		order.item = items;
+	}
+
 //	/*
 //	 * 가입 테스트
 //	 */
