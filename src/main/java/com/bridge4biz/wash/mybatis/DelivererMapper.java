@@ -2,9 +2,9 @@ package com.bridge4biz.wash.mybatis;
 
 import java.util.ArrayList;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.bridge4biz.wash.data.ItemData;
+import com.bridge4biz.wash.service.Item;
+import org.apache.ibatis.annotations.*;
 
 import com.bridge4biz.wash.service.Order;
 
@@ -35,4 +35,12 @@ public interface DelivererMapper {
 	
 	@Update("UPDATE orders SET dropoff_man = null, state = 2 WHERE oid = #{oid}")
 	Boolean cancelDropoffAssign(Order order);
+
+	@Delete("DELETE FROM item WHERE oid = #{oid}")
+	Boolean deleteItemList(@Param("oid") Integer oid);
+
+	@Insert("INSERT INTO item (oid, item_code, price, count, rdate) VALUES(#{oid}, #{item_code}, #{price}, #{count}, NOW())")
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "itid", before = false, resultType = Integer.class)
+	Boolean updateItems(ItemData itemData);
+
 }

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import com.bridge4biz.wash.data.ItemData;
+import com.bridge4biz.wash.service.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,5 +191,22 @@ public class DelivererDAO {
 		}
 			
 		return orders;
+	}
+
+	public Integer modifyOrderItem(Order order) {
+
+		ItemData itemData = new ItemData();
+
+		if(!delivererMapper.deleteItemList(order.oid))
+			return Constant.ERROR;
+
+		for (Item item : order.item) {
+			int price = (int) (mapper.getItemPrice(item.item_code) * (1 - item.discount_rate));
+
+			if (!delivererMapper.updateItems(new ItemData(order.oid, item.item_code, price, item.count)))
+				return Constant.ERROR;
+		}
+
+		return Constant.SUCCESS;
 	}
 }

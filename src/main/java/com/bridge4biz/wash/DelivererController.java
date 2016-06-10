@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bridge4biz.wash.service.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -231,5 +232,20 @@ public class DelivererController {
 			return constant.setConstant(Constant.SUCCESS, "", gson.toJson(orders));
 		else
 			return constant.setConstant(Constant.ERROR, "");
+	}
+
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.POST, value = "/item/update")
+	@ResponseBody
+	public Constant modifyItemOfOrder(Constant constant, @RequestBody Order order, Authentication auth) {
+
+		Integer value = delivererDAO.modifyOrderItem(order);
+
+		if (value == Constant.SUCCESS) {
+			return constant.setConstant(Constant.SUCCESS, "아이템 수정 성공 : SUCCESS");
+		}
+		else {
+			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");
+		}
 	}
 }
