@@ -193,19 +193,20 @@ public class DelivererDAO {
 		return orders;
 	}
 
-	public Integer modifyOrderItem(Order order) {
+	public Integer modifyOrderItem(ItemData itemData) {
 
-		ItemData itemData = new ItemData();
+		int price = (int) (mapper.getItemPrice(itemData.item_code));
 
-		if(!delivererMapper.deleteItemList(order.oid))
+		if (!delivererMapper.updateItems(new ItemData(itemData.oid, itemData.item_code, price, itemData.count)))
 			return Constant.ERROR;
 
-		for (Item item : order.item) {
-			int price = (int) (mapper.getItemPrice(item.item_code) * (1 - item.discount_rate));
+		return Constant.SUCCESS;
+	}
 
-			if (!delivererMapper.updateItems(new ItemData(order.oid, item.item_code, price, item.count)))
-				return Constant.ERROR;
-		}
+	public Integer deleteItems(ItemData itemData) {
+
+		if(!delivererMapper.deleteItemList(itemData.oid))
+			return Constant.ERROR;
 
 		return Constant.SUCCESS;
 	}
