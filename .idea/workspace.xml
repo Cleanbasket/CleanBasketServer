@@ -73,8 +73,8 @@
       <file leaf-file-name="MemberContollerTest.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/wash/MemberContollerTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.43252596">
-              <caret line="116" column="38" selection-start-line="116" selection-start-column="38" selection-end-line="116" selection-end-column="38" />
+            <state vertical-scroll-proportion="1.6955017">
+              <caret line="125" column="16" selection-start-line="125" selection-start-column="16" selection-end-line="125" selection-end-column="16" />
               <folding>
                 <element signature="e#2394#2400#0" expanded="true" />
               </folding>
@@ -1245,7 +1245,7 @@
       <updated>1461139376380</updated>
       <workItem from="1461139377550" duration="11427000" />
       <workItem from="1461163760400" duration="1507000" />
-      <workItem from="1465593849519" duration="310000" />
+      <workItem from="1465593849519" duration="454000" />
     </task>
     <servers />
   </component>
@@ -1258,7 +1258,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13244000" />
+    <option name="totallyTimeSpent" value="13388000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1606,8 +1606,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/wash/MemberContollerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.43252596">
-          <caret line="116" column="38" selection-start-line="116" selection-start-column="38" selection-end-line="116" selection-end-column="38" />
+        <state vertical-scroll-proportion="1.6955017">
+          <caret line="125" column="16" selection-start-line="125" selection-start-column="16" selection-end-line="125" selection-end-column="16" />
           <folding>
             <element signature="e#2394#2400#0" expanded="true" />
           </folding>

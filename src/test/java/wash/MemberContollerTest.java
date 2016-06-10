@@ -104,12 +104,12 @@ public class MemberContollerTest {
 //		assertEquals(user.email, member.email);
 //	}
 //
-	@Test
-	@Transactional
-	public void testCheckPrice() {
-		boolean success = mybatisDAO.priceCheck(order, uid);
-		assertTrue(success);
-	}
+//	@Test
+//	@Transactional
+//	public void testCheckPrice() {
+//		boolean success = mybatisDAO.priceCheck(order, uid);
+//		assertTrue(success);
+//	}
 //
 //	@Test
 //	@Transactional
