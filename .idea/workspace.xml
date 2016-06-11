@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b277f997-2f87-414e-bf3d-8d8fc684a457" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" />
     </list>
     <ignored path="wash.iws" />
@@ -54,8 +53,8 @@
       <file leaf-file-name="DelivererDAO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.40924656">
-              <caret line="198" column="34" selection-start-line="198" selection-start-column="34" selection-end-line="198" selection-end-column="34" />
+            <state vertical-scroll-proportion="0.8458904">
+              <caret line="221" column="32" selection-start-line="221" selection-start-column="32" selection-end-line="221" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -991,7 +990,7 @@
       <updated>1461139376380</updated>
       <workItem from="1461139377550" duration="11427000" />
       <workItem from="1461163760400" duration="1507000" />
-      <workItem from="1465593849519" duration="6393000" />
+      <workItem from="1465593849519" duration="6743000" />
     </task>
     <servers />
   </component>
@@ -1004,7 +1003,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19327000" />
+    <option name="totallyTimeSpent" value="19677000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1392,8 +1391,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.40924656">
-          <caret line="198" column="34" selection-start-line="198" selection-start-column="34" selection-end-line="198" selection-end-column="34" />
+        <state vertical-scroll-proportion="0.8458904">
+          <caret line="221" column="32" selection-start-line="221" selection-start-column="32" selection-end-line="221" selection-end-column="32" />
           <folding />
         </state>
       </provider>

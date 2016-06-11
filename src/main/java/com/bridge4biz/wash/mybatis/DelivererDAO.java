@@ -198,12 +198,26 @@ public class DelivererDAO {
 		if(!delivererMapper.deleteItemList(itemDataArrayList.get(0).oid))
 			return Constant.ERROR;
 
+		int totalPrice = 0;
+
 		for (ItemData itemData : itemDataArrayList) {
 			int price = (int) (mapper.getItemPrice(itemData.item_code));
+
+			totalPrice += price * itemData.count;
 
 			if (!delivererMapper.updateItems(new ItemData(itemData.oid, itemData.item_code, price, itemData.count)))
 				return Constant.ERROR;
 		}
+
+		if (totalPrice < 20000){
+			totalPrice += 2000;
+		}
+
+		Order order = new Order();
+		order.oid = itemDataArrayList.get(0).oid;
+		order.price = totalPrice;
+
+		modifyOrderTotal(order);
 
 		return Constant.SUCCESS;
 	}
