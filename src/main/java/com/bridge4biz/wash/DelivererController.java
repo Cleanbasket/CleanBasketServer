@@ -253,7 +253,7 @@ public class DelivererController {
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method=RequestMethod.POST, value = "/item/update")
 	@ResponseBody
-	public Constant modifyItemOfOrder(Constant constant, @RequestBody ItemData itemData, Authentication auth) {
+	public Constant modifyItemOfOrder(Constant constant, @RequestBody ArrayList<ItemData> itemData, Authentication auth) {
 
 		Integer value = delivererDAO.modifyOrderItem(itemData);
 
