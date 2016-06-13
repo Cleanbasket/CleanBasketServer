@@ -264,4 +264,19 @@ public class DelivererController {
 			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");
 		}
 	}
+
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.POST, value = "/order/update")
+	@ResponseBody
+	public Constant updateOrder(Constant constant, @RequestBody Order order, Authentication auth) {
+
+		Integer value = delivererDAO.updateOrder(order);
+
+		if (value == Constant.SUCCESS) {
+			return constant.setConstant(Constant.SUCCESS, "아이템 수정 성공 : SUCCESS");
+		}
+		else {
+			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");
+		}
+	}
 }

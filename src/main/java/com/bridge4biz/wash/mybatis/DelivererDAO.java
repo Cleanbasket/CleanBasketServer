@@ -235,4 +235,12 @@ public class DelivererDAO {
 
 		return Constant.SUCCESS;
 	}
+
+	public Integer updateOrder(Order order) {
+
+		if(!delivererMapper.updateOrder(order))
+			return Constant.ERROR;
+
+		return Constant.SUCCESS;
+	}
 }
