@@ -209,12 +209,15 @@ public class DelivererDAO {
 				return null;
 		}
 
+		Order order = new Order();
+
 		if (totalPrice < 20000){
 			totalPrice += 2000;
+
 		}
 
-		Order order = new Order();
 		order.oid = itemDataArrayList.get(0).oid;
+		order.dropoff_price = 2000;
 		order.price = totalPrice;
 
 		modifyOrderTotal(order);

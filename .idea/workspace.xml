@@ -7,7 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b277f997-2f87-414e-bf3d-8d8fc684a457" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" />
     </list>
     <ignored path="wash.iws" />
@@ -31,21 +30,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DelivererController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DelivererController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7986577">
-              <caret line="261" column="9" selection-start-line="261" selection-start-column="9" selection-end-line="261" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="256" column="0" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DelivererDAO.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DelivererDAO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.333334">
-              <caret line="225" column="5" selection-start-line="225" selection-start-column="5" selection-end-line="225" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.6366782">
+              <caret line="216" column="9" selection-start-line="216" selection-start-column="9" selection-end-line="216" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -56,16 +55,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="District.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/District.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -96,6 +85,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
               <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MybatisDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="264" column="13" selection-start-line="261" selection-start-column="12" selection-end-line="264" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -153,8 +152,8 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererMapper.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" />
       </list>
     </option>
   </component>
@@ -1142,7 +1141,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20381000" />
+    <option name="totallyTimeSpent" value="21128000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1416,14 +1415,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="264" column="13" selection-start-line="261" selection-start-column="12" selection-end-line="264" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/listener/ServletContextLifeCycle.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1560,6 +1551,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="256" column="0" selection-start-line="256" selection-start-column="0" selection-end-line="256" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="264" column="13" selection-start-line="261" selection-start-column="12" selection-end-line="264" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererMapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1570,16 +1577,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-24.333334">
-          <caret line="225" column="5" selection-start-line="225" selection-start-column="5" selection-end-line="225" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7986577">
-          <caret line="261" column="9" selection-start-line="261" selection-start-column="9" selection-end-line="261" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.6366782">
+          <caret line="216" column="9" selection-start-line="216" selection-start-column="9" selection-end-line="216" selection-end-column="9" />
           <folding />
         </state>
       </provider>
