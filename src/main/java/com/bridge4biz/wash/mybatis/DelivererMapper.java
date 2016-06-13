@@ -30,6 +30,9 @@ public interface DelivererMapper {
 	@Update("UPDATE orders SET price = #{price} WHERE oid = #{oid}")
 	Boolean updateOrderTotal(Order order);
 
+	@Update("UPDATE orders SET dropoff_price = #{dropoff_price} WHERE oid = #{oid}")
+	Boolean updateDropoffPrice(Order order);
+
 	@Update("UPDATE orders SET pickup_man = null, state = 0 WHERE oid = #{oid}")
 	Boolean cancelPickupAssign(Order order);
 	

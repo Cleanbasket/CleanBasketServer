@@ -213,14 +213,14 @@ public class DelivererDAO {
 
 		if (totalPrice < 20000){
 			totalPrice += 2000;
-
+			order.dropoff_price = 2000;
 		}
 
 		order.oid = itemDataArrayList.get(0).oid;
-		order.dropoff_price = 2000;
 		order.price = totalPrice;
 
 		modifyOrderTotal(order);
+		delivererMapper.updateDropoffPrice(order);
 
 		Order updatedOrder = new Order();
 		updatedOrder = getOrderByOid("" + order.oid);
