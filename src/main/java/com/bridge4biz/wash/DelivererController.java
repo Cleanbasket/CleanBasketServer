@@ -253,12 +253,12 @@ public class DelivererController {
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method=RequestMethod.POST, value = "/item/update")
 	@ResponseBody
-	public Constant modifyItemOfOrder(Constant constant, @RequestBody ArrayList<ItemData> itemData, Authentication auth) {
+	public Constant modifyItemOfOrder(Constant constant, @RequestBody ArrayList<ItemData> itemData, Authentication auth, Gson gson) {
 
-		Integer value = delivererDAO.modifyOrderItem(itemData);
+		Order value = delivererDAO.modifyOrderItem(itemData);
 
-		if (value == Constant.SUCCESS) {
-			return constant.setConstant(Constant.SUCCESS, "아이템 수정 성공 : SUCCESS");
+		if (value != null) {
+			return constant.setConstant(Constant.SUCCESS, "아이템 수정 성공 : SUCCESS", gson.toJson(value));
 		}
 		else {
 			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");

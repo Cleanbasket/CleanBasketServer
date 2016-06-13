@@ -193,10 +193,10 @@ public class DelivererDAO {
 		return orders;
 	}
 
-	public Integer modifyOrderItem(ArrayList<ItemData> itemDataArrayList) {
+	public Order modifyOrderItem(ArrayList<ItemData> itemDataArrayList) {
 
 		if(!delivererMapper.deleteItemList(itemDataArrayList.get(0).oid))
-			return Constant.ERROR;
+			return null;
 
 		int totalPrice = 0;
 
@@ -206,7 +206,7 @@ public class DelivererDAO {
 			totalPrice += price * itemData.count;
 
 			if (!delivererMapper.updateItems(new ItemData(itemData.oid, itemData.item_code, price, itemData.count)))
-				return Constant.ERROR;
+				return null;
 		}
 
 		if (totalPrice < 20000){
@@ -219,7 +219,10 @@ public class DelivererDAO {
 
 		modifyOrderTotal(order);
 
-		return Constant.SUCCESS;
+		Order updatedOrder = new Order();
+		updatedOrder = getOrderByOid("" + order.oid);
+
+		return updatedOrder;
 	}
 
 	public Integer deleteItems(ItemData itemData) {
