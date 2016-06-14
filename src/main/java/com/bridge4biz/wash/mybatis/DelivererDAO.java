@@ -243,4 +243,12 @@ public class DelivererDAO {
 
 		return Constant.SUCCESS;
 	}
+
+	public Integer paymentChangePrice(Order order) {
+
+		if(!delivererMapper.paymentChangePrice(order))
+			return Constant.ERROR;
+
+		return Constant.SUCCESS;
+	}
 }

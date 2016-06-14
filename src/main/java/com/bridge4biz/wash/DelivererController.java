@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.bridge4biz.wash.data.ItemData;
+import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.bridge4biz.wash.service.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -33,6 +34,9 @@ import com.google.gson.Gson;
 public class DelivererController {
 	@Autowired
 	private MybatisDAO dao;
+
+	@Autowired
+	private PaymentDAO paymentDao;
 	
 	@Autowired
 	private DelivererDAO delivererDAO;
@@ -277,6 +281,22 @@ public class DelivererController {
 		}
 		else {
 			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");
+		}
+	}
+
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.POST, value = "/payment", consumes = { "application/json" })
+	@ResponseBody
+	public Constant triggerPayment(Constant constant, Gson gson, @RequestBody Order order) {
+		int oid = Integer.valueOf(order.oid);
+		int uid = Integer.valueOf(order.uid);
+
+		Integer value = delivererDAO.paymentChangePrice(order);
+
+		if (value == Constant.SUCCESS) {
+			return constant.setConstant(Constant.SUCCESS, "결제 성공", gson.toJson(paymentDao.triggerPayment(oid, uid)));
+		} else {
+			return constant.setConstant(Constant.ERROR, "결제 실패 : ERROR");
 		}
 	}
 }
