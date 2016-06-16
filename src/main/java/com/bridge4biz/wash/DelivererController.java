@@ -108,19 +108,27 @@ public class DelivererController {
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/dropoff/complete")
 	@ResponseBody
-	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
+	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Order order, Gson gson) {
 		String payment_method;
 		Boolean success = false;
 		Integer uid = dao.getUid(auth.getName());
+		Integer price = order.price;
+		Integer value = null;
 		
-		if (data.containsKey("payment_method")) {
-			payment_method = data.get("payment_method");
-			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), payment_method);
+		if (order.payment_method != null) {
+			payment_method = order.payment_method;
+			success = dao.updateDeliveryRequestComplete(uid, order.oid, order.note, payment_method);
+			value = delivererDAO.paymentChangePrice(order);
+
+			if (order.payment_method == "3"){
+				gson.toJson(paymentDao.triggerPayment(order.oid, order.uid));
+			}
+
 		} else {
-			success = dao.updateDeliveryRequestComplete(uid, Integer.parseInt(data.get("oid")), data.get("note"), null);
+			success = null;
 		}
 		
-		if (success) {
+		if (success && value == Constant.SUCCESS) {
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");

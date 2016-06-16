@@ -246,7 +246,7 @@ public class DelivererDAO {
 
 	public Integer paymentChangePrice(Order order) {
 
-		if(!delivererMapper.paymentChangePrice(order))
+		if(!delivererMapper.paymentChangePrice(order.price, order.oid))
 			return Constant.ERROR;
 
 		return Constant.SUCCESS;

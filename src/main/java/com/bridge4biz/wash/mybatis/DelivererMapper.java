@@ -42,8 +42,8 @@ public interface DelivererMapper {
 	@Update("UPDATE orders SET phone = #{phone}, price = #{price}, address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder}, memo = #{memo}, note = #{note}, pickup_date = #{pickup_date}, dropoff_date = #{dropoff_date} WHERE oid = #{oid}")
 	Boolean updateOrder(Order order);
 
-	@Update("UPDATE orders SET price = #{price}, note = #{note} WHERE oid = #{oid}")
-	Boolean paymentChangePrice(Order order);
+	@Update("UPDATE orders SET price = #{price} WHERE oid = #{oid}")
+	Boolean paymentChangePrice(@Param("price") Integer price, @Param("oid") Integer oid);
 
 	@Delete("DELETE FROM item WHERE oid = #{oid}")
 	Boolean deleteItemList(@Param("oid") Integer oid);

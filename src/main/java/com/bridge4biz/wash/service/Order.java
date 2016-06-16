@@ -24,7 +24,7 @@ public class Order {
 	public String rdate = "";
 	public Integer mileage = 0;
 	public Integer sale = 0;
-	public Integer payment_method = 0;
+	public String payment_method = 0;
 	public Integer feedback = 0;
 	public Deliverer pickupInfo = null;
 	public Deliverer dropoffInfo = null;
