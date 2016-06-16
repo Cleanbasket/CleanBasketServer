@@ -130,7 +130,7 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
-			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS");
+			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
 			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");
 		}
