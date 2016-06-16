@@ -114,6 +114,7 @@ public class DelivererController {
 		Integer uid = dao.getUid(auth.getName());
 		Integer price = order.price;
 		Integer value = null;
+		String gson_test = null;
 		
 		if (order.payment_method != null) {
 			payment_method = order.payment_method;
@@ -121,7 +122,7 @@ public class DelivererController {
 			value = delivererDAO.paymentChangePrice(order);
 
 			if (order.payment_method == 3){
-				gson.toJson(paymentDao.triggerPayment(order.oid, order.uid));
+				gson_test = gson.toJson(paymentDao.triggerPayment(order.oid, order.uid));
 			}
 
 		} else {

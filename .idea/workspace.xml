@@ -8,9 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b277f997-2f87-414e-bf3d-8d8fc684a457" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/Order.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/Order.java" />
     </list>
     <ignored path="wash.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="DelivererController.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DelivererController.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-25.0">
-              <caret line="119" column="47" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
+            <state vertical-scroll-proportion="0.6645367">
+              <caret line="132" column="79" selection-start-line="132" selection-start-column="59" selection-end-line="132" selection-end-column="79" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -115,10 +112,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MybatisDAO.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MybatisDAO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5662526">
+            <state vertical-scroll-proportion="0.0">
               <caret line="932" column="45" selection-start-line="932" selection-start-column="45" selection-end-line="932" selection-end-column="45" />
               <folding />
             </state>
@@ -168,9 +165,9 @@
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/Order.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
       </list>
     </option>
   </component>
@@ -1118,7 +1115,7 @@
       <workItem from="1461139377550" duration="11427000" />
       <workItem from="1461163760400" duration="1507000" />
       <workItem from="1465593849519" duration="6743000" />
-      <workItem from="1465961399375" duration="1767000" />
+      <workItem from="1465961399375" duration="2138000" />
     </task>
     <servers />
   </component>
@@ -1131,7 +1128,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27250000" />
+    <option name="totallyTimeSpent" value="27621000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1516,14 +1513,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/PaymentDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="105" column="32" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/Order.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1540,24 +1529,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="248" column="42" selection-start-line="248" selection-start-column="42" selection-end-line="248" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-25.0">
-          <caret line="119" column="47" selection-start-line="119" selection-start-column="47" selection-end-line="119" selection-end-column="47" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1568,9 +1539,35 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5662526">
+        <state vertical-scroll-proportion="0.0">
           <caret line="932" column="45" selection-start-line="932" selection-start-column="45" selection-end-line="932" selection-end-column="45" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/PaymentDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="105" column="32" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/DelivererDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="248" column="42" selection-start-line="248" selection-start-column="42" selection-end-line="248" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6645367">
+          <caret line="132" column="79" selection-start-line="132" selection-start-column="59" selection-end-line="132" selection-end-column="79" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
