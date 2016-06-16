@@ -350,7 +350,7 @@ public interface MybatisMapper {
 	Boolean updatePickupRequestComplete(@Param("oid") Integer oid, @Param("note") String note);
 
 	@Update("UPDATE orders SET state = 4, note = #{note}, payment_method = #{payment_method}, rdate = NOW() WHERE oid = #{oid}")
-	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, @Param("payment_method") String payment_method);
+	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, @Param("payment_method") Integer payment_method);
 
 	@Update("UPDATE orders SET state = 4, note = #{note}, rdate = NOW() WHERE oid = #{oid}")
 	Boolean updateDeliveryRequest(@Param("oid") Integer oid, @Param("note") String note);

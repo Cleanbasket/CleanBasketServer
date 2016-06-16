@@ -915,7 +915,7 @@ public class MybatisDAO {
 		}
 	}
 
-	public Boolean updateDeliveryRequestComplete(Integer uid, int oid, String note, String payment_method) {
+	public Boolean updateDeliveryRequestComplete(Integer uid, int oid, String note, Integer payment_method) {
 		try {
 			Order orderData = getOrderByOrderId(oid);
 			int userId = orderData.uid;

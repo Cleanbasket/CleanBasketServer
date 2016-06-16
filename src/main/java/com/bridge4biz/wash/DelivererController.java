@@ -109,7 +109,7 @@ public class DelivererController {
 	@RequestMapping(value = "/dropoff/complete")
 	@ResponseBody
 	public Constant delivererDropOffComplete(Constant constant, Authentication auth, @RequestBody Order order, Gson gson) {
-		String payment_method;
+		Integer payment_method;
 		Boolean success = false;
 		Integer uid = dao.getUid(auth.getName());
 		Integer price = order.price;
@@ -120,7 +120,7 @@ public class DelivererController {
 			success = dao.updateDeliveryRequestComplete(uid, order.oid, order.note, payment_method);
 			value = delivererDAO.paymentChangePrice(order);
 
-			if (order.payment_method == "3"){
+			if (order.payment_method == 3){
 				gson.toJson(paymentDao.triggerPayment(order.oid, order.uid));
 			}
 
