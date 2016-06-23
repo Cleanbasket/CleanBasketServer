@@ -18,7 +18,7 @@ public class PushMessage {
 	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);		
 	
 	public static void addPush(int uid, int oid, String msg, int value, int type, String regId) {
-		FcmSender sender = new FcmSender();
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
 		Message message = new Message.Builder()
 		.addData("oid", String.valueOf(oid))
 		.addData("uid", String.valueOf(uid))
