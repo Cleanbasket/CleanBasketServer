@@ -56,14 +56,15 @@ public class FcmSender {
 		FirebaseApp.initializeApp(options);
 	}
 	
+	private InputStream inputStream;
 	private InputStream getAccountJSON() {
 		try {
-			return new ClassPathResource("CleanBasketPush-411875c193ab.json").getInputStream();
+			if(inputStream == null) inputStream = new ClassPathResource("CleanBasketPush-411875c193ab.json").getInputStream();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("File Not Found Exception");
-			return null;
 		}
+		return inputStream;
 	}
 	
 	public Result send(Message message, String registrationId, int retries) throws IOException {
