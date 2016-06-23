@@ -49,22 +49,12 @@ public class FcmSender {
 	
 	public FcmSender() {
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				  .setServiceAccount(getAccountJSON())
+				  .setServiceAccount(ClassLoader.class.getResourceAsStream("/CleanBasketPush-411875c193ab.json"))
 				  .setDatabaseUrl("https://cleanbasketpush.firebaseio.com/")
 				  .build();
 		FirebaseApp.initializeApp(options);
 	}
-	
-	private FileInputStream getAccountJSON() {
-		try {
-			FileInputStream fis = new FileInputStream("resources/CleanBasketPush-411875c193ab.json");
-			return fis;
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
+		
 	public Result send(Message message, String registrationId, int retries) throws IOException {
 		int attempt = 0;
 		Result result = null;
