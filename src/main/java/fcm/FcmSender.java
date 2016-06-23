@@ -49,7 +49,7 @@ public class FcmSender {
 	
 	public FcmSender() {
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				  .setServiceAccount(ClassLoader.class.getResourceAsStream("/CleanBasketPush-411875c193ab.json"))
+				  .setServiceAccount(ClassLoader.class.getResourceAsStream("CleanBasketPush-411875c193ab.json"))
 				  .setDatabaseUrl("https://cleanbasketpush.firebaseio.com/")
 				  .build();
 		FirebaseApp.initializeApp(options);
