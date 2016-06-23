@@ -584,4 +584,16 @@ public interface MybatisMapper {
 
 	@Insert("INSERT INTO dropofftime (datetime, rdate) VALUES (#{datetime}, NOW())")
 	Boolean addDropoffTime(@Param("datetime") String datetime);	
+	
+	//gingerAebi
+	
+	//date(format_date) 함수로 시간 데이터에서 날짜만 추출 가능 
+	//오늘의 모든 수거정보를 get --> 매니저용 
+	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 1 AND date(pickup_date) = CURDATE()) OR (state = 2 AND date(pickup_date) = CURDATE()) ORDER BY state ASC, pickup_date ASC, oid ASC")
+	ArrayList<DelivererWork> getTodayPickupRequest();
+
+	//오늘의 모든 배달정보를 get --> 매니저용 
+	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 3 AND date(dropoff_date) = date(now())) OR (state = 4 AND date(dropoff_date) = CURDATE()) ORDER BY state ASC, dropoff_date ASC, oid ASC")
+	ArrayList<DelivererWork> getTodayDropOffRequest();
+		
 }

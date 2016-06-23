@@ -1312,6 +1312,7 @@ public class MybatisDAO {
 		new SendSMS(set).run();
 	}
 
+	//ITEM 수정 
 	public Integer modifyOrderItem(Order order, Integer uid) {	
 		if (order.state > 1)
 			return Constant.ERROR;

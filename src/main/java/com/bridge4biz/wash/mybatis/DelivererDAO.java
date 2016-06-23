@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.bridge4biz.wash.data.ItemData;
-import com.bridge4biz.wash.service.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,25 +17,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bridge4biz.wash.data.UserData;
+import com.bridge4biz.wash.service.DelivererWork;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
 
 public class DelivererDAO {
-	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);		
+	private static final Logger log = LoggerFactory.getLogger(MybatisDAO.class);
 
 	private MybatisMapper mapper;
 	private DelivererMapper delivererMapper;
-	
+
 	public DelivererDAO() {
-		
+
 	}
 
 	@Autowired
-	private DelivererDAO(MybatisMapper mapper, DelivererMapper delivererMapper, PlatformTransactionManager platformTransactionManager) {
+	private DelivererDAO(MybatisMapper mapper, DelivererMapper delivererMapper,
+			PlatformTransactionManager platformTransactionManager) {
 		this.mapper = mapper;
 		this.delivererMapper = delivererMapper;
 	}
-	
+
 	public Integer addUserForDeliverer(UserData userData, MultipartFile file) {
 		// TransactionStatus status =
 		// platformTransactionManager.getTransaction(paramTransactionDefinition);
@@ -71,28 +71,28 @@ public class DelivererDAO {
 		// platformTransactionManager.commit(status);
 		return Constant.SUCCESS;
 	}
-	
+
 	private Order additionalInfo(Order order) {
 		order.item = mapper.getItem(order.oid);
 		order.coupon = mapper.getCoupon(order.oid, order.uid);
 		order.pickupInfo = mapper.getDeliverer(order.pickup_man);
 		order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
-		
+
 		if (mapper.checkMileage(order.oid, order.uid) > 0)
 			order.mileage = mapper.getMileageByOid(order.oid);
 		else
 			order.mileage = 0;
-		
-		return order;	
+
+		return order;
 	}
-	
+
 	public ArrayList<Order> getPickUpOrder() {
 		ArrayList<Order> datas = delivererMapper.getPickupData();
-		
+
 		for (Order order : datas) {
 			additionalInfo(order);
 		}
-		
+
 		return datas;
 	}
 
@@ -108,17 +108,17 @@ public class DelivererDAO {
 		}
 		return constant;
 	}
-	
+
 	public ArrayList<Order> getDropOffOrder() {
 		ArrayList<Order> datas = delivererMapper.getDropoffData();
-		
+
 		for (Order order : datas) {
 			additionalInfo(order);
 		}
-		
+
 		return datas;
 	}
-	
+
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(value = "/pickup/assign", consumes = { "application/json" })
 	@ResponseBody
@@ -131,43 +131,42 @@ public class DelivererDAO {
 		}
 		return constant;
 	}
-	
+
 	public ArrayList<Order> getRecentOrder(Integer oid) {
 		ArrayList<Order> datas;
-		
+
 		if (oid == 0) {
 			datas = delivererMapper.getRecentOrderInit();
-		}
-		else
+		} else
 			datas = delivererMapper.getRecentOrder(oid);
-		
+
 		for (Order order : datas) {
 			additionalInfo(order);
 		}
-		
+
 		return datas;
 	}
 
 	public Integer modifyOrderDate(Order order) {
 		if (!mapper.updateOrderDateTime(order))
 			return Constant.ERROR;
-				
-		return Constant.SUCCESS;
-	}
-	
-	public Integer modifyOrderTotal(Order order) {
-		if (!delivererMapper.updateOrderTotal(order))
-			return Constant.ERROR;
-				
+
 		return Constant.SUCCESS;
 	}
 
-	public Integer cancelAssign(Order order) {		
+	public Integer modifyOrderTotal(Order order) {
+		if (!delivererMapper.updateOrderTotal(order))
+			return Constant.ERROR;
+
+		return Constant.SUCCESS;
+	}
+
+	public Integer cancelAssign(Order order) {
 		if (order.state == 1)
 			delivererMapper.cancelPickupAssign(order);
 		else if (order.state == 3)
 			delivererMapper.cancelDropoffAssign(order);
-		else 
+		else
 			return Constant.ERROR;
 
 		return Constant.SUCCESS;
@@ -175,58 +174,45 @@ public class DelivererDAO {
 
 	public Order getOrderByOid(String oid) {
 		Order order = mapper.getOrderForSingle(Integer.parseInt(oid));
-		
+
 		if (order != null)
 			additionalInfo(order);
-		
+
 		return order;
 	}
 
 	public ArrayList<Order> getOrderByPhone(String phone) {
 		ArrayList<Order> orders = mapper.getOrderByPhone(phone);
-		
+
 		if (orders != null) {
 			for (Order order : orders)
 				additionalInfo(order);
 		}
-			
+
 		return orders;
 	}
 
-	public Integer modifyOrderItem(ArrayList<ItemData> itemDataArrayList) {
-
-		if(!delivererMapper.deleteItemList(itemDataArrayList.get(0).oid))
-			return Constant.ERROR;
-
-		int totalPrice = 0;
-
-		for (ItemData itemData : itemDataArrayList) {
-			int price = (int) (mapper.getItemPrice(itemData.item_code));
-
-			totalPrice += price * itemData.count;
-
-			if (!delivererMapper.updateItems(new ItemData(itemData.oid, itemData.item_code, price, itemData.count)))
-				return Constant.ERROR;
+	// gingerAebi
+	// 오늘의 수거 정보를 모두 가져오기
+	public ArrayList<DelivererWork> getTodayPickupOrder() {
+		ArrayList<DelivererWork> delivererWorkLists = mapper.getTodayPickupRequest();
+		for (DelivererWork delivererWorkList : delivererWorkLists) {
+			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
+			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
+			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
 		}
-
-		if (totalPrice < 20000){
-			totalPrice += 2000;
+		return delivererWorkLists;
+	}
+	
+	//오늘의 배달 정보를 모두 가져오
+	public ArrayList<DelivererWork> getTodayDropOffOrder() {
+		ArrayList<DelivererWork> delivererWorkLists = mapper.getTodayDropOffRequest();
+		for (DelivererWork delivererWorkList : delivererWorkLists) {
+			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
+			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
+			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
 		}
-
-		Order order = new Order();
-		order.oid = itemDataArrayList.get(0).oid;
-		order.price = totalPrice;
-
-		modifyOrderTotal(order);
-
-		return Constant.SUCCESS;
+		return delivererWorkLists;
 	}
 
-	public Integer deleteItems(ItemData itemData) {
-
-		if(!delivererMapper.deleteItemList(itemData.oid))
-			return Constant.ERROR;
-
-		return Constant.SUCCESS;
-	}
 }

@@ -1,4 +1,5 @@
-
+target/
+*.imi
 .metadata
 bin/
 tmp/
