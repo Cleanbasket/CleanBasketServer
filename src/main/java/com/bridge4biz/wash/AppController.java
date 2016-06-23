@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
+import com.bridge4biz.wash.service.Notification;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
 import com.bridge4biz.wash.util.EmailData;
 import com.bridge4biz.wash.util.EmailService;
+import com.bridge4biz.wash.util.PushMessage;
 import com.google.gson.Gson;
 
 @RestController
@@ -36,6 +38,13 @@ public class AppController {
 
 	@Autowired
 	private EmailService emailService;
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/fcm/test")
+	@ResponseBody
+	public Constant gcmTest(Constant constant, Gson gson) {
+		PushMessage.addPush(12721, 1, null, 0, Notification.PICKUP_ALARM, "APA91bE-dUH551l9pHT8g2yalaemnNRtMwf5TxGoTEoLd7N0eLIetJhFgvl71agZTOK_dPMcU55mJLXVasmD7icsfMQZtfjCBiaS9Jx88vqXuhLKdgW78Sfkp7F_4JLJ24PXYqgxTh47");
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getItemInfo()));		
+	}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/item")
 	@ResponseBody
