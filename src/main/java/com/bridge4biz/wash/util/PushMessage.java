@@ -6,19 +6,18 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bridge4biz.wash.gcm.Message;
 import com.bridge4biz.wash.gcm.MulticastResult;
 import com.bridge4biz.wash.gcm.Result;
-import com.bridge4biz.wash.gcm.Sender;
-import com.bridge4biz.wash.mybatis.MybatisMapper;
+
+import fcm.FcmSender;
 
 public class PushMessage {
 	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);		
 	
 	public static void addPush(int uid, int oid, String msg, int value, int type, String regId) {
-		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
+		FcmSender sender = new FcmSender();
 		Message message = new Message.Builder()
 		.addData("oid", String.valueOf(oid))
 		.addData("uid", String.valueOf(uid))
@@ -43,7 +42,7 @@ public class PushMessage {
 	}
 	
 	public static void addPush(int uid, int oid, String msg, int value, int type, ArrayList<String> regIds) {
-		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
+		FcmSender sender = new FcmSender();
 		Message message = new Message.Builder()
 		.addData("oid", String.valueOf(oid))
 		.addData("uid", String.valueOf(uid))

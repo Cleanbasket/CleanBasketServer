@@ -72,7 +72,7 @@ public class DelivererController {
 		if (!data.get("oid").equals("(null)"))
 			oid = Integer.parseInt(data.get("oid"));
 
-		return constant.setConstant(Constant.SUCCESS, "수거요청 정보 가져오기 성공 : SUCCESS",
+		return constant.setConstant(Constant.SUCCESS, "전체정보 가져오기 성공 : SUCCESS",
 				gson.toJson(delivererDAO.getRecentOrder(oid)));
 	}
 
@@ -91,8 +91,6 @@ public class DelivererController {
 			@RequestBody Map<String, String> data) {
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			// SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE,
-			// 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "수거완료 처리 실패 : ERROR");
@@ -214,6 +212,7 @@ public class DelivererController {
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getDelivererAll()));
 	}
 
+	//oid로 order정보 가져오기
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method = RequestMethod.GET, value = "/order/{oid}")
 	@ResponseBody
@@ -239,7 +238,7 @@ public class DelivererController {
 			return constant.setConstant(Constant.ERROR, "");
 	}
 
-	// gingerAebi
+	// ---------------------------------------- gingerAebi ---------------------------------------------
 	// 오늘의 수거 정보를 모두 가져오기 
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method = RequestMethod.POST, value = "/order/pickup/today")
@@ -258,5 +257,21 @@ public class DelivererController {
 				gson.toJson(delivererDAO.getTodayDropOffOrder()));
 		
 	}
-
+	
+	//orderId로 주문 바꾸기 
+	@Secured("ROLE_DELIVERER")
+	@RequestMapping(method=RequestMethod.POST, value = "/order/modify")
+	@ResponseBody
+	public Constant modifyMemberOrderItem(Constant constant, @RequestBody Order order, Authentication auth) {
+		Integer uid = dao.getUid(auth.getName());
+		Integer value = dao.modifyOrderItem(order, uid);
+		if (value == Constant.SUCCESS) {
+			return constant.setConstant(Constant.SUCCESS, "배달자 변경 성공 : SUCCESS");
+		} 
+		else {
+			return constant.setConstant(Constant.ERROR, "배달자 변경 실패 : ERROR");
+		}
+	}
+	
+	
 }
