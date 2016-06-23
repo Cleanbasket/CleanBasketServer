@@ -57,7 +57,7 @@ public class FcmSender {
 	
 	private FileInputStream getAccountJSON() {
 		try {
-			FileInputStream fis = new FileInputStream("path/to/serviceAccountCredentials.json");
+			FileInputStream fis = new FileInputStream("resources/CleanBasketPush-411875c193ab.json");
 			return fis;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
