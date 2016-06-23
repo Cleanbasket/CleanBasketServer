@@ -42,7 +42,7 @@ public class AppController {
 	@RequestMapping(method=RequestMethod.GET, value = "/fcm/test")
 	@ResponseBody
 	public Constant gcmTest(Constant constant, Gson gson) {
-		//PushMessage.addPush(12721, 1, null, 0, Notification.PICKUP_ALARM, "APA91bE-dUH551l9pHT8g2yalaemnNRtMwf5TxGoTEoLd7N0eLIetJhFgvl71agZTOK_dPMcU55mJLXVasmD7icsfMQZtfjCBiaS9Jx88vqXuhLKdgW78Sfkp7F_4JLJ24PXYqgxTh47");
+		PushMessage.addPush(12721, 1, null, 0, Notification.PICKUP_ALARM, "APA91bE-dUH551l9pHT8g2yalaemnNRtMwf5TxGoTEoLd7N0eLIetJhFgvl71agZTOK_dPMcU55mJLXVasmD7icsfMQZtfjCBiaS9Jx88vqXuhLKdgW78Sfkp7F_4JLJ24PXYqgxTh47");
 		return constant.setConstant(Constant.SUCCESS, "", "");		
 	}
 	

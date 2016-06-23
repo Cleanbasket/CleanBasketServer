@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.bridge4biz.wash.gcm.Message;
 import com.bridge4biz.wash.gcm.MulticastResult;
 import com.bridge4biz.wash.gcm.Result;
+import com.bridge4biz.wash.gcm.Sender;
 
 import fcm.FcmSender;
 
@@ -17,7 +18,7 @@ public class PushMessage {
 	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);		
 	
 	public static void addPush(int uid, int oid, String msg, int value, int type, String regId) {
-		FcmSender sender = new FcmSender();
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
 		Message message = new Message.Builder()
 		.addData("oid", String.valueOf(oid))
 		.addData("uid", String.valueOf(uid))
