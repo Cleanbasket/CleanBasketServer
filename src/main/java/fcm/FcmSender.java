@@ -26,6 +26,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.core.io.ClassPathResource;
 
 import com.bridge4biz.wash.gcm.Constants;
 import com.bridge4biz.wash.gcm.InvalidRequestException;
@@ -47,14 +48,24 @@ public class FcmSender {
 
 	private static final String key ="MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCh58GOqYYDtebr\nbQUMknZReIfDUpt4JkQ+h/wQsrwipRTDaldoRT1EPduu3wczmCQXsjitsGHXsFEm\nVG+iTx9EOlXXQCxr0jGpVFjiMGFqxxaLzKkiQVF6pSj2Je1Y7ZNRQ/s84Wfv+EWX\nLRfusN/vcUPf6VNhb68bhDBIcwd3rtWnWZUjHYecDfKrJtGpp1+QcJhcCKXKKkdx\nrhlW/YFj7YR0zKOIzaN1ACnLwrT72ZZM5hWlXs4ghCV1wK4ONB54mdwXBQKEmDBS\nlbi1vkzXuhROdTdqTWLF1ShBaEWWrxLm8VC5cWvWBJx7uRBsVMx9EvECCWqpspWB\nkUvVQsdtAgMBAAECggEBAIoSCxWvahMmAAyLR0AGcxJdWGHww5a+A3rUGtjeo+Rj\npYZU3L+WNH5Kxlql5g1Q1I7EtOMiRP5cZYfrf9wJ358epG/RUVCNyz4dKUOTgLA/\nofGMkjwdOe/+gyUPCQ7KY9RsxgeQLkQOFMKsePlcK0yV6g08fJfeV5V+sHJIbnjX\n5P0K+zs2CVEtjWMBpu39jTbtAGnagZhxmhoL8oyMFoNutO5PsDek3H2zvHFNe7bo\nu2OGYI5PYIW7wAWG/uv0Z1KUrTe+plgs3ZKsGGYJgGtBl5mZKMzOwW1A4E3ouKcb\nzyE/zMHILDi9D4CeGL2t9fp6ksSzcM5CjgXRnwTfRQECgYEA+XE8FWpvJP2UzR86\nchfldHN1qi87zvshPH+0N3gm91YX9a1f9dg8z6efCv5SdcBkDuVZSQ1gqgqmBpFz\nx6js/DTHVek5qliNxcBCNtCQcr5fADgltYKdbiatX7Dk3CLckZtMhmIDw8NQBl1P\n+RjuVOg8KFlB2nNsy20DMgy+R8ECgYEApilkBhNzrwCqik+D8ntMDBmOvLqlJZ3Z\nUzosgNuNB/AQgdfz5tyxqOmSRLzy8B7aDlOmFU5e2/EheBBYsoMuuRnjR9KPdDEZ\n53YUaRwH+UCPbzAgnpogq+7/MWnO09EyynNUXaXiM/UlZzhvKJ0XxDKSInamRkLV\n1fznKQeOyq0CgYEAyqlDRasJziXwxY7/rz7W//vmt3RUxV+nqz2eMAsAradXJBXO\nhzE+hwAK6aWjXWQIZ0nTdtTVmpG4PlHinW8Ty/0djyFD5rC3ztjbcymUkoU1Ljpv\n+L68JYhrB/nylyAD0JE6ZVww7tY6qFEb7qhgyr88URPjuxZYaBaTqBBOcIECgYAY\niPIRB5xEUffclmMoUdZnzvpJmdG63TTy2hsqJ8EKVANL+OQ1yY6eH2cOqUvB8vxF\ns0pJyRmupktH3DoMmdwzTsRFnay6/mkRyVi4MIBo6ISFaXjXknCSkqax2CrHEhPK\n2v6xGUZuX5tXQ3j+aTvSJ5l2Z0ikBUhn4YEMiOYnvQKBgGA0uYy/Hcc/NwxGMqzt\nNQgr7QjKTW4nXVp0CbTOdC3gtExCy4mE3vxOntj17r0fRfvXBr7T4De6CH6GvjDV\n3OV69cRTIiA0E/eHr4TnS8vCj3UI2+Oyyz31/SVtVwzNGtqMuK51YXo6I6nM4GEp\nNJwnxrYLLObst6Dx9Fwr7xlg\n";
 	
-	public FcmSender() throws FileNotFoundException {
+	public FcmSender() {
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				  .setServiceAccount(new FileInputStream("../CleanBasketPush-411875c193ab.json"))
+				  .setServiceAccount(getAccountJSON())
 				  .setDatabaseUrl("https://cleanbasketpush.firebaseio.com/")
 				  .build();
 		FirebaseApp.initializeApp(options);
 	}
-		
+	
+	private InputStream getAccountJSON() {
+		try {
+			return new ClassPathResource("CleanBasketPush-411875c193ab.json").getInputStream();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("File Not Found Exception");
+			return null;
+		}
+	}
+	
 	public Result send(Message message, String registrationId, int retries) throws IOException {
 		int attempt = 0;
 		Result result = null;
