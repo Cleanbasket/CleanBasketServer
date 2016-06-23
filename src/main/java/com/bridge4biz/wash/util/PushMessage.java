@@ -15,16 +15,18 @@ import com.bridge4biz.wash.gcm.Sender;
 import fcm.FcmSender;
 
 public class PushMessage {
-	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);		
-	
+	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);
+
 	public static void addPush(int uid, int oid, String msg, int value, int type, String regId) {
-		FcmSender sender = new FcmSender();
-		Message message = new Message.Builder()
-		.addData("oid", String.valueOf(oid))
-		.addData("uid", String.valueOf(uid))
-		.addData("message", msg)
-		.addData("type", String.valueOf(type))
-		.addData("value", String.valueOf(value)).build();
+		FcmSender sender = null;
+		try {
+			sender = new FcmSender();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Message message = new Message.Builder().addData("oid", String.valueOf(oid)).addData("uid", String.valueOf(uid))
+				.addData("message", msg).addData("type", String.valueOf(type)).addData("value", String.valueOf(value))
+				.build();
 		List<String> list = new ArrayList<String>();
 		list.add(regId);
 		MulticastResult multiResult;
@@ -35,21 +37,18 @@ public class PushMessage {
 				for (Result result : resultList) {
 					log.debug("Result : " + result.getMessageId());
 				}
-		}
-			
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+/*
 	public static void addPush(int uid, int oid, String msg, int value, int type, ArrayList<String> regIds) {
 		FcmSender sender = new FcmSender();
-		Message message = new Message.Builder()
-		.addData("oid", String.valueOf(oid))
-		.addData("uid", String.valueOf(uid))
-		.addData("message", msg)
-		.addData("type", String.valueOf(type))
-		.addData("value", String.valueOf(value)).build();
+		Message message = new Message.Builder().addData("oid", String.valueOf(oid)).addData("uid", String.valueOf(uid))
+				.addData("message", msg).addData("type", String.valueOf(type)).addData("value", String.valueOf(value))
+				.build();
 		List<String> list = new ArrayList<String>();
 		list.addAll(regIds);
 		MulticastResult multiResult;
@@ -60,10 +59,10 @@ public class PushMessage {
 				for (Result result : resultList) {
 					log.debug("Result : " + result.getMessageId());
 				}
-		}
-			
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }
