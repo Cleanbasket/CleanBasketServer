@@ -49,7 +49,7 @@ public class FcmSender {
 	
 	public FcmSender() throws FileNotFoundException {
 		FirebaseOptions options = new FirebaseOptions.Builder()
-				  .setServiceAccount(new FileInputStream("./CleanBasketPush-411875c193ab.json"))
+				  .setServiceAccount(new FileInputStream("../CleanBasketPush-411875c193ab.json"))
 				  .setDatabaseUrl("https://cleanbasketpush.firebaseio.com/")
 				  .build();
 		FirebaseApp.initializeApp(options);
