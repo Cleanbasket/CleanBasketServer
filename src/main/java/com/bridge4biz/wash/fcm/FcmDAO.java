@@ -9,9 +9,8 @@ public class FcmDAO {
 	private FcmMapper fcmMapper;
 
 	public FcmDAO(){}
-	
-	@Autowired
-	private FcmDAO(FcmMapper mapper, PlatformTransactionManager platformTransactionManager) {
+
+	private FcmDAO(FcmMapper mapper) {
 		this.fcmMapper = mapper;
 	}
 

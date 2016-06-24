@@ -19,8 +19,7 @@ import com.google.gson.Gson;
 @RequestMapping(value = "/fcm")
 public class FcmController {
 
-	@Autowired
-	private FcmDAO fcmDao;
+	private FcmDAO fcmDao = new FcmDAO();
 
 	@Autowired
 	private MybatisDAO dao;
