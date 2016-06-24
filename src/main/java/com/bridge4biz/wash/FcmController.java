@@ -40,13 +40,13 @@ public class FcmController {
 	@ResponseBody
 	public Constant regid(@RequestBody Map<String, String> data, Constant constant, Authentication auth, Gson gson) {
 		String regid = data.get("regid");
-		return constant.setConstant(Constant.SUCCESS, fcmDao.getRegid(dao.getUid(auth.getName())));
-//		Boolean success = fcmDao.updateRegid(dao.getUid(auth.getName()), regid);
-//		if (success) {
-//			return constant.setConstant(Constant.SUCCESS, "FCM REGID 수정 성공 : SUCCESS",
-//					gson.toJson(fcmDao.getRegid(dao.getUid(auth.getName()))));
-//		} else {
-//			return constant.setConstant(Constant.ERROR, "FCM REGID 수정 실패 : ERROR");
-//		}
+	
+		Boolean success = fcmDao.updateRegid(dao.getUid(auth.getName()), regid);
+		if (success) {
+			return constant.setConstant(Constant.SUCCESS, "FCM REGID 수정 성공 : SUCCESS",
+					gson.toJson(fcmDao.getRegid(dao.getUid(auth.getName()))));
+		} else {
+			return constant.setConstant(Constant.ERROR, "FCM REGID 수정 실패 : ERROR");
+		}
 	}
 }
