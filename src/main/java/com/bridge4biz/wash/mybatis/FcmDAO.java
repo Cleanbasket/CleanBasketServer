@@ -19,7 +19,7 @@ public class FcmDAO {
 		// TransactionStatus status =
 		// platformTransactionManager.getTransaction(paramTransactionDefinition);
 		try {
-			if(fcmMapper.getRegid(uid) != null){
+			if(fcmMapper.getRegid(uid).length() > 0){
 				fcmMapper.clearRegid(uid);
 			}
 			fcmMapper.updateRegid(uid, regid);
