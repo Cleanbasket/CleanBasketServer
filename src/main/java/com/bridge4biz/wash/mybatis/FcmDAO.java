@@ -1,4 +1,4 @@
-package com.bridge4biz.wash.fcm;
+package com.bridge4biz.wash.mybatis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -10,7 +10,8 @@ public class FcmDAO {
 
 	public FcmDAO(){}
 
-	private FcmDAO(FcmMapper mapper) {
+	@Autowired
+	private FcmDAO(FcmMapper mapper, PlatformTransactionManager platformTransactionManager) {
 		this.fcmMapper = mapper;
 	}
 
