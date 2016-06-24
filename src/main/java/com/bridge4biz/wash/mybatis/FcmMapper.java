@@ -24,6 +24,6 @@ public interface FcmMapper {
 	@Delete("UPDATE fcm SET regid = null WHERE regid = #{regid}")
 	Boolean clearAllRegid(@Param("regid") String regid);
 
-	@Delete("UPDATE fcm SET regid = null WHERE uid = #{uid}")
+	@Delete("DELETE from fcm WHERE uid = #{uid}")
 	Boolean clearRegid(@Param("uid") Integer uid);
 }
