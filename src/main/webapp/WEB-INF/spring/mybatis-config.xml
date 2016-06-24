@@ -62,17 +62,20 @@
 	</bean>
 
 	<bean id="dashBoardDAO" class="com.bridge4biz.wash.mybatis.DashBoardDAO" />
+	
+	<bean id="fcmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.FcmMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="fcmDao" class="com.bridge4biz.wash.mybatis.FcmDAO" />
 
 	<bean id="platformTransactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-<!-- 	<bean id="fcmDao" class="com.bridge4biz.wash.fcm.FcmDAO" />
 
-	<bean id="fcmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.FcmMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean> -->
-	
+
+
 </beans>
