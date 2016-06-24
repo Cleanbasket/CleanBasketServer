@@ -19,11 +19,9 @@ import com.google.gson.Gson;
 @RequestMapping(value = "/fcm")
 public class FcmController {
 
-	@Autowired
-	private FcmDAO fcmDao;
+	private FcmDAO fcmDao = new FcmDAO();
 
-	@Autowired
-	private MybatisDAO dao;
+	private MybatisDAO dao = new MybatisDAO();
 
 	@Secured({ "ROLE_DELIVERER", "ROLE_MEMBER" })
 	@RequestMapping(method = RequestMethod.GET, value = "/test")
