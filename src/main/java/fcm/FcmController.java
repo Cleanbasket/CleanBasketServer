@@ -5,17 +5,18 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
 
-@Controller
+@RestController
+@RequestMapping(value = "fcm")
 public class FcmController {
 
 	@Autowired
@@ -25,7 +26,7 @@ public class FcmController {
 	private MybatisDAO dao;
 
 	@Secured({ "ROLE_DELIVERER", "ROLE_MEMBER" })
-	@RequestMapping(method = RequestMethod.GET, value = "/fcm/test")
+	@RequestMapping(method = RequestMethod.GET, value = "/test")
 	@ResponseBody
 	public Constant gcmTest(Constant constant, Authentication auth, Gson gson) {
 		FcmPushMessage.addPush("TEST", fcmDao.getRegid(dao.getUid(auth.getName())));
@@ -33,7 +34,7 @@ public class FcmController {
 	}
 
 	@Secured({ "ROLE_DELIVERER", "ROLE_MEMBER" })
-	@RequestMapping(method = RequestMethod.POST, value = "/fcm/regid", consumes = { "application/json" })
+	@RequestMapping(method = RequestMethod.POST, value = "/regid", consumes = { "application/json" })
 	@ResponseBody
 	public Constant regid(@RequestBody Map<String, String> data, Constant constant, Authentication auth, Gson gson) {
 		String regid = data.get("regid");
