@@ -1,4 +1,4 @@
-package fcm;
+package com.bridge4biz.wash.fcm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;

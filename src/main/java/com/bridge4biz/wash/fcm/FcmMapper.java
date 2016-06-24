@@ -1,4 +1,4 @@
-package fcm;
+package com.bridge4biz.wash.fcm;
 
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;

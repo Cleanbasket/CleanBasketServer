@@ -1,4 +1,4 @@
-package fcm;
+package com.bridge4biz.wash.fcm;
 
 import static com.bridge4biz.wash.gcm.Constants.GCM_SEND_ENDPOINT;
 import static com.bridge4biz.wash.gcm.Constants.PARAM_COLLAPSE_KEY;

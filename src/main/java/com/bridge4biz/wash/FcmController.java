@@ -1,21 +1,23 @@
-package fcm;
+package com.bridge4biz.wash;
 
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
+import com.bridge4biz.wash.fcm.FcmDAO;
+import com.bridge4biz.wash.fcm.FcmPushMessage;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
 
-@RestController
+@Controller
 @RequestMapping(value = "/fcm")
 public class FcmController {
 

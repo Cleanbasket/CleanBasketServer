@@ -1,4 +1,4 @@
-package fcm;
+package com.bridge4biz.wash.fcm;
 
 import java.io.IOException;
 import java.util.ArrayList;

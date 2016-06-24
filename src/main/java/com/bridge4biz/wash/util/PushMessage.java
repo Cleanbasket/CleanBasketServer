@@ -7,12 +7,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bridge4biz.wash.fcm.FcmSender;
 import com.bridge4biz.wash.gcm.Message;
 import com.bridge4biz.wash.gcm.MulticastResult;
 import com.bridge4biz.wash.gcm.Result;
 import com.bridge4biz.wash.gcm.Sender;
-
-import fcm.FcmSender;
 
 public class PushMessage {
 	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);
