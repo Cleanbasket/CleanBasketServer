@@ -21,7 +21,8 @@ public class FcmController {
 
 	private FcmDAO fcmDao = new FcmDAO();
 
-	private MybatisDAO dao = new MybatisDAO();
+	@Autowired
+	private MybatisDAO dao;
 
 	@Secured({ "ROLE_DELIVERER", "ROLE_MEMBER" })
 	@RequestMapping(method = RequestMethod.GET, value = "/test")
