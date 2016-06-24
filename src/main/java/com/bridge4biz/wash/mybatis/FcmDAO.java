@@ -14,7 +14,7 @@ public class FcmDAO {
 	private FcmDAO(FcmMapper mapper, PlatformTransactionManager platformTransactionManager) {
 		this.fcmMapper = mapper;
 	}
-
+	
 	public Boolean updateRegid(Integer uid, String regid) {
 		// TransactionStatus status =
 		// platformTransactionManager.getTransaction(paramTransactionDefinition);
