@@ -1,4 +1,4 @@
-package com.bridge4biz.wash;
+package fcm;
 
 import java.util.Map;
 
@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
-
-import fcm.FcmDAO;
-import fcm.FcmPushMessage;
 
 @RestController
 @RequestMapping(value = "/fcm")
