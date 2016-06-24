@@ -18,12 +18,8 @@ public class PushMessage {
 	private static final Logger log = LoggerFactory.getLogger(PushMessage.class);
 
 	public static void addPush(int uid, int oid, String msg, int value, int type, String regId) {
-		FcmSender sender = null;
-		try {
-			sender = new FcmSender();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
+		
 		Message message = new Message.Builder().addData("oid", String.valueOf(oid)).addData("uid", String.valueOf(uid))
 				.addData("message", msg).addData("type", String.valueOf(type)).addData("value", String.valueOf(value))
 				.build();
@@ -43,9 +39,9 @@ public class PushMessage {
 			e.printStackTrace();
 		}
 	}
-/*
+
 	public static void addPush(int uid, int oid, String msg, int value, int type, ArrayList<String> regIds) {
-		FcmSender sender = new FcmSender();
+		Sender sender = new Sender("AIzaSyClOmdKk3R8N1-gAoifS2gBijqMf4wjLGI");
 		Message message = new Message.Builder().addData("oid", String.valueOf(oid)).addData("uid", String.valueOf(uid))
 				.addData("message", msg).addData("type", String.valueOf(type)).addData("value", String.valueOf(value))
 				.build();
@@ -64,5 +60,5 @@ public class PushMessage {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 }
