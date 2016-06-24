@@ -16,7 +16,7 @@ import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
 
 @RestController
-@RequestMapping(value = "fcm")
+@RequestMapping(value = "/fcm")
 public class FcmController {
 
 	@Autowired
