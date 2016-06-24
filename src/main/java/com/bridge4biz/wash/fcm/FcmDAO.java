@@ -6,23 +6,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 public class FcmDAO {
 
-	private FcmMapper mapper;
+	private FcmMapper fcmMapper;
 
 	public FcmDAO(){}
 	
 	@Autowired
 	private FcmDAO(FcmMapper mapper, PlatformTransactionManager platformTransactionManager) {
-		this.mapper = mapper;
+		this.fcmMapper = mapper;
 	}
 
 	public Boolean updateRegid(Integer uid, String regid) {
 		// TransactionStatus status =
 		// platformTransactionManager.getTransaction(paramTransactionDefinition);
 		try {
-			mapper.updateRegid(uid, regid);
+			fcmMapper.updateRegid(uid, regid);
 		} catch (DuplicateKeyException duplicateKeyException) {
-			mapper.clearAllRegid(regid);
-			mapper.updateRegid(uid, regid);
+			fcmMapper.clearAllRegid(regid);
+			fcmMapper.updateRegid(uid, regid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			// platformTransactionManager.rollback(status);
@@ -33,12 +33,12 @@ public class FcmDAO {
 	}
 
 	public Boolean clearRegid(Integer uid) {
-		return mapper.clearRegid(uid);
+		return fcmMapper.clearRegid(uid);
 	}
 
 	public Boolean clearAllRegid(String regid) {
 		try {
-			mapper.clearAllRegid(regid);
+			fcmMapper.clearAllRegid(regid);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -47,6 +47,6 @@ public class FcmDAO {
 	}
 
 	public String getRegid(Integer uid) {
-		return mapper.getRegid(uid);
+		return fcmMapper.getRegid(uid);
 	}
 }
