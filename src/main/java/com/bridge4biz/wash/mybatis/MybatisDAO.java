@@ -785,6 +785,17 @@ public class MybatisDAO {
 		
 		return orders;
 	}
+
+	public ArrayList<Order> getPhoneRecentOrder(String phone) {
+		ArrayList<Order> orders = mapper.getPhoneRecentOrder(phone);
+		for (Order order : orders) {
+			order.pickupInfo = mapper.getDeliverer(order.pickup_man);
+			order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
+			order.item = mapper.getItem(order.oid);
+		}
+
+		return orders;
+	}
 	
 	public ArrayList<Item> getItem(Integer oid) {
 		return mapper.getItem(oid);

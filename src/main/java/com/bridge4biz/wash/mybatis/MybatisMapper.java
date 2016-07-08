@@ -136,6 +136,9 @@ public interface MybatisMapper {
 	
 	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE uid = #{uid} AND  state != 4 ORDER BY oid DESC LIMIT 1")
 	ArrayList<Order> getRecentOrder(@Param("uid") Integer uid);
+
+	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE phone = #{phone} AND  state != 4 ORDER BY oid DESC LIMIT 1")
+	ArrayList<Order> getPhoneRecentOrder(@Param("phone") String phone);
 	
 	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 1 AND pickup_man = #{uid}) OR (state = 2 AND rdate >= CURDATE() AND pickup_man = #{uid}) ORDER BY state ASC, pickup_date ASC, oid ASC")
 	ArrayList<DelivererWork> getPickupRequest(@Param("uid") Integer uid);

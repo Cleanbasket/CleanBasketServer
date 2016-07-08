@@ -131,6 +131,12 @@ public class MemberContoller {
 		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getRecentOrder(dao.getUid(auth.getName()))));
 	}
 
+	@RequestMapping(value = "/order/recent/phone/{phone_number}")
+	@ResponseBody
+	public Constant phoneRecentOrder(Constant constant, Gson gson, @PathVariable String phone_number) {
+		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getPhoneRecentOrder(phone_number)));
+	}
+
 	@RequestMapping(method=RequestMethod.POST, value = "/order/add/new")
 	@ResponseBody
 	public Constant addMemberOrder(Constant constant, @RequestBody Order order) {
