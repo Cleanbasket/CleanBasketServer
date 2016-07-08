@@ -131,8 +131,6 @@ public class MemberContoller {
 		return constant.setConstant(Constant.SUCCESS, "일반회원 주문정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getRecentOrder(dao.getUid(auth.getName()))));
 	}
 
-	
-	@Secured("ROLE_MEMBER")
 	@RequestMapping(method=RequestMethod.POST, value = "/order/add/new")
 	@ResponseBody
 	public Constant addMemberOrder(Constant constant, @RequestBody Order order) {
