@@ -277,7 +277,6 @@ public class MemberContoller {
 		}
 	}
 
-	@Secured("ROLE_MEMBER")
 	@RequestMapping(value = "/order/del/new")
 	@ResponseBody
 	public Constant delMemberNewOrder(Constant constant, @RequestBody Order order, Authentication auth) {
