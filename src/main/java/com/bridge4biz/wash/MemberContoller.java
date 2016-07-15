@@ -279,9 +279,8 @@ public class MemberContoller {
 
 	@RequestMapping(value = "/order/del/new")
 	@ResponseBody
-	public Constant delMemberNewOrder(Constant constant, @RequestBody Order order, Authentication auth) {
-		Integer uid = dao.getUid(auth.getName());
-		Integer value = dao.delNewOrder(order, uid);
+	public Constant delMemberNewOrder(Constant constant, @RequestBody Order order) {
+		Integer value = dao.delNewOrder(order, order.uid);
 		if (value == Constant.SUCCESS) {
 //			SocketIO.broadCast(new PushMessage(Constant.PUSH_ORDER_CANCEL, uid, orderData.oid));
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문취소 성공 : SUCCESS");
