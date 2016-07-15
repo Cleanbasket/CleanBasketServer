@@ -7,8 +7,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b277f997-2f87-414e-bf3d-8d8fc684a457" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/DelivererController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/MemberContoller.java" afterPath="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/MemberContoller.java" />
     </list>
     <ignored path="wash.iws" />
@@ -149,8 +147,8 @@
       <file leaf-file-name="MemberContoller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/MemberContoller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5855615">
-              <caret line="284" column="96" selection-start-line="284" selection-start-column="96" selection-end-line="284" selection-end-column="96" />
+            <state vertical-scroll-proportion="0.32486632">
+              <caret line="284" column="59" selection-start-line="284" selection-start-column="59" selection-end-line="284" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -935,7 +933,7 @@
       <workItem from="1466133688888" duration="753000" />
       <workItem from="1466145328590" duration="1633000" />
       <workItem from="1467974256951" duration="122000" />
-      <workItem from="1468545626775" duration="1468000" />
+      <workItem from="1468545626775" duration="1727000" />
     </task>
     <servers />
   </component>
@@ -948,7 +946,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="35270000" />
+    <option name="totallyTimeSpent" value="35529000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1391,8 +1389,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/MemberContoller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5855615">
-          <caret line="284" column="96" selection-start-line="284" selection-start-column="96" selection-end-line="284" selection-end-column="96" />
+        <state vertical-scroll-proportion="0.32486632">
+          <caret line="284" column="59" selection-start-line="284" selection-start-column="59" selection-end-line="284" selection-end-column="59" />
           <folding />
         </state>
       </provider>
