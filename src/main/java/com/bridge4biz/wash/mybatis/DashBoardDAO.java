@@ -34,4 +34,21 @@ public class DashBoardDAO {
 
 		return dashBoardDatas;
 	}
+	
+	public ArrayList<MapData> getMapDatas(String type, String date) {
+		ArrayList<MapData> mapDatas = null;
+		
+		if (type.equals("d")) 
+			mapDatas = dashBoardMapper.getPickupNo(1, date);
+		else if (type.equals("w")) 
+			mapDatas = dashBoardMapper.getPickupNo(7, date);
+		else if (type.equals("m"))
+			mapDatas = dashBoardMapper.getPickupNo(30, date);
+		else if (type.equals("s"))
+			mapDatas = dashBoardMapper.getPickupNo(91, date);
+		else if (type.equals("y"))
+			mapDatas = dashBoardMapper.getPickupNo(365, date);
+		
+		return mapDatas;
+	}
 }

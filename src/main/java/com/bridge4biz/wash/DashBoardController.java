@@ -24,4 +24,10 @@ public class DashBoardController {
 	public Constant getItemList(Constant constant, Gson gson, @PathVariable("type") String type, @PathVariable("limit") int limit) {
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getBoardDatas(type, limit)));
 	} 
+	
+	@RequestMapping(value = "/pickup/district/{type}/{date}")
+	@ResponseBody
+	public Constant getDistrictOrder(Constant constant, Gson gson, @PathVariable("type") String type, @PathVariable("date") String date) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getMapDatas(type, date)));
+	}
 }
