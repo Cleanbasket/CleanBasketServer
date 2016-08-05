@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 import com.bridge4biz.wash.service.DashBoardData;
+import com.bridge4biz.wash.service.MapData;
 
 public class DashBoardDAO {
 	private static final Logger log = LoggerFactory.getLogger(DashBoardDAO.class);		
