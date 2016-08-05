@@ -1462,4 +1462,27 @@ public class MybatisDAO {
 	public Boolean addDropoff(PickupTime data) {
 		return mapper.addDropoffTime(data.datetime);
 	}
+	
+	public Integer getOrderCount(String type, String hub, String date) {
+		if (hub.equals("gangnam")) {
+			if (type.equals("pickup"))
+				return mapper.getGangnamPickup(date);
+			else
+				return mapper.getGangnamDropoff(date);
+		}
+		else if (hub.equals("gangbuk")) {
+			if (type.equals("pickup"))
+				return mapper.getGangbukPickup(date);
+			else
+				return mapper.getGangbukDropoff(date);
+		}
+		else if (hub.equals("bundang")) {
+			if (type.equals("pickup"))
+				return mapper.getBundangPickup(date);
+			else
+				return mapper.getBundangDropoff(date);
+		}
+		else
+			return -1;
+	}
 }

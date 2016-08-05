@@ -404,4 +404,10 @@ public class AdminWebController {
 		else
 			return constant.setConstant(Constant.ERROR, "");
 	}
+	
+	@RequestMapping(method=RequestMethod.GET, value = "/{type}/{hub}/{date}")
+	@ResponseBody
+	public Constant getOrderCount(Constant constant, Gson gson, @PathVariable("type") String type, @PathVariable("hub") String hub, @PathVariable("date") String date) {
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getOrderCount(type, hub, date)));
+	}
 }

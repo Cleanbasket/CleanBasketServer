@@ -587,4 +587,23 @@ public interface MybatisMapper {
 
 	@Insert("INSERT INTO dropofftime (datetime, rdate) VALUES (#{datetime}, NOW())")
 	Boolean addDropoffTime(@Param("datetime") String datetime);	
+	
+	
+	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND ( `address` LIKE '%강남%' OR `address` LIKE '%서초%' OR `address` LIKE '%한남동%' OR `address` LIKE '%다산동%' OR `address` LIKE '%장충동%' OR `address` LIKE '%약수동%' OR `address` LIKE '%광희동%' OR `address` LIKE '%황학동%' OR `address` LIKE '%신당동%' OR `address` LIKE '%청구동%' OR `address` LIKE '%흥인동%' OR `address` LIKE '동화동%' OR `address` LIKE '%성동%');")
+	Integer getGangnamPickup(@Param("date") String date);
+	
+	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND (`address` LIKE  '%강남%'OR  `address` LIKE  '%서초%'OR  `address` LIKE  '%한남동%'OR  `address` LIKE  '%다산동%'OR  `address` LIKE  '%장충동%'OR  `address` LIKE  '%약수동%'OR  `address` LIKE  '%광희동%'OR  `address` LIKE  '%황학동%'OR  `address` LIKE  '%신당동%'OR  `address` LIKE  '%청구동%'OR  `address` LIKE  '%흥인동%'OR  `address` LIKE  '동화동%' OR  `address` LIKE  '%성동%');")
+	Integer getGangnamDropoff(@Param("date") String date);
+	
+	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND (`address` NOT LIKE  '%한남%'AND (`address` LIKE  '%소공동%'OR  `address` LIKE  '%회현동%'OR  `address` LIKE  '%명동%'OR  `address` LIKE  '%필동%'OR  `address` LIKE  '%을지로동%'OR  `address` LIKE  '%신당제5동%'OR  `address` LIKE  '%중림동%'OR  `address` LIKE  '%용산%'OR  `address` LIKE  '%서대문%'OR  `address` LIKE  '%마포%'OR  `address` LIKE  '%영등포%'OR  `address` LIKE  '%동작%'OR  `address` LIKE  '%관악%'));")
+	Integer getGangbukPickup(@Param("date") String date);
+	
+	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND (`address` NOT LIKE  '%한남%'AND (`address` LIKE  '%소공동%'OR  `address` LIKE  '%회현동%'OR  `address` LIKE  '%명동%'OR  `address` LIKE  '%필동%'OR  `address` LIKE  '%을지로동%'OR  `address` LIKE  '%신당제5동%'OR  `address` LIKE  '%중림동%'OR  `address` LIKE  '%용산%'OR  `address` LIKE  '%서대문%'OR  `address` LIKE  '%마포%'OR  `address` LIKE  '%영등포%'OR  `address` LIKE  '%동작%'OR  `address` LIKE  '%관악%'));")
+	Integer getGangbukDropoff(@Param("date") String date);
+	
+	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND ( `address` LIKE  '%성남%');")
+	Integer getBundangPickup(@Param("date") String date);
+	
+	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND ( `address` LIKE  '%성남%');")
+	Integer getBundangDropoff(@Param("date") String date);
 }
