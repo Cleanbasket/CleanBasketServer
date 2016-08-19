@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.mybatis.PaymentDAO;
+import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -302,20 +304,34 @@ public class DelivererController {
 					"{\"title\": \"변경이력\",\"description\": \"0000-00-00 00:00:00 에서 0000-00-00 00:00:00 으로 변경되었습니다.\"}]," +
 					"\"body\": \"[시간변경] 차용빈 개발리드가 수거시간을 변경했습니다. \"}";
 
+			String state = "";
+			JSONObject subObject1 = new JSONObject();
 
 			if(pre_pickup_date.equals(order.pickup_date)){
 
-				POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
-						"[{\"title\": \"주문번호\",\"description\":" + order.order_number + " }," +
-						"{\"title\": \"변경이력\",\"description\": " + pre_dropoff_date + "\"에서 \" " + order.dropoff_date + " \"으로 변경되었습니다.\"}]," +
-						"\"body\": \"[시간변경] \"" + name + "\"가 수거시간을 변경했습니다. \"}";
+				subObject1.put("title", "변경이력");
+				subObject1.put("description", pre_dropoff_date + "에서 " + order.dropoff_date + "로 변경되었습니다.");
+
+				state = "배달";
 
 			} else if(pre_dropoff_date.equals(order.dropoff_date)) {
-				POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
-						"[{\"title\": \"주문번호\",\"description\":" + order.order_number + " }," +
-						"{\"title\": \"변경이력\",\"description\": " + pre_pickup_date + "\"에서 \" " + order.pickup_date + " \"으로 변경되었습니다.\"}]," +
-						"\"body\": \"[시간변경] \"" + name + "\"가 수거시간을 변경했습니다. \"}";
+
+				subObject1.put("title", "변경이력");
+				subObject1.put("description", pre_pickup_date + "에서 " + order.pickup_date + "로 변경되었습니다.");
+
+				state = "수거";
 			}
+
+			JSONObject subObject = new JSONObject();
+			subObject.put("title", "주문번호");
+			subObject.put("description", order.order_number);
+
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("connectColor", "#FF0066");
+			jsonObject.put("body", "[시간변경] " + name + "가 "+ state +"시간을 변경했습니다.");
+			jsonObject.put("connectInfo", subObject);
+			jsonObject.put("connectInfo", subObject1);
+
 
 
 			URL obj = null;
@@ -329,7 +345,7 @@ public class DelivererController {
 				con.setDoOutput(true);
 
 				OutputStream os = con.getOutputStream();
-				os.write(POST_PARAMS.getBytes());
+				os.write(jsonObject.toJSONString().getBytes());
 				os.flush();
 				os.close();
 
