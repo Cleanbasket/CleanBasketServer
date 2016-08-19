@@ -293,7 +293,7 @@ public class DelivererController {
 	@ResponseBody
 	public Constant updateOrder(Constant constant, @RequestBody Order order, Authentication auth) {
 
-		String name = auth.getName();
+		String name = dao.getDeliverer(dao.getUid(auth.getName()));
 
 		String pre_pickup_date = delivererDAO.getOrderByOid(String.valueOf(order.oid)).pickup_date;
 		String pre_dropoff_date = delivererDAO.getOrderByOid(String.valueOf(order.oid)).dropoff_date;

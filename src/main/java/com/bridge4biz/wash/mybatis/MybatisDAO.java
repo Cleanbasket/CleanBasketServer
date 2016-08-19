@@ -87,6 +87,10 @@ public class MybatisDAO {
 	public String getAuthority(String email) {
 		return mapper.getAuthority(email);
 	}
+
+	public String getDeliverer(Integer uid) {
+		return mapper.getDeliverer(uid).name;
+	}
 	
 	public Integer loginFailureCheck(String email, String password) {
 		try {
