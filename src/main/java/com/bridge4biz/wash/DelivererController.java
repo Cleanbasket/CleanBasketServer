@@ -1,5 +1,11 @@
 package com.bridge4biz.wash;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -8,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.bridge4biz.wash.service.Item;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -283,15 +290,66 @@ public class DelivererController {
 	@ResponseBody
 	public Constant updateOrder(Constant constant, @RequestBody Order order, Authentication auth) {
 
+		String name = auth.getName();
+
+		String pre_pickup_date = delivererDAO.getOrderByOid(String.valueOf(order.oid)).pickup_date;
+		String pre_dropoff_date = delivererDAO.getOrderByOid(String.valueOf(order.oid)).dropoff_date;
+
 		Integer value = delivererDAO.updateOrder(order);
 
 		if (value == Constant.SUCCESS) {
+
+			String POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
+					"[{\"title\": \"주문번호\",\"description\": \"000000-00000\"}," +
+					"{\"title\": \"변경이력\",\"description\": \"0000-00-00 00:00:00 에서 0000-00-00 00:00:00 으로 변경되었습니다.\"}]," +
+					"\"body\": \"[시간변경] 차용빈 개발리드가 수거시간을 변경했습니다. \"}";
+
+
+			if(pre_pickup_date.equals(order.pickup_date)){
+
+				POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
+						"[{\"title\": \"주문번호\",\"description\":" + order.order_number + " }," +
+						"{\"title\": \"변경이력\",\"description\": " + pre_dropoff_date + "\"에서 \" " + order.dropoff_date + " \"으로 변경되었습니다.\"}]," +
+						"\"body\": \"[시간변경] \"" + name + "\"가 수거시간을 변경했습니다. \"}";
+
+			} else if(pre_dropoff_date.equals(order.dropoff_date)) {
+				POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
+						"[{\"title\": \"주문번호\",\"description\":" + order.order_number + " }," +
+						"{\"title\": \"변경이력\",\"description\": " + pre_pickup_date + "\"에서 \" " + order.pickup_date + " \"으로 변경되었습니다.\"}]," +
+						"\"body\": \"[시간변경] \"" + name + "\"가 수거시간을 변경했습니다. \"}";
+			}
+
+
+			URL obj = null;
+
+			try {
+				obj = new URL("https://wh.jandi.com/connect-api/webhook/11486269/75f086fdd098cdac2ce7cf6191a9b352");
+				HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+				con.setRequestMethod("POST");
+				con.setRequestProperty("Accept", "application/vnd.tosslab.jandi-v2+json");
+				con.setRequestProperty("Content-Type", "application/json");
+				con.setDoOutput(true);
+
+				OutputStream os = con.getOutputStream();
+				os.write(POST_PARAMS.getBytes());
+				os.flush();
+				os.close();
+
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (ProtocolException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 			return constant.setConstant(Constant.SUCCESS, "아이템 수정 성공 : SUCCESS");
 		}
 		else {
 			return constant.setConstant(Constant.ERROR, "아이템 수정 실패 : ERROR");
 		}
 	}
+
 
 	@Secured("ROLE_DELIVERER")
 	@RequestMapping(method=RequestMethod.POST, value = "/payment", consumes = { "application/json" })
