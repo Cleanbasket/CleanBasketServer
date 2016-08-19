@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -328,11 +329,14 @@ public class DelivererController {
 			subObject.put("title", "주문번호");
 			subObject.put("description", order.order_number);
 
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.add(subObject);
+			jsonArray.add(subObject1);
+
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("connectColor", "#FF0066");
 			jsonObject.put("body", "[시간변경] " + name + "가 "+ state +"시간을 변경했습니다.");
-			jsonObject.put("connectInfo", subObject);
-			jsonObject.put("connectInfo", subObject1);
+			jsonObject.put("connectInfo", jsonArray);
 
 
 
