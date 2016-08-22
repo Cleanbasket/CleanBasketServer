@@ -302,11 +302,6 @@ public class DelivererController {
 
 		if (value == Constant.SUCCESS) {
 
-			String POST_PARAMS = "{\"connectColor\": \"#FF0066\",\"connectInfo\": " +
-					"[{\"title\": \"주문번호\",\"description\": \"000000-00000\"}," +
-					"{\"title\": \"변경이력\",\"description\": \"0000-00-00 00:00:00 에서 0000-00-00 00:00:00 으로 변경되었습니다.\"}]," +
-					"\"body\": \"[시간변경] 차용빈 개발리드가 수거시간을 변경했습니다. \"}";
-
 			String state = "";
 			JSONObject subObject1 = new JSONObject();
 
