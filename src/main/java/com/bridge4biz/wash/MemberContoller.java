@@ -139,8 +139,8 @@ public class MemberContoller {
 
 	@RequestMapping(method=RequestMethod.POST, value = "/order/add/new")
 	@ResponseBody
-	public Constant addMemberOrder(Constant constant, @RequestBody Order order) {
-		Integer uid = order.uid;
+	public Constant addMemberOrder(Constant constant, @RequestBody Order order, Authentication auth) {
+		Integer uid = dao.getUid(auth.getName());
 		Integer value = dao.addNewOrder(order, uid);
 		if (value == Constant.SUCCESS) {
 			return constant.setConstant(Constant.SUCCESS, "일반회원 주문 성공 : SUCCESS", String.valueOf(dao.getLatestOrderIdByUid(uid)));
