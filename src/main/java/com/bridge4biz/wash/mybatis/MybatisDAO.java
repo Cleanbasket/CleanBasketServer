@@ -250,10 +250,14 @@ public class MybatisDAO {
 			 * Case Three : 주소가 많은 경우에 로직을 어떻게 처리 할 것인지에 대해서 고민이 필요함
 			 */
 
-			if(mapper.getNumberOfAddressByUid(uid) == 0) {
-				mapper.addAddress(new AddressData(uid, order.address, order.addr_building));
-			} else {
-				mapper.updateMemberAddress(new Address(order.uid, order.address, order.addr_building));
+			Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
+
+			if(mapper.isEqualAddressInfo(new Address(order.uid, order.address, order.addr_number,
+					order.addr_building, order.addr_remainder)) == null) {
+
+				mapper.addNewAddress(new Address(order.uid, numberOfAddress, order.address, order.addr_number,
+						order.addr_building, order.addr_remainder));
+
 			}
 
 			Integer adrid = mapper.getAddressByUid(uid);
@@ -889,7 +893,7 @@ public class MybatisDAO {
 			if (mapper.getNumberOfAddressByUid(uid) > 0)
 				return mapper.updateMemberAddress(address);
 			else
-				return mapper.addAddress2(address);
+				return mapper.addNewAddress(address);
 		} catch (Exception e) {
 			e.printStackTrace();
 			

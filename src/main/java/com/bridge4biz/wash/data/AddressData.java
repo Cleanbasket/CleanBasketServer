@@ -28,4 +28,12 @@ public class AddressData {
 		this.address = address;
 		this.addr_building = addr_building;
 	}
+
+	public AddressData(Integer uid, String address,  String addr_number, String addr_building, String addr_remainder) {
+		this.uid = uid;
+		this.address = address;
+		this.addr_number = addr_number;
+		this.addr_building = addr_building;
+		this.addr_remainder = addr_remainder;
+	}
 }
