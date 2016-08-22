@@ -19,4 +19,22 @@ public class Address {
 		this.address = address;
 		this.addr_building = addr_building;
 	}
+
+	public Address(Integer uid, String address,  String addr_number, String addr_building, String addr_remainder) {
+		this.uid = uid;
+		this.address = address;
+		this.addr_number = addr_number;
+		this.addr_building = addr_building;
+		this.addr_remainder = addr_remainder;
+	}
+
+	public Address(Integer uid, Integer type, String address,  String addr_number, String addr_building, String addr_remainder) {
+		this.uid = uid;
+		this.type = type;
+		this.address = address;
+		this.addr_number = addr_number;
+		this.addr_building = addr_building;
+		this.addr_remainder = addr_remainder;
+	}
+
 }

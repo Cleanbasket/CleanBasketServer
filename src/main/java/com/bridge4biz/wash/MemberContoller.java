@@ -321,14 +321,29 @@ public class MemberContoller {
 		}
 	}
 
-	@Secured("ROLE_MEMBER")
-	@RequestMapping(value = "/address")
-	@ResponseBody
-	public Constant memberAddress(Constant constant, Gson gson, Authentication auth) {
-		return constant.setConstant(Constant.SUCCESS, "일반회원 주소 가져오기 성공 : SUCCESS", gson.toJson(dao.getAddress(dao.getUid(auth.getName()))));
-	}
+    @Secured("ROLE_MEMBER")
+    @RequestMapping(method=RequestMethod.GET, value = "/address")
+    @ResponseBody
+    public Constant memberAddress(Constant constant, Gson gson, Authentication auth) {
+        return constant.setConstant(Constant.SUCCESS, "일반회원 주소 가져오기 성공 : SUCCESS", gson.toJson(dao.getAddress(dao.getUid(auth.getName()))));
+    }
 
-	@Secured("ROLE_MEMBER")
+    @Secured("ROLE_MEMBER")
+    @RequestMapping(method=RequestMethod.POST, value = "/address")
+    @ResponseBody
+    public Constant memberAddAddress(Constant constant, Gson gson, Authentication auth, @RequestBody Address address) {
+
+        dao.addNewAddress(address);
+
+        if(dao.addNewAddress(address) != Constant.SUCCESS) {
+            return constant.setConstant(Constant.ERROR, "일반회원 주소 등록 실패: ERROR");
+        }
+
+        return constant.setConstant(Constant.SUCCESS, "일반회원 주소 등록 : SUCCESS", gson.toJson(dao.getAddress(dao.getUid(auth.getName()))));
+    }
+
+
+    @Secured("ROLE_MEMBER")
 	@RequestMapping(value = "", consumes = { "application/json" })
 	@ResponseBody
 	public Constant member(Constant constant, Authentication auth, Gson gson) {

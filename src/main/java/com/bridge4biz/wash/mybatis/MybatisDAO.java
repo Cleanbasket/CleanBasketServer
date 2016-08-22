@@ -209,7 +209,26 @@ public class MybatisDAO {
 		// platformTransactionManager.commit(status);
 		return Constant.SUCCESS;
 	}
-	
+
+    public Integer addNewAddress(Address address) {
+
+        if (address == null) {
+            return Constant.ERROR;
+        }
+
+        Integer numberOfAddress = mapper.getNumberOfAddressByUid(address.uid);
+
+        if(mapper.isEqualAddressInfo(address) == null) {
+
+            mapper.addNewAddress(new Address(address.uid, numberOfAddress, address.address, address.addr_number,
+                    address.addr_building, address.addr_remainder));
+
+        }
+
+
+        return Constant.SUCCESS;
+    }
+
 	public Integer addNewOrder(Order order, Integer uid) {
 		if (priceCheck(order, uid) == false) {
 			return Constant.ERROR;
@@ -242,11 +261,27 @@ public class MybatisDAO {
 				return Constant.DATE_UNAVAILABLE;
 			}			
 			
-			if(mapper.getNumberOfAddressByUid(uid) == 0) {
-				mapper.addAddress(new AddressData(uid, order.address, order.addr_building));
-			} else {
-				mapper.updateMemberAddress(new Address(order.uid, order.address, order.addr_building));
-			}
+			/*
+			 * 현재 주소 추가 방법
+			 * => 새로운 주문이 접수 => 주소를 가지고 와서 기존에 주소가 없으면 추가하고 아니면 업데이트를 하는 방식
+			 *
+			 * 변경해야하는 방식
+			 * => 새로운 주문이 접수
+			 * => 해당 주소가 있는지 없는지 체크
+			 * Case One : 주소가 없는 경우에는 새로운 주소를 추가해준다
+			 * Case Two : 주소가 있는 경우 다른 주소인 경우에는 새로운 주소를 추가 해준다.
+			 * Case Three : 주소가 많은 경우에 로직을 어떻게 처리 할 것인지에 대해서 고민이 필요함
+			 */
+
+            Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
+
+            if(mapper.isEqualAddressInfo(new Address(order.uid, order.address, order.addr_number,
+                    order.addr_building, order.addr_remainder)) == null) {
+
+                mapper.addNewAddress(new Address(order.uid, numberOfAddress, order.address, order.addr_number,
+                        order.addr_building, order.addr_remainder));
+
+            }
 
 			Integer adrid = mapper.getAddressByUid(uid);
 			order.adrid = adrid;
@@ -892,7 +927,7 @@ public class MybatisDAO {
 			if (mapper.getNumberOfAddressByUid(uid) > 0)
 				return mapper.updateMemberAddress(address);
 			else
-				return mapper.addAddress2(address);
+				return mapper.addNewAddress(address);
 		} catch (Exception e) {
 			e.printStackTrace();
 			

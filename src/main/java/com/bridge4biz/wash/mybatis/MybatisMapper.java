@@ -285,7 +285,7 @@ public interface MybatisMapper {
 
 	@Insert("INSERT INTO address (uid, type, address, addr_number, addr_building, addr_remainder, rdate) VALUES(#{uid}, #{type}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adrid", before = false, resultType = Integer.class)
-	Boolean addAddress2(Address addressData);
+	Boolean addNewAddress(Address addressData);
 
 	
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
@@ -606,4 +606,9 @@ public interface MybatisMapper {
 	
 	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND ( `address` LIKE  '%성남%');")
 	Integer getBundangDropoff(@Param("date") String date);
+
+    // 신규
+    @Select("SELECT adrid FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}" +
+            " AND addr_building LIKE #{addr_building} AND addr_remainder LIKE #{addr_remainder}")
+    String isEqualAddressInfo(Address address);
 }
