@@ -275,16 +275,13 @@ public class MybatisDAO {
 
             Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
 
-//            if(mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number,
-//                    order.addr_building, order.addr_remainder)) == null) {
-//
-//                mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
-//                        order.addr_building, order.addr_remainder));
-//
-//            }
+            if(mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number,
+                    order.addr_building, order.addr_remainder)) == null) {
 
-            mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
-                    order.addr_building, order.addr_remainder));
+            }
+
+//            mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
+//                    order.addr_building, order.addr_remainder));
 
 			Integer adrid = mapper.getAddressByUid(uid);
 			order.adrid = adrid;
