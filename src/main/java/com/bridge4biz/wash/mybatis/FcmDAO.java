@@ -24,7 +24,6 @@ public class FcmDAO {
 			}else {
 				fcmMapper.clearRegid(uid);
 				fcmMapper.updateRegid(uid, regid);
-
 			}
 			
 		} catch (DuplicateKeyException duplicateKeyException) {
