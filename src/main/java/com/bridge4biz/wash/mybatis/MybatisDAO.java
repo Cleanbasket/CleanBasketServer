@@ -273,7 +273,7 @@ public class MybatisDAO {
 			 * Case Three : 주소가 많은 경우에 로직을 어떻게 처리 할 것인지에 대해서 고민이 필요함
 			 */
 
-            Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
+//            Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
 
 //            if(mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number,
 //                    order.addr_building, order.addr_remainder)) == null) {
@@ -282,6 +282,13 @@ public class MybatisDAO {
 
 //            mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
 //                    order.addr_building, order.addr_remainder));
+
+            if(mapper.getNumberOfAddressByUid(uid) == 0) {
+                mapper.addAddress(new AddressData(uid, order.address, order.addr_building));
+            } else {
+                mapper.updateMemberAddress(new Address(order.uid, order.address, order.addr_building));
+            }
+
 
 			Integer adrid = mapper.getAddressByUid(uid);
 			order.adrid = adrid;

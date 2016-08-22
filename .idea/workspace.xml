@@ -44,8 +44,8 @@
       <file leaf-file-name="MybatisDAO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="339">
-              <caret line="282" column="102" selection-start-line="282" selection-start-column="102" selection-end-line="282" selection-end-column="102" />
+            <state relative-caret-position="744">
+              <caret line="301" column="95" selection-start-line="301" selection-start-column="95" selection-end-line="301" selection-end-column="95" />
               <folding>
                 <element signature="e#3117#3118#0" expanded="true" />
                 <element signature="e#3160#3161#0" expanded="true" />
@@ -1049,7 +1049,7 @@
       <workItem from="1471597714692" duration="472000" />
       <workItem from="1471599264453" duration="2482000" />
       <workItem from="1471838234856" duration="124000" />
-      <workItem from="1471842860517" duration="1753000" />
+      <workItem from="1471842860517" duration="2045000" />
     </task>
     <servers />
   </component>
@@ -1062,7 +1062,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42673000" />
+    <option name="totallyTimeSpent" value="42965000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1492,8 +1492,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="339">
-          <caret line="282" column="102" selection-start-line="282" selection-start-column="102" selection-end-line="282" selection-end-column="102" />
+        <state relative-caret-position="744">
+          <caret line="301" column="95" selection-start-line="301" selection-start-column="95" selection-end-line="301" selection-end-column="95" />
           <folding>
             <element signature="e#3117#3118#0" expanded="true" />
             <element signature="e#3160#3161#0" expanded="true" />
