@@ -210,17 +210,17 @@ public class MybatisDAO {
 		return Constant.SUCCESS;
 	}
 
-    public Integer addNewAddress(Address address) {
+    public Integer addNewAddress(Integer uid, Address address) {
 
         if (address == null) {
             return Constant.ERROR;
         }
 
-        Integer numberOfAddress = mapper.getNumberOfAddressByUid(address.uid);
+        Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
 
         if(mapper.isEqualAddressInfo(address) == null) {
 
-            mapper.addNewAddress(new Address(address.uid, numberOfAddress, address.address, address.addr_number,
+            mapper.addNewAddress(new Address(uid, numberOfAddress, address.address, address.addr_number,
                     address.addr_building, address.addr_remainder));
 
         }

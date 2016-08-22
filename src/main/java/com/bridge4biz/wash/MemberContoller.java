@@ -333,9 +333,7 @@ public class MemberContoller {
     @ResponseBody
     public Constant memberAddAddress(Constant constant, Gson gson, Authentication auth, @RequestBody Address address) {
 
-        dao.addNewAddress(address);
-
-        if(dao.addNewAddress(address) != Constant.SUCCESS) {
+        if(dao.addNewAddress(dao.getUid(auth.getName()),address) != Constant.SUCCESS) {
             return constant.setConstant(Constant.ERROR, "일반회원 주소 등록 실패: ERROR");
         }
 
