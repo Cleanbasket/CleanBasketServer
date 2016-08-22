@@ -339,7 +339,17 @@ public class MemberContoller {
 
         return constant.setConstant(Constant.SUCCESS, "일반회원 주소 등록 : SUCCESS", gson.toJson(dao.getAddress(dao.getUid(auth.getName()))));
     }
-
+    
+    @Secured("ROLE_MEMBER")
+    @RequestMapping(method=RequestMethod.POST, value = "/address/delete")
+    @ResponseBody
+    public Constant deleteAddress(Constant constant, Gson gson, Authentication auth, @RequestBody Address address) {
+    		if(dao.deleteAddress(dao.getUid(auth.getName()), address)) {
+    			return constant.setConstant(Constant.SUCCESS, "주소 삭제 성공");
+    		}else {
+    			return constant.setConstant(Constant.ERROR, "주소 삭제 실패");
+    		}
+    }
 
     @Secured("ROLE_MEMBER")
 	@RequestMapping(value = "", consumes = { "application/json" })

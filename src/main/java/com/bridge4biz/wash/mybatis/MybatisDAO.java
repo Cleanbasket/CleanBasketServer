@@ -226,6 +226,14 @@ public class MybatisDAO {
 
 		return Constant.SUCCESS;
 	}
+	
+	public boolean deleteAddress(Integer uid, Address address) {
+		if(address == null) {
+			return false;
+		}
+	
+		return mapper.deleteAddress(address.adrid);
+	}
 
 	public Integer addNewOrder(Order order, Integer uid) {
 		if (priceCheck(order, uid) == false) {

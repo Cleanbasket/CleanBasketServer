@@ -611,4 +611,7 @@ public interface MybatisMapper {
     @Select("SELECT * FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}" +
             " AND addr_building LIKE #{addr_building} AND addr_remainder LIKE #{addr_remainder}")
     ArrayList<Address> isEqualAddressInfo(Address address);
+    
+    @Delete("DELETE FROM address WHERE adrid = #{adrid}")
+    Boolean deleteAddress(@Param("adrid") Integer adrid);
 }
