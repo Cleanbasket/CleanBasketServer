@@ -270,12 +270,13 @@ public class MybatisDAO {
 			 */
 
 			Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
-
-			if (mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number, order.addr_building,
-					order.addr_remainder)) == null) {
+			
+			ArrayList<Address> addressList = mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number, order.addr_building,
+					order.addr_remainder));
+			
+			if (addressList.size() == 0 || addressList == null) {
 				mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
 						order.addr_building, order.addr_remainder));
-
 			}
 
 			// if(mapper.getNumberOfAddressByUid(uid) == 0) {

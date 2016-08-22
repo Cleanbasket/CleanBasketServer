@@ -608,7 +608,7 @@ public interface MybatisMapper {
 	Integer getBundangDropoff(@Param("date") String date);
 
     // 신규
-    @Select("SELECT adrid FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}" +
+    @Select("SELECT * FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}" +
             " AND addr_building LIKE #{addr_building} AND addr_remainder LIKE #{addr_remainder}")
-    String isEqualAddressInfo(Address address);
+    ArrayList<Address> isEqualAddressInfo(Address address);
 }
