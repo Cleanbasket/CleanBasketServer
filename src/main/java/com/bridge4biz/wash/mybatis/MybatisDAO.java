@@ -237,7 +237,19 @@ public class MybatisDAO {
 			if(checkUnavailableDistricDate(dcid, order.pickup_date, order.dropoff_date)) {
 				return Constant.DATE_UNAVAILABLE;
 			}			
-			
+
+			/*
+			 * 현재 주소 추가 방법
+			 * => 새로운 주문이 접수 => 주소를 가지고 와서 기존에 주소가 없으면 추가하고 아니면 업데이트를 하는 방식
+			 *
+			 * 변경해야하는 방식
+			 * => 새로운 주문이 접수
+			 * => 해당 주소가 있는지 없는지 체크
+			 * Case One : 주소가 없는 경우에는 새로운 주소를 추가해준다
+			 * Case Two : 주소가 있는 경우 다른 주소인 경우에는 새로운 주소를 추가 해준다.
+			 * Case Three : 주소가 많은 경우에 로직을 어떻게 처리 할 것인지에 대해서 고민이 필요함
+			 */
+
 			if(mapper.getNumberOfAddressByUid(uid) == 0) {
 				mapper.addAddress(new AddressData(uid, order.address, order.addr_building));
 			} else {
