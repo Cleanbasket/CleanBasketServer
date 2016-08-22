@@ -44,8 +44,8 @@
       <file leaf-file-name="MybatisDAO.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-471">
-              <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+            <state relative-caret-position="504">
+              <caret line="271" column="63" selection-start-line="271" selection-start-column="63" selection-end-line="271" selection-end-column="63" />
               <folding>
                 <element signature="e#3117#3118#0" expanded="true" />
                 <element signature="e#3160#3161#0" expanded="true" />
@@ -172,8 +172,8 @@
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/data/AddressData.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisMapper.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/service/Address.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/MemberContoller.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java" />
       </list>
     </option>
   </component>
@@ -1049,7 +1049,7 @@
       <workItem from="1471597714692" duration="472000" />
       <workItem from="1471599264453" duration="2482000" />
       <workItem from="1471838234856" duration="124000" />
-      <workItem from="1471842860517" duration="1089000" />
+      <workItem from="1471842860517" duration="1328000" />
     </task>
     <servers />
   </component>
@@ -1062,7 +1062,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42009000" />
+    <option name="totallyTimeSpent" value="42248000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1492,8 +1492,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/bridge4biz/wash/mybatis/MybatisDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-471">
-          <caret line="227" column="0" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+        <state relative-caret-position="504">
+          <caret line="271" column="63" selection-start-line="271" selection-start-column="63" selection-end-line="271" selection-end-column="63" />
           <folding>
             <element signature="e#3117#3118#0" expanded="true" />
             <element signature="e#3160#3161#0" expanded="true" />
