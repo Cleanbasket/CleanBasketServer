@@ -283,8 +283,10 @@ public class MybatisDAO {
 					order.addr_remainder));
 			
 			if (addressList.size() == 0 || addressList == null) {
-				mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
-						order.addr_building, order.addr_remainder));
+				if (numberOfAddress < 6) {
+					mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
+							order.addr_building, order.addr_remainder));
+				}
 			}
 
 			// if(mapper.getNumberOfAddressByUid(uid) == 0) {
