@@ -487,4 +487,5 @@ public class MemberContoller {
 	public Constant getDropoffTime(Constant constant, Authentication auth, Gson gson, @PathVariable String dropoff_time) {
 		return constant.setConstant(Constant.SUCCESS, "", dao.getDropoffInterval(dropoff_time));
 	}
+		
 }

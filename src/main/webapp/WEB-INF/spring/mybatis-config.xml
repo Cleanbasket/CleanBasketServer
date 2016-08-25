@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<context:annotation-config />
-	
-	<context:property-placeholder location="classpath:/db.properties" ignore-resource-not-found="true" />
-	
+
+	<context:property-placeholder location="classpath:/db.properties"
+		ignore-resource-not-found="true" />
+
 	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="username" value="manager" />
-		<property name="url" value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
-		<!--<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" />-->
+		<property name="url"
+			value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
+		<!--<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" 
+			/> -->
 		<property name="password" value="fastdel2015@" />
 
 		<property name="maxActive" value="150" />
@@ -55,10 +60,18 @@
 		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.DashBoardMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
-	
+
 	<bean id="dashBoardDAO" class="com.bridge4biz.wash.mybatis.DashBoardDAO" />
 
-	<bean id="platformTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="platformTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="mileageDao" class="com.bridge4biz.wash.mybatis.MileageDao" />
+
+	<bean id="mileageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.MileageMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
 </beans>

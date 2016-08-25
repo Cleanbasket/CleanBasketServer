@@ -27,13 +27,15 @@ public class DelivererDAO {
 
 	private MybatisMapper mapper;
 	private DelivererMapper delivererMapper;
+	private MileageDao mileageDao;
 	
 	public DelivererDAO() {
 		
 	}
 
 	@Autowired
-	private DelivererDAO(MybatisMapper mapper, DelivererMapper delivererMapper, PlatformTransactionManager platformTransactionManager) {
+	private DelivererDAO(MileageDao mileageDao, MybatisMapper mapper, DelivererMapper delivererMapper, PlatformTransactionManager platformTransactionManager) {
+		this.mileageDao = mileageDao;
 		this.mapper = mapper;
 		this.delivererMapper = delivererMapper;
 	}
@@ -78,8 +80,8 @@ public class DelivererDAO {
 		order.pickupInfo = mapper.getDeliverer(order.pickup_man);
 		order.dropoffInfo = mapper.getDeliverer(order.dropoff_man);
 		
-		if (mapper.checkMileage(order.oid, order.uid) > 0)
-			order.mileage = mapper.getMileageByOid(order.oid);
+		if (mileageDao.checkMileage(order.oid, order.uid) > 0)
+			order.mileage = mileageDao.getMileageByOid(order.oid);
 		else
 			order.mileage = 0;
 		

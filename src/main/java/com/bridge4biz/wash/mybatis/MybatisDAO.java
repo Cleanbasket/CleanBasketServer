@@ -68,6 +68,9 @@ public class MybatisDAO {
 	}
 
 	@Autowired
+	MileageDao mileageDao;
+
+	@Autowired
 	private MybatisDAO(MybatisMapper mapper, PlatformTransactionManager platformTransactionManager) {
 		this.mapper = mapper;
 	}
@@ -226,12 +229,12 @@ public class MybatisDAO {
 
 		return Constant.SUCCESS;
 	}
-	
+
 	public boolean deleteAddress(Integer uid, Address address) {
-		if(address == null) {
+		if (address == null) {
 			return false;
 		}
-	
+
 		return mapper.deleteAddress(address.adrid);
 	}
 
@@ -278,10 +281,10 @@ public class MybatisDAO {
 			 */
 
 			Integer numberOfAddress = mapper.getNumberOfAddressByUid(uid);
-			
-			ArrayList<Address> addressList = mapper.isEqualAddressInfo(new Address(uid, order.address, order.addr_number, order.addr_building,
-					order.addr_remainder));
-			
+
+			ArrayList<Address> addressList = mapper.isEqualAddressInfo(
+					new Address(uid, order.address, order.addr_number, order.addr_building, order.addr_remainder));
+
 			if (addressList.size() == 0 || addressList == null) {
 				if (numberOfAddress < 6) {
 					mapper.addNewAddress(new Address(uid, numberOfAddress, order.address, order.addr_number,
@@ -321,9 +324,10 @@ public class MybatisDAO {
 				mapper.updateCoupon(order.uid, oid, coupon.cpid);
 			}
 
-			if (order.mileage > 0)
-				delMileage(uid, oid, order.mileage);
+			if (order.mileage > 0) {
 
+				mileageDao.delMileage(uid, oid, order.mileage);
+			}
 			ArrayList<String> phones = mapper.getDistrictPhones(dcid);
 
 			sendNewSMS(order, order.address + " " + order.addr_building, phones);
@@ -334,25 +338,6 @@ public class MybatisDAO {
 		}
 
 		return Constant.SUCCESS;
-	}
-
-	public void addMileage(int uid, int oid, int mileage) {
-		if (mapper.isAuthUser(uid) == 0)
-			return;
-
-		int totalMileage = mapper.getMileage(uid);
-		mapper.addUseOfMileage(uid, oid, 0, mileage);
-		mapper.updateMileageByUser(uid, totalMileage + mileage);
-	}
-
-	public void delMileage(int uid, int oid, int mileage) {
-		if (mapper.isAuthUser(uid) == 0)
-			return;
-
-		int totalMileage = mapper.getMileage(uid);
-
-		mapper.addUseOfMileage(uid, oid, 1, mileage);
-		mapper.updateMileageByUser(uid, totalMileage - mileage);
 	}
 
 	public void addTotal(int uid, int price) {
@@ -625,7 +610,7 @@ public class MybatisDAO {
 			}
 
 			if (mapper.isAuthUser(uid) > 0) {
-				if (mileage > mapper.getMileage(uid))
+				if (mileage > mileageDao.getMileageByUid(uid))
 					return false;
 			}
 
@@ -656,12 +641,12 @@ public class MybatisDAO {
 			} else if (state >= 1) {
 				return Constant.IMPOSSIBLE;
 			} else {
-				if (mapper.selectMileage(orderData.oid, uid, 1) != null) {
-					int addMileage = mapper.selectMileage(orderData.oid, uid, 1);
-					int totalMileage = mapper.getMileage(uid);
-					mapper.updateMileageByUser(uid, totalMileage + addMileage);
-					mapper.deleteMileageUsedCancel(orderData.oid, uid, 1);
-				}
+
+				int addMileage = mileageDao.getMileageFromOrder(orderData.oid, uid, 1);
+				int totalMileage = mileageDao.getMileageByUid(uid);
+				// Logic에서 버그 발견
+				mileageDao.updateMileage(uid, totalMileage - addMileage);
+				mileageDao.deleteMileageByOrderCancel(orderData.oid, uid, 1);
 
 				sendDeleteSMS(orderData, uid);
 
@@ -688,12 +673,10 @@ public class MybatisDAO {
 			} else if (state >= 2) {
 				return Constant.IMPOSSIBLE;
 			} else {
-				if (mapper.selectMileage(orderData.oid, uid, 1) != null) {
-					int addMileage = mapper.selectMileage(orderData.oid, uid, 1);
-					int totalMileage = mapper.getMileage(uid);
-					mapper.updateMileageByUser(uid, totalMileage + addMileage);
-					mapper.deleteMileageUsedCancel(orderData.oid, uid, 1);
-				}
+				int addMileage = mileageDao.getMileageFromOrder(orderData.oid, uid, 1);
+				int totalMileage = mileageDao.getMileageByUid(uid);
+				mileageDao.updateMileage(uid, totalMileage - addMileage);
+				mileageDao.deleteMileageByOrderCancel(orderData.oid, uid, 1);
 
 				sendNewDeleteSMS(orderData, uid);
 
@@ -781,7 +764,7 @@ public class MybatisDAO {
 		if (mapper.isAuthUser(uid) == 0)
 			return 0;
 
-		return mapper.getMileage(uid);
+		return mileageDao.getMileageByUid(uid);
 	}
 
 	public ArrayList<Coupon> getAvailableCoupon(Integer uid) {
@@ -796,10 +779,9 @@ public class MybatisDAO {
 			order.item = mapper.getItem(order.oid);
 			order.coupon = mapper.getCoupon(order.oid, uid);
 
-			if (mapper.selectMileage(order.oid, uid, 1) != null) {
-				int mileage = mapper.selectMileage(order.oid, uid, 1);
-				if (mileage > 0)
-					order.mileage = mileage;
+			int mileage = mileageDao.getMileageFromOrder(order.oid, uid, 1);
+			if (mileage > 0) {
+				order.mileage = mileage;
 			}
 		}
 
@@ -814,10 +796,9 @@ public class MybatisDAO {
 			order.item = mapper.getItem(order.oid);
 			order.coupon = mapper.getCoupon(order.oid, uid);
 
-			if (mapper.selectMileage(order.oid, uid, 1) != null) {
-				int mileage = mapper.selectMileage(order.oid, uid, 1);
-				if (mileage > 0)
-					order.mileage = mileage;
+			int mileage = mileageDao.getMileageFromOrder(order.oid, uid, 1);
+			if (mileage > 0) {
+				order.mileage = mileage;
 			}
 		}
 
@@ -832,10 +813,9 @@ public class MybatisDAO {
 			order.item = mapper.getItem(order.oid);
 			order.coupon = mapper.getCoupon(order.oid, uid);
 
-			if (mapper.selectMileage(order.oid, uid, 1) != null) {
-				int mileage = mapper.selectMileage(order.oid, uid, 1);
-				if (mileage > 0)
-					order.mileage = mileage;
+			int mileage = mileageDao.getMileageFromOrder(order.oid, uid, 1);
+			if (mileage > 0) {
+				order.mileage = mileage;
 			}
 		}
 
@@ -957,7 +937,7 @@ public class MybatisDAO {
 		for (DelivererWork delivererWorkList : delivererWorkLists) {
 			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
 			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
-			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
+			delivererWorkList.mileage = mileageDao.getMileageByOid(delivererWorkList.oid);
 		}
 		return delivererWorkLists;
 	}
@@ -967,7 +947,7 @@ public class MybatisDAO {
 		for (DelivererWork delivererWorkList : delivererWorkLists) {
 			delivererWorkList.item = mapper.getItem(delivererWorkList.oid);
 			delivererWorkList.coupon = mapper.getCoupon(delivererWorkList.oid, delivererWorkList.uid);
-			delivererWorkList.mileage = mapper.getMileageByOid(delivererWorkList.oid);
+			delivererWorkList.mileage = mileageDao.getMileageByOid(delivererWorkList.oid);
 		}
 		return delivererWorkLists;
 	}
@@ -987,11 +967,11 @@ public class MybatisDAO {
 			Order orderData = getOrderByOrderId(oid);
 			int userId = orderData.uid;
 
-			if (mapper.isAuthUser(userId) == 1 && mapper.checkMileage(uid, oid) == 0) {
+			if (mapper.isAuthUser(userId) == 1 && mileageDao.checkMileage(uid, oid) == 0) {
 				if (mapper.selectRate(oid) == 0)
 					PushMessage.addPush(userId, oid, null, 0, Notification.FEEDBACK_ALARM, mapper.getRegid(uid));
 
-				addMileage(userId, oid, (int) (orderData.price * getAccumulationRate(userId)));
+				mileageDao.addMileage(userId, oid, (int) (orderData.price * getAccumulationRate(userId)));
 				addTotal(userId, orderData.price);
 				PushMessage.addPush(userId, oid, null, (int) (orderData.price * getAccumulationRate(userId)),
 						Notification.MILEAGE_ALARM, mapper.getRegid(uid));
@@ -1093,7 +1073,7 @@ public class MybatisDAO {
 			else
 				data.count = 0;
 
-			Integer mileage = mapper.getMileageByOid(data.oid);
+			Integer mileage = mileageDao.getMileageByOid(data.oid);
 			if (mileage != null)
 				data.mileage = mileage;
 			else
@@ -1299,7 +1279,7 @@ public class MybatisDAO {
 				int initialMileage = (int) (mapper.getTotalGrossOfUser(uid) * 0.01);
 				authUser.total = mapper.getTotalGrossOfUser(uid);
 				authUser.mileage = initialMileage;
-				mapper.addUseOfMileage(uid, null, 0, initialMileage);
+				mileageDao.addUseOfMileage(uid, null, 0, initialMileage);
 			} else
 				authUser.total = 0;
 
@@ -1399,8 +1379,8 @@ public class MybatisDAO {
 			}
 
 			if (mapper.isAuthUser(uid) > 0) {
-				if (mapper.getMileageByOid(order.oid) != null) {
-					int mileage = mapper.getMileageByOid(order.oid);
+				if (mileageDao.getMileageByOid(order.oid) != null) {
+					int mileage = mileageDao.getMileageByOid(order.oid);
 					order.price = order.price - mileage;
 				}
 			}

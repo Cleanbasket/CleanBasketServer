@@ -74,7 +74,7 @@ public interface MybatisMapper {
 
 	@Select("SELECT COUNT(*) FROM user WHERE email = #{email} AND password = #{password}")
 	Integer accountNewCheck(@Param("email") String email, @Param("password") String password);
-	
+
 	@Select("SELECT uid, email, phone FROM user WHERE email = #{email}")
 	Member getMember(@Param("email") String email);
 
@@ -93,21 +93,18 @@ public interface MybatisMapper {
 	@Select("SELECT address FROM orders WHERE oid = #{oid}")
 	String getAddressForOrderId(@Param("oid") Integer oid);
 
-	
 	@Select("SELECT * FROM address WHERE adrid = #{adrid} AND uid = #{uid}")
 	Address getAddressForSingle(@Param("adrid") Integer adrid, @Param("uid") Integer uid);
 
 	@Select("SELECT * FROM address WHERE uid = #{uid}")
 	ArrayList<Address> getAddress(@Param("uid") Integer uid);
 
-
 	@Select("SELECT COUNT(*) FROM address where uid = #{uid}")
 	Integer getNumberOfAddressByUid(@Param("uid") Integer uid);
 
 	@Select("SELECT adrid FROM address where uid = #{uid} AND type = 0")
 	Integer getAddressByUid(@Param("uid") Integer uid);
-	
-	
+
 	@Select("SELECT * FROM coupon_code WHERE kind = 0")
 	ArrayList<CouponCodeData> getOrderCoupon();
 
@@ -120,8 +117,6 @@ public interface MybatisMapper {
 	@Select("SELECT serial_number FROM coupon WHERE coupon_code = #{coupon_code} AND uid = #{uid} AND serial_number is not NULL")
 	String getSerialNumberIssueCheck(@Param("coupon_code") Integer coupon_code, @Param("uid") Integer uid);
 
-	
-	
 	@Select("SELECT A.*, IF(B.item_code IS NULL, 0, A.item_code) AS info FROM item_code A LEFT JOIN item_info B ON A.item_code = B.item_code")
 	ArrayList<ItemCode> getItemCode();
 
@@ -133,13 +128,13 @@ public interface MybatisMapper {
 
 	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE uid = #{uid} ORDER BY oid DESC")
 	ArrayList<Order> getAllOrder(@Param("uid") Integer uid);
-	
+
 	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE uid = #{uid} AND  state != 4 ORDER BY oid DESC LIMIT 1")
 	ArrayList<Order> getRecentOrder(@Param("uid") Integer uid);
 
 	@Select("SELECT oid, pickup_man, dropoff_man, order_number, state, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate FROM orders WHERE phone = #{phone} AND  state != 4 ORDER BY oid DESC LIMIT 1")
 	ArrayList<Order> getPhoneRecentOrder(@Param("phone") String phone);
-	
+
 	@Select("SELECT oid, uid, order_number, state, phone, address, addr_number, addr_building, addr_remainder, note, memo, price, dropoff_price, pickup_date, dropoff_date, payment_method, rdate FROM orders WHERE (state = 1 AND pickup_man = #{uid}) OR (state = 2 AND rdate >= CURDATE() AND pickup_man = #{uid}) ORDER BY state ASC, pickup_date ASC, oid ASC")
 	ArrayList<DelivererWork> getPickupRequest(@Param("uid") Integer uid);
 
@@ -158,7 +153,10 @@ public interface MybatisMapper {
 	@Select("SELECT state FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	Integer getOrderState(@Param("oid") Integer oid, @Param("uid") Integer uid);
 
-//	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, price, payment_method, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC")
+	// @Select("SELECT oid, A.uid, order_number, email, address, addr_number,
+	// addr_building, addr_remainder, A.phone, price, payment_method, state,
+	// A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY
+	// oid DESC")
 	@Select("SELECT oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, payment_method, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid ORDER BY oid DESC LIMIT 500")
 	ArrayList<OrderStateData> getOrderStateData();
 
@@ -192,14 +190,17 @@ public interface MybatisMapper {
 	@Select("SELECT SUM(count) FROM item WHERE oid = #{oid}")
 	Integer getSumCountForItem(@Param("oid") Integer oid);
 
-	
-	
-	
 	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid WHERE authority = 'ROLE_MEMBER' ORDER BY count DESC")
 	ArrayList<MemberInfo> getMemberInfo();
 
-//	@Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search}")
-//	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid WHERE authority = 'ROLE_MEMBER' ORDER BY count DESC")
+	// @Select("SELECT @X:=@X+1 AS rownum, A.* FROM (SELECT @X:=0) R, user A
+	// WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search}")
+	// @Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone,
+	// avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0)
+	// R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ',
+	// addr_building, ' ', addr_remainder) as address, AVG(price) as avg,
+	// SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid
+	// = B.uid WHERE authority = 'ROLE_MEMBER' ORDER BY count DESC")
 	@Select("SELECT @X:=@X+1 AS rownum, A.uid, B.address, A.email, A.phone, avg as avgPrice, sum as accruePrice, count, A.rdate FROM (SELECT @X:=0) R, user A INNER JOIN (SELECT uid, CONCAT(address, ' ', addr_number, ' ', addr_building, ' ', addr_remainder) as address, AVG(price) as avg, SUM(price) as sum, COUNT(*) as count FROM orders GROUP BY uid) B ON A.uid = B.uid  WHERE authority = 'ROLE_MEMBER' AND email LIKE #{search} ORDER BY count DESC")
 	ArrayList<MemberInfo> getMemberInfoSearch(@Param("search") String search);
 
@@ -220,13 +221,13 @@ public interface MybatisMapper {
 
 	@Select("SELECT SUM(price) FROM orders WHERE uid = #{uid} AND state = 4 AND rdate > DATE_ADD(NOW(), INTERVAL -6 MONTH)")
 	Integer getTotalPriceBySixMonth(@Param("uid") Integer uid);
-	
+
 	@Select("SELECT price FROM item_code WHERE item_code = #{item_code}")
 	Integer getItemPrice(@Param("item_code") Integer item_code);
 
 	@Select("SELECT name FROM item_code WHERE item_code = #{item_code}")
 	String getItemName(@Param("item_code") Integer item_code);
-	
+
 	@Select("SELECT value FROM coupon_code WHERE coupon_code = #{coupon_code}")
 	Integer getCouponValue(@Param("coupon_code") Integer coupon_code);
 
@@ -234,40 +235,39 @@ public interface MybatisMapper {
 	Integer getCouponSerialNumberExist(@Param("serial_number") String serial_number);
 
 	@Select("SELECT COUNT(*) FROM coupon WHERE coupon_code = #{coupon_code} AND serial_number = #{serial_number} AND enabled = 1")
-	Integer getRecommendationCouponEnabledCount(@Param("coupon_code") Integer coupon_code, @Param("serial_number") String serial_number);
+	Integer getRecommendationCouponEnabledCount(@Param("coupon_code") Integer coupon_code,
+			@Param("serial_number") String serial_number);
 
 	@Select("SELECT value FROM coupon WHERE cpid = #{cpid} AND uid = #{uid}")
 	Integer getCouponPrice(@Param("uid") Integer uid, @Param("cpid") Integer cpid);
 
 	@Select("SELECT oid FROM orders order by oid DESC LIMIT 1")
 	Integer getLatestOrderId();
-	
 
 	@Select("SELECT oid FROM orders WHERE uid = #{uid} order by oid DESC LIMIT 1")
 	Integer getLatestOrderIdByUid(@Param("uid") Integer uid);
-	
-	
+
 	@Select("SELECT * FROM areacode")
 	ArrayList<Area> getAvailableAreaDatas();
 
 	@Select("SELECT acid FROM areacode WHERE area = #{area} LIMIT 1")
 	Integer getAcidWithAreaData(@Param("area") String area);
-	
+
 	@Select("SELECT area FROM areacode")
 	ArrayList<String> getAvailableArea();
-	
+
 	@Select("SELECT area_date FROM area_date WHERE acid = #{acid}")
 	ArrayList<String> getAvailableAreaDateDatas(@Param("acid") Integer acid);
-	
+
 	@Select("SELECT * FROM area_date WHERE acid = #{acid}")
 	ArrayList<AreaDate> getAvailableAreaDate(@Param("acid") Integer acid);
-	
+
 	@Select("SELECT phone FROM area_alarm WHERE acid = #{acid}")
 	ArrayList<String> getPhones(@Param("acid") Integer acid);
-	
+
 	@Select("SELECT * FROM orders WHERE oid = #{oid}")
 	Order getOrderForSingle(@Param("oid") Integer oid);
-	
+
 	@Insert("INSERT INTO user (email, password, name, phone, img, birthday, enabled, authority, rdate) VALUES(#{email}, SHA(#{password}), #{name}, #{phone}, #{img}, #{birthday}, #{enabled}, #{authority}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "uid", before = false, resultType = Integer.class)
 	Boolean addUser(UserData userData);
@@ -276,26 +276,22 @@ public interface MybatisMapper {
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "uid", before = false, resultType = Integer.class)
 	Boolean registerUser(UserData userData);
 
-	
-	
 	@Insert("INSERT INTO address (uid, type, address, addr_number, addr_building, addr_remainder, rdate) VALUES(#{uid}, #{type}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adrid", before = false, resultType = Integer.class)
 	Boolean addAddress(AddressData addressData);
-
 
 	@Insert("INSERT INTO address (uid, type, address, addr_number, addr_building, addr_remainder, rdate) VALUES(#{uid}, #{type}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adrid", before = false, resultType = Integer.class)
 	Boolean addNewAddress(Address addressData);
 
-	
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
 	Boolean addOrder(OrderData orderData);
 
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
-	Boolean addNewOrder(Order order);	
-	
+	Boolean addNewOrder(Order order);
+
 	@Insert("INSERT INTO item (oid, item_code, price, count, rdate) VALUES(#{oid}, #{item_code}, #{price}, #{count}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "itid", before = false, resultType = Integer.class)
 	Boolean addItem(ItemData itemData);
@@ -311,7 +307,7 @@ public interface MybatisMapper {
 	@Insert("INSERT INTO areacode (areacode, area) VALUES(#{areacode}, #{area})")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "acid", before = false, resultType = Integer.class)
 	Boolean insertArea(AreaData areaData);
-	
+
 	@Insert("INSERT INTO area_date (acid, area_date) VALUES(#{acid}, #{area_date})")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "adid", before = false, resultType = Integer.class)
 	Boolean insertAreaDate(AreaDateData areaDateData);
@@ -319,7 +315,7 @@ public interface MybatisMapper {
 	@Insert("INSERT INTO area_alarm (acid, phone) VALUES(#{acid}, #{phone})")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "aaid", before = false, resultType = Integer.class)
 	Boolean insertAreaAlarm(AreaAlarmData areaAlarmData);
-	
+
 	@Update("UPDATE user SET password = SHA(#{password}) WHERE email = #{email}")
 	Boolean updatePassword(@Param("email") String email, @Param("password") String password);
 
@@ -341,11 +337,9 @@ public interface MybatisMapper {
 	@Update("UPDATE orders SET order_number = #{order_number} WHERE oid = #{oid} AND uid = #{uid}")
 	Boolean updateOrderNumber(OrderData orderData);
 
-
 	@Update("UPDATE orders SET order_number = #{order_number} WHERE oid = #{oid} AND uid = #{uid}")
 	Boolean updateNewOrderNumber(Order orderData);
-	
-	
+
 	@Update("UPDATE address SET address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder} WHERE type = #{type} AND uid = #{uid}")
 	Boolean updateMemberAddress(Address address);
 
@@ -353,11 +347,12 @@ public interface MybatisMapper {
 	Boolean updatePickupRequestComplete(@Param("oid") Integer oid, @Param("note") String note);
 
 	@Update("UPDATE orders SET state = 4, note = #{note}, payment_method = #{payment_method}, rdate = NOW() WHERE oid = #{oid}")
-	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note, @Param("payment_method") Integer payment_method);
+	Boolean updateDeliveryRequestComplete(@Param("oid") Integer oid, @Param("note") String note,
+			@Param("payment_method") Integer payment_method);
 
 	@Update("UPDATE orders SET state = 4, note = #{note}, rdate = NOW() WHERE oid = #{oid}")
 	Boolean updateDeliveryRequest(@Param("oid") Integer oid, @Param("note") String note);
-	
+
 	@Update("UPDATE orders SET address = #{address}, addr_number = #{addr_number}, addr_building = #{addr_building}, addr_remainder = #{addr_remainder} WHERE (uid = #{uid} AND state = 0) OR (uid = #{uid} AND state = 2")
 	Boolean updateOrderAddress(Address address);
 
@@ -374,38 +369,33 @@ public interface MybatisMapper {
 	Boolean updateDelivererEnabled(@Param("uid") Integer uid, @Param("enabled") Boolean enabled);
 
 	@Update("UPDATE coupon SET serial_number = #{serial_number} WHERE uid = #{uid} AND coupon_code = #{coupon_code} AND serial_number is NULL")
-	Boolean updateRecommendationCoupon(@Param("coupon_code") Integer coupon_code, @Param("uid") Integer uid, @Param("serial_number") String serial_number);
+	Boolean updateRecommendationCoupon(@Param("coupon_code") Integer coupon_code, @Param("uid") Integer uid,
+			@Param("serial_number") String serial_number);
 
 	@Update("UPDATE coupon SET enabled = 1 WHERE coupon_code = #{coupon_code} AND serial_number = #{serial_number}")
-	Boolean updateRecommendationCouponEnable(@Param("coupon_code") Integer coupon_code, @Param("serial_number") String serial_number);
+	Boolean updateRecommendationCouponEnable(@Param("coupon_code") Integer coupon_code,
+			@Param("serial_number") String serial_number);
 
 	@Update("UPDATE orders SET pickup_date = #{pickup_date}, dropoff_date = #{dropoff_date} WHERE oid = #{oid}")
 	Boolean updateOrderDateTime(Order order);
 
-
-
-	@Delete("DELETE FROM mileage WHERE oid = #{oid} AND uid = #{uid} AND type = #{type}")
-	Boolean deleteMileageUsedCancel(@Param("oid") Integer oid, @Param("uid") Integer uid, @Param("type") Integer type);
-
 	@Delete("DELETE FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	Boolean delOrder(@Param("oid") Integer oid, @Param("uid") Integer uid);
-	
+
 	@Delete("DELETE FROM areacode WHERE acid = #{acid}")
 	Boolean delArea(@Param("acid") Integer acid);
-	
+
 	@Delete("DELETE FROM area_date WHERE acid = #{acid}")
 	Boolean delAllAreaDate(@Param("acid") Integer acid);
-	
+
 	@Delete("DELETE FROM area_alarm WHERE acid = #{acid}")
 	Boolean delAllAreaAlarm(@Param("acid") Integer acid);
-	
+
 	@Delete("DELETE FROM area_date WHERE adid = #{adid}")
 	Boolean delAreaDate(@Param("adid") Integer adid);
-	
+
 	@Delete("DELETE FROM area_alarm WHERE adid = #{aaid}")
 	Boolean delAreaAlarm(@Param("aaid") Integer aaid);
-	
-	
 
 	@Select("SELECT regid FROM gcm WHERE uid = #{uid}")
 	String getRegid(@Param("uid") Integer uid);
@@ -415,19 +405,17 @@ public interface MybatisMapper {
 
 	@Select("SELECT uid FROM gcm WHERE regid = #{regid}")
 	Integer getUidFromGcm(@Param("regid") String regid);
-	
+
 	@Insert("INSERT INTO gcm (uid, regid, rdate) VALUES(#{uid}, #{regid}, NOW()) ON DUPLICATE KEY UPDATE regid = #{regid}, rdate = NOW()")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "gcmid", before = false, resultType = Integer.class)
 	Boolean updateRegid(@Param("uid") Integer uid, @Param("regid") String regid);
-	
+
 	@Delete("UPDATE gcm SET regid = null WHERE regid = #{regid}")
 	Boolean clearAllRegid(@Param("regid") String regid);
 
 	@Delete("UPDATE gcm SET regid = null WHERE uid = #{uid}")
 	Boolean clearRegid(@Param("uid") Integer uid);
-	
-	
-	
+
 	@Select("SELECT * FROM order_item")
 	ArrayList<OrderItem> getOrderItems();
 
@@ -440,22 +428,9 @@ public interface MybatisMapper {
 	@Select("SELECT * FROM notice ORDER BY nid DESC")
 	ArrayList<Notice> getNotice();
 
-	@Select("SELECT mileage FROM auth_user WHERE uid = #{uid}")
-	Integer getMileage(@Param("uid") Integer uid);
-
-	@Select("SELECT count(*) FROM mileage WHERE uid = #{uid} AND oid = #{oid}")
-	Integer checkMileage(@Param("oid") Integer oid, @Param("uid") Integer uid);
-	
-	@Select("SELECT mileage FROM mileage WHERE oid = #{oid} AND type = 1 LIMIT 1")
-	Integer getMileageByOid(@Param("oid") Integer oid);
-	
 	@Select("SELECT price FROM sale ORDER BY sid DESC LIMIT 1")
 	Integer getSale();
 
-	@Insert("INSERT INTO mileage (uid, oid, type, mileage, rdate) VALUES (#{uid}, #{oid}, #{type}, #{mileage}, NOW())")
-	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "mid", before = false, resultType = Integer.class)	
-	Boolean addUseOfMileage(@Param("uid") Integer uid, @Param("oid") Integer oid, @Param("type") Integer type, @Param("mileage") Integer mileage);
-	
 	@Insert("INSERT INTO auth_user (uid, code, email, phone, mileage, total, user_class, agent, rdate) VALUES (#{uid}, #{code}, #{email}, #{phone}, #{mileage}, #{total}, #{user_class}, #{agent}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "auid", before = false, resultType = Integer.class)
 	Boolean addAuthUser(AuthUser authUser);
@@ -472,7 +447,6 @@ public interface MybatisMapper {
 	@Select("SELECT * FROM auth_user WHERE uid = #{uid}")
 	AuthUser getAuthUser(@Param("uid") Integer uid);
 
-	
 	@Insert("INSERT INTO orders (uid, adrid, phone, address, addr_number, addr_building, addr_remainder, memo, price, payment_method, dropoff_price, pickup_date, dropoff_date, rdate) VALUES(#{uid}, #{adrid}, #{phone}, #{address}, #{addr_number}, #{addr_building}, #{addr_remainder}, #{memo}, #{price}, #{payment_method}, #{dropoff_price}, #{pickup_date}, #{dropoff_date}, NOW())")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "oid", before = false, resultType = Integer.class)
 	Boolean insertOrder(Order order);
@@ -485,20 +459,18 @@ public interface MybatisMapper {
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "cid", before = false, resultType = Integer.class)
 	Boolean generateCode(@Param("value") String value, @Param("uid") Integer uid);
 
-
-	
 	@Select("SELECT rdate FROM code WHERE uid = #{uid}")
 	Date getAuthorizationDate(@Param("uid") Integer uid);
-	
+
 	@Select("SELECT code FROM code WHERE uid = #{uid}")
 	String getAuthorizationCode(@Param("uid") Integer uid);
-	
+
 	@Select("SELECT uid FROM code WHERE code = #{code}")
 	Integer getAuthorizationCodeExist(@Param("code") String code);
 
 	@Delete("DELETE FROM item WHERE oid = #{oid}")
 	Boolean deleteOrderItem(@Param("oid") Integer oid);
-	
+
 	@Update("UPDATE orders SET price = #{price}, dropoff_price = #{dropoff_price} WHERE oid = #{oid}")
 	Boolean updateOrderData(Order order);
 
@@ -508,29 +480,14 @@ public interface MybatisMapper {
 	@Select("SELECT user_class FROM auth_user WHERE uid = #{uid}")
 	Integer getAccumulationRateByUser(@Param("uid") Integer uid);
 
-
 	@Select("SELECT total FROM auth_user WHERE uid = #{uid}")
 	Integer getTotalByUser(@Param("uid") Integer uid);
-	
 
-	@Select("SELECT mileage FROM auth_user WHERE uid = #{uid}")
-	Integer getMileageByUser(@Param("uid") Integer uid);
-	
-
-	@Select("SELECT mileage FROM mileage WHERE oid = #{oid} AND uid = #{uid} AND type = #{type}")
-	Integer selectMileage(@Param("oid") Integer oid, @Param("uid") Integer uid, @Param("type") Integer type);
-
-	
 	@Update("UPDATE auth_user SET total = #{total} WHERE uid = #{uid}")
 	Boolean updateTotalByUser(@Param("uid") Integer uid, @Param("total") int total);
-	
+
 	@Update("UPDATE auth_user SET user_class = #{user_class} WHERE uid = #{uid}")
 	Boolean updateUserClass(@Param("uid") Integer uid, @Param("user_class") int user_class);
-
-
-	
-	@Update("UPDATE auth_user SET mileage = #{mileage} WHERE uid = #{uid}")
-	Boolean updateMileageByUser(@Param("uid") Integer uid, @Param("mileage") int mileage);
 
 	@Select("SELECT COUNT(*) FROM auth_user WHERE email = #{email}")
 	Integer selectEmailAuthUser(@Param("email") String email);
@@ -540,33 +497,28 @@ public interface MybatisMapper {
 
 	@Select("SELECT * FROM district_code")
 	ArrayList<District> getDistricts();
-	
 
 	@Select("SELECT dcid FROM district_code WHERE area = #{dist} LIMIT 1")
 	Integer getDistrictsHolidayDate(@Param("area") String area);
-	
+
 	@Select("SELECT COUNT(*) FROM district_code WHERE city= #{city} AND district = #{district} AND dong is null")
 	Integer isAvailableDistrictWithNull(District object);
 
 	@Select("SELECT COUNT(*) FROM district_code WHERE #{city} = city AND #{district} = district AND #{dong} = dong")
 	Integer isAvailableDistrict(District object);
-	
-
 
 	@Select("SELECT dcid FROM district_code WHERE #{city} = city AND #{district} = district AND dong = #{dong}")
 	Integer getDistrictId(District object);
 
 	@Select("SELECT dcid FROM district_code WHERE #{city} = city AND #{district} = district AND dong is null")
 	Integer getDistrictIdWithNull(District object);
-	
 
 	@Select("SELECT holiday FROM district_date WHERE dcid = #{dcid}")
 	ArrayList<String> getAvailableDistrictDateDatas(@Param("dcid") Integer dcid);
-	
+
 	@Select("SELECT phone FROM district_alarm WHERE dcid = #{dcid}")
 	ArrayList<String> getDistrictPhones(@Param("dcid") Integer dcid);
-	
-	
+
 	@Select("SELECT price FROM orders WHERE oid = #{oid} AND uid = #{uid}")
 	int getOrderPrice(@Param("oid") int oid, @Param("uid") int uid);
 
@@ -583,35 +535,34 @@ public interface MybatisMapper {
 	Integer getDropoffTime(@Param("dropoffTime") String dropoffTime);
 
 	@Insert("INSERT INTO pickuptime_type (datetime, type, rdate) VALUES (#{datetime}, #{type}, NOW())")
-	Boolean addPickupTime(@Param("datetime") String datetime, @Param("type") Integer type);	
+	Boolean addPickupTime(@Param("datetime") String datetime, @Param("type") Integer type);
 
 	@Insert("INSERT INTO dropofftime (datetime, rdate) VALUES (#{datetime}, NOW())")
-	Boolean addDropoffTime(@Param("datetime") String datetime);	
-	
-	
+	Boolean addDropoffTime(@Param("datetime") String datetime);
+
 	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND ( `address` LIKE '%강남%' OR `address` LIKE '%서초%' OR `address` LIKE '%한남동%' OR `address` LIKE '%다산동%' OR `address` LIKE '%장충동%' OR `address` LIKE '%약수동%' OR `address` LIKE '%광희동%' OR `address` LIKE '%황학동%' OR `address` LIKE '%신당동%' OR `address` LIKE '%청구동%' OR `address` LIKE '%흥인동%' OR `address` LIKE '동화동%' OR `address` LIKE '%성동%');")
 	Integer getGangnamPickup(@Param("date") String date);
-	
+
 	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND (`address` LIKE  '%강남%'OR  `address` LIKE  '%서초%'OR  `address` LIKE  '%한남동%'OR  `address` LIKE  '%다산동%'OR  `address` LIKE  '%장충동%'OR  `address` LIKE  '%약수동%'OR  `address` LIKE  '%광희동%'OR  `address` LIKE  '%황학동%'OR  `address` LIKE  '%신당동%'OR  `address` LIKE  '%청구동%'OR  `address` LIKE  '%흥인동%'OR  `address` LIKE  '동화동%' OR  `address` LIKE  '%성동%');")
 	Integer getGangnamDropoff(@Param("date") String date);
-	
+
 	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND (`address` NOT LIKE  '%한남%'AND (`address` LIKE  '%소공동%'OR  `address` LIKE  '%회현동%'OR  `address` LIKE  '%명동%'OR  `address` LIKE  '%필동%'OR  `address` LIKE  '%을지로동%'OR  `address` LIKE  '%신당제5동%'OR  `address` LIKE  '%중림동%'OR  `address` LIKE  '%용산%'OR  `address` LIKE  '%서대문%'OR  `address` LIKE  '%마포%'OR  `address` LIKE  '%영등포%'OR  `address` LIKE  '%동작%'OR  `address` LIKE  '%관악%'));")
 	Integer getGangbukPickup(@Param("date") String date);
-	
+
 	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND (`address` NOT LIKE  '%한남%'AND (`address` LIKE  '%소공동%'OR  `address` LIKE  '%회현동%'OR  `address` LIKE  '%명동%'OR  `address` LIKE  '%필동%'OR  `address` LIKE  '%을지로동%'OR  `address` LIKE  '%신당제5동%'OR  `address` LIKE  '%중림동%'OR  `address` LIKE  '%용산%'OR  `address` LIKE  '%서대문%'OR  `address` LIKE  '%마포%'OR  `address` LIKE  '%영등포%'OR  `address` LIKE  '%동작%'OR  `address` LIKE  '%관악%'));")
 	Integer getGangbukDropoff(@Param("date") String date);
-	
+
 	@Select("SELECT IFNULL( COUNT( oid ) , 0 ) AS data FROM orders WHERE DATE( `pickup_date` ) = #{date} AND ( `address` LIKE  '%성남%');")
 	Integer getBundangPickup(@Param("date") String date);
-	
+
 	@Select("SELECT IFNULL(COUNT(oid), 0) AS data FROM orders WHERE DATE(dropoff_date) = #{date} AND ( `address` LIKE  '%성남%');")
 	Integer getBundangDropoff(@Param("date") String date);
 
-    // 신규
-    @Select("SELECT * FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}" +
-            " AND addr_building LIKE #{addr_building} AND addr_remainder LIKE #{addr_remainder}")
-    ArrayList<Address> isEqualAddressInfo(Address address);
-    
-    @Delete("DELETE FROM address WHERE adrid = #{adrid}")
-    Boolean deleteAddress(@Param("adrid") Integer adrid);
+	// 신규
+	@Select("SELECT * FROM address WHERE uid = #{uid} AND address LIKE #{address} AND addr_number LIKE #{addr_number}"
+			+ " AND addr_building LIKE #{addr_building} AND addr_remainder LIKE #{addr_remainder}")
+	ArrayList<Address> isEqualAddressInfo(Address address);
+
+	@Delete("DELETE FROM address WHERE adrid = #{adrid}")
+	Boolean deleteAddress(@Param("adrid") Integer adrid);
 }
