@@ -75,6 +75,7 @@ public class MileageDao {
 
 	public Promotion getPromotionByCode(String code) {
 		ArrayList<Promotion> result = mileageMapper.getPromotionByCode(code);
+		System.out.println(result.get(0).getCode());
 		if (result.size() > 0 && result != null) {
 			return result.get(0);
 		}
