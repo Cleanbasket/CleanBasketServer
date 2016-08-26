@@ -1,11 +1,15 @@
 package com.bridge4biz.wash.mybatis;
 
+import java.util.ArrayList;
+
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
+
+import com.bridge4biz.wash.service.Promotion;
 
 public interface MileageMapper {
 
@@ -35,4 +39,13 @@ public interface MileageMapper {
 	@Delete("DELETE FROM mileage WHERE oid = #{oid} AND uid = #{uid} AND type = #{type}")
 	Boolean deleteMileageUsedCancel(@Param("oid") Integer oid, @Param("uid") Integer uid, @Param("type") Integer type);
 
+	@Select("SELECT * from promotion WHERE code = #{code}")
+	ArrayList<Promotion>  getPromotionByCode(@Param("code") String code);
+	
+	@Select("SELECT count(*) FROM promotion_result WHERE uid = #{uid} AND promotion_id = #{promotion_id}")
+	Integer checkPromotion(@Param("uid") Integer uid, @Param("promotion_id") Integer promotionId);
+	
+	@Insert("INSERT INTO promotion_result (uid, promotion_id, used, enable) VALUES(#{uid}, #{promotion_id}, 1, 0)") 
+	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "prid", before = false, resultType = Integer.class)
+	Boolean addPromotionResult(@Param("uid") Integer uid, @Param("promotion_id") Integer promotionId);
 }

@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import com.bridge4biz.wash.data.ItemData;
-import com.bridge4biz.wash.service.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
