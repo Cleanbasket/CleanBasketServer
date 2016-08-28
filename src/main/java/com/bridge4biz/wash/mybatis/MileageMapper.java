@@ -39,8 +39,8 @@ public interface MileageMapper {
 	@Delete("DELETE FROM mileage WHERE oid = #{oid} AND uid = #{uid} AND type = #{type}")
 	Boolean deleteMileageUsedCancel(@Param("oid") Integer oid, @Param("uid") Integer uid, @Param("type") Integer type);
 
-	@Select("SELECT count(*) from promotion WHERE code = #{code}")
-	Integer  getPromotionByCode(@Param("code") String code);
+	@Select("SELECT * from promotion WHERE code = #{code}")
+	ArrayList<Promotion>  getPromotionByCode(@Param("code") String code);
 	
 	@Select("SELECT count(*) FROM promotion_result WHERE uid = #{uid} AND promotion_id = #{promotion_id}")
 	Integer checkPromotion(@Param("uid") Integer uid, @Param("promotion_id") Integer promotionId);

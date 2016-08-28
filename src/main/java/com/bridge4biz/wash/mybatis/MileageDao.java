@@ -1,7 +1,7 @@
 package com.bridge4biz.wash.mybatis;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -10,7 +10,6 @@ import com.bridge4biz.wash.service.Promotion;
 public class MileageDao {
 	private MileageMapper mileageMapper;
 	private MybatisMapper mapper;
-	private static final Logger log = LoggerFactory.getLogger(MileageDao.class);		
 
 	public MileageDao() {
 
@@ -75,10 +74,10 @@ public class MileageDao {
 	}
 
 	public Promotion getPromotionByCode(String code) {
-		log.debug("CODE : " + code);
-		int result = mileageMapper.getPromotionByCode(code);
-		log.debug(result + "");
-		
+		ArrayList<Promotion> result = mileageMapper.getPromotionByCode(code);
+		if (result.size() > 0 && result != null) {
+			return result.get(0);
+		}
 		return null;
 	}
 	
