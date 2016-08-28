@@ -75,6 +75,7 @@ public class MileageDao {
 	}
 
 	public Promotion getPromotionByCode(String code) {
+		log.debug("CODE : " + code);
 		int result = mileageMapper.getPromotionByCode(code);
 		log.debug(result + "");
 		
