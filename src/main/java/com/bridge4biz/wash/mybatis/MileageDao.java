@@ -1,7 +1,5 @@
 package com.bridge4biz.wash.mybatis;
 
-import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -74,10 +72,10 @@ public class MileageDao {
 	}
 
 	public Promotion getPromotionByCode(String code) {
-		ArrayList<Promotion> result = mileageMapper.getPromotionByCode(code);
-		System.out.println(result.get(0).getCode());
-		if (result.size() > 0 && result != null) {
-			return result.get(0);
+		Promotion result = mileageMapper.getPromotionByCode(code);
+		System.out.println(result.getCode());
+		if (result != null) {
+			return result;
 		}
 		return null;
 	}
