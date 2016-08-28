@@ -39,6 +39,13 @@
 		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.MybatisMapper" />
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
+	
+	<bean id="mileageDao" class="com.bridge4biz.wash.mybatis.MileageDao" />
+
+	<bean id="mileageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.MileageMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
 
 	<bean id="dao" class="com.bridge4biz.wash.mybatis.MybatisDAO" />
 
@@ -68,10 +75,5 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 
-	<bean id="mileageDao" class="com.bridge4biz.wash.mybatis.MileageDao" />
-
-	<bean id="mileageMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.MileageMapper" />
-		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
-	</bean>
+	
 </beans>

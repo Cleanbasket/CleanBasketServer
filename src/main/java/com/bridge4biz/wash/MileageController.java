@@ -23,8 +23,8 @@ public class MileageController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/member/promotion/add")
 	@ResponseBody
-	public Constant addPromotionCode(@RequestBody String promotionCode, Authentication auth, Constant constant) {
-		Promotion promotion = mileageDao.getPromotionByCode(promotionCode);
+	public Constant addPromotionCode(@RequestBody String code, Authentication auth, Constant constant) {
+		Promotion promotion = mileageDao.getPromotionByCode(code);
 		int uid = dao.getUid(auth.getName());
 		if (promotion == null) {
 			return constant.setConstant(Constant.ERROR, "존재하지 않는 프로모션입니다.");
