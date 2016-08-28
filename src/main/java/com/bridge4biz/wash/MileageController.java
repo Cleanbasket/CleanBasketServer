@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bridge4biz.wash.mybatis.MileageDao;
@@ -23,8 +24,9 @@ public class MileageController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/member/promotion/add")
 	@ResponseBody
-	public Constant addPromotionCode(@RequestBody String code, Authentication auth, Constant constant) {
+	public Constant addPromotionCode(@RequestParam String code, Authentication auth, Constant constant) {
 		Promotion promotion = mileageDao.getPromotionByCode(code);
+		
 		int uid = dao.getUid(auth.getName());
 		if (promotion == null) {
 			return constant.setConstant(Constant.ERROR, "존재하지 않는 프로모션입니다.");
