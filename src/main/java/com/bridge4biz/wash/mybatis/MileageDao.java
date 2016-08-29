@@ -82,10 +82,10 @@ public class MileageDao {
 		return null;
 	}
 	
-	public ArrayList<PromotionResult> getPromotionResultsByUid(Integer uid) {
-		ArrayList<PromotionResult> promotionResults = mileageMapper.getPromotionResultsByUid(uid);
-		if (promotionResults.size() > 0 && promotionResults != null) {
-			return promotionResults;
+	public ArrayList<Promotion> getPromotionsByUid(Integer uid) {
+		ArrayList<Promotion> promotions = mileageMapper.getPromotionsByUid(uid);
+		if (promotions.size() > 0 && promotions != null) {
+			return promotions;
 		}
 		return null;
 	}

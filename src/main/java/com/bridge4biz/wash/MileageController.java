@@ -48,12 +48,12 @@ public class MileageController {
 	@ResponseBody
 	public Constant getPromotionResults(Authentication auth, Gson gson, Constant constant) {
 		int uid = dao.getUid(auth.getName());
-		ArrayList<PromotionResult> promotionResults = mileageDao.getPromotionResultsByUid(uid);
+		ArrayList<Promotion> promotions = mileageDao.getPromotionsByUid(uid);
 		
-		if(promotionResults == null) {
+		if(promotions == null) {
 			return constant.setConstant(Constant.ERROR, "등록된 프로모션 코드가 없습니다.");
 		}else {
-			return constant.setConstant(Constant.SUCCESS, "프로모션 코드 가져오기 성공.", gson.toJson(promotionResults));
+			return constant.setConstant(Constant.SUCCESS, "프로모션 코드 가져오기 성공.", gson.toJson(promotions));
 		}	
 	}
 
