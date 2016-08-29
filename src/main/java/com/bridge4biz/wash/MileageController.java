@@ -1,9 +1,10 @@
 package com.bridge4biz.wash;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.bridge4biz.wash.mybatis.MileageDao;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.service.Promotion;
+import com.bridge4biz.wash.service.PromotionResult;
 import com.bridge4biz.wash.util.Constant;
+import com.google.gson.Gson;
 
 @Controller
 public class MileageController {
@@ -39,6 +42,19 @@ public class MileageController {
 			mileageDao.addPromotionResult(uid, promotion.getPromotion_id());
 			return constant.setConstant(Constant.SUCCESS, "프로모션 코드 등록 성공");
 		}
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/member/promotion")
+	@ResponseBody
+	public Constant getPromotionResults(Authentication auth, Gson gson, Constant constant) {
+		int uid = dao.getUid(auth.getName());
+		ArrayList<PromotionResult> promotionResults = mileageDao.getPromotionResultsByUid(uid);
+		
+		if(promotionResults == null) {
+			return constant.setConstant(Constant.ERROR, "등록된 프로모션 코드가 없습니다.");
+		}else {
+			return constant.setConstant(Constant.SUCCESS, "프로모션 코드 가져오기 성공.", gson.toJson(promotionResults));
+		}	
 	}
 
 }

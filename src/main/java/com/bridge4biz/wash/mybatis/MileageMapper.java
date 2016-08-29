@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.SelectKey;
 import org.apache.ibatis.annotations.Update;
 
 import com.bridge4biz.wash.service.Promotion;
+import com.bridge4biz.wash.service.PromotionResult;
 
 public interface MileageMapper {
 
@@ -41,6 +42,9 @@ public interface MileageMapper {
 
 	@Select("SELECT * from promotion WHERE code = #{code}")
 	ArrayList<Promotion>  getPromotionByCode(@Param("code") String code);
+	
+	@Select("SELECT * from promotion_result WHERE uid = #{uid}")
+	ArrayList<PromotionResult> getPromotionResultsByUid(@Param("uid")Integer uid); 
 	
 	@Select("SELECT count(*) FROM promotion_result WHERE uid = #{uid} AND promotion_id = #{promotion_id}")
 	Integer checkPromotion(@Param("uid") Integer uid, @Param("promotion_id") Integer promotionId);

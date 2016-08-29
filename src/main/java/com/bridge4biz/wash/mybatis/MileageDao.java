@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.bridge4biz.wash.service.Promotion;
+import com.bridge4biz.wash.service.PromotionResult;
 
 public class MileageDao {
 	private MileageMapper mileageMapper;
@@ -77,6 +78,14 @@ public class MileageDao {
 		ArrayList<Promotion> result = mileageMapper.getPromotionByCode(code);
 		if (result.size() > 0 && result != null) {
 			return result.get(0);
+		}
+		return null;
+	}
+	
+	public ArrayList<PromotionResult> getPromotionResultsByUid(Integer uid) {
+		ArrayList<PromotionResult> promotionResults = mileageMapper.getPromotionResultsByUid(uid);
+		if (promotionResults.size() > 0 && promotionResults != null) {
+			return promotionResults;
 		}
 		return null;
 	}
