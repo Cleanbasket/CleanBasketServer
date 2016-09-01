@@ -369,7 +369,7 @@ public class MemberContoller {
 	@RequestMapping(method=RequestMethod.GET, value = "/user")
 	@ResponseBody
 	public Constant getMember(Constant constant, Authentication auth, Gson gson) {
-		return constant.setConstant(Constant.SUCCESS, "인증회원 정보 가져오기 성공 : SUCCESS", gson.toJson(dao.isAuthUser(dao.getUid(auth.getName()))));
+		return constant.setConstant(Constant.SUCCESS, "인증회원 정보 가져오기 성공 : SUCCESS", gson.toJson(dao.getAuthUser(dao.getUid(auth.getName()))));
 	}
 	
 	@Secured("ROLE_MEMBER")

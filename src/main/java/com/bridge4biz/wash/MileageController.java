@@ -37,7 +37,7 @@ public class MileageController {
 		} else if (mileageDao.isPromotionAlreadyUse(uid, promotion.getPromotion_id())){
 			return constant.setConstant(Constant.IMPOSSIBLE, "이미 사용한 코드입니다.");
 		}else {
-			int nowMileage = mileageDao.getMileageByUid(uid);
+			int nowMileage = mileageDao.getMileage(uid);
 			int promotionMileage = promotion.getMileage();
 			mileageDao.updateMileage(uid, nowMileage + promotionMileage); 
 			mileageDao.addPromotionResult(uid, promotion.getPromotion_id());

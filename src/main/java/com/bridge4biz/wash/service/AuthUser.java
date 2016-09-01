@@ -10,4 +10,12 @@ public class AuthUser {
 	public int total = 0;
 	public int user_class = 0;
 	public String agent = "";
+	
+	public AuthUser(){}
+	
+	public AuthUser(int uid, String email, String phone){
+		this.uid = uid;
+		this.email = email;
+		this.phone = phone;
+	}
 }

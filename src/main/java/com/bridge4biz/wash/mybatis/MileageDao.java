@@ -42,7 +42,14 @@ public class MileageDao {
 		mileageMapper.updateMileageByUser(uid, totalMileage - mileage);
 	}
 
-	public int getMileageByUid(int uid) {
+	public Integer getMileage(int uid) {
+		if (mapper.isAuthUser(uid) == 0)
+			return 0;
+
+		return getMileageByUid(uid);
+	}
+	
+	private int getMileageByUid(int uid) {
 		return mileageMapper.getMileage(uid);
 	}
 

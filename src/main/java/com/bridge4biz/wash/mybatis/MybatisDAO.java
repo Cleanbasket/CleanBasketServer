@@ -610,7 +610,7 @@ public class MybatisDAO {
 			}
 
 			if (mapper.isAuthUser(uid) > 0) {
-				if (mileage > mileageDao.getMileageByUid(uid))
+				if (mileage > mileageDao.getMileage(uid))
 					return false;
 			}
 
@@ -643,7 +643,7 @@ public class MybatisDAO {
 			} else {
 
 				int addMileage = mileageDao.getMileageFromOrder(orderData.oid, uid, 1);
-				int totalMileage = mileageDao.getMileageByUid(uid);
+				int totalMileage = mileageDao.getMileage(uid);
 				// Logic에서 버그 발견
 				mileageDao.updateMileage(uid, totalMileage - addMileage);
 				mileageDao.deleteMileageByOrderCancel(orderData.oid, uid, 1);
@@ -674,7 +674,7 @@ public class MybatisDAO {
 				return Constant.IMPOSSIBLE;
 			} else {
 				int addMileage = mileageDao.getMileageFromOrder(orderData.oid, uid, 1);
-				int totalMileage = mileageDao.getMileageByUid(uid);
+				int totalMileage = mileageDao.getMileage(uid);
 				mileageDao.updateMileage(uid, totalMileage - addMileage);
 				mileageDao.deleteMileageByOrderCancel(orderData.oid, uid, 1);
 
@@ -758,13 +758,6 @@ public class MybatisDAO {
 		itemInfo.orderItems = mapper.getItemCode();
 
 		return itemInfo;
-	}
-
-	public Integer getMileage(int uid) {
-		if (mapper.isAuthUser(uid) == 0)
-			return 0;
-
-		return mileageDao.getMileageByUid(uid);
 	}
 
 	public ArrayList<Coupon> getAvailableCoupon(Integer uid) {
@@ -1323,8 +1316,12 @@ public class MybatisDAO {
 		}
 	}
 
-	public AuthUser isAuthUser(Integer uid) {
+	public AuthUser getAuthUser(Integer uid) {
 		return mapper.getAuthUser(uid);
+	}
+	
+	public Boolean isAuthUser(Integer uid) {
+		return mapper.isAuthUser(uid) == 1;
 	}
 
 	public Integer addRate(Feedback feedback, Integer uid) {
