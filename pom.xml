@@ -234,6 +234,13 @@
 			<version>0.9.14</version>
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/nicepay-lite-0.9.14.jar</systemPath>
 		</dependency>
+
+		<!-- FireBase -->
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-server-sdk</artifactId>
+			<version>[3.0.0,)</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -286,7 +293,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.3</version>
-				<configuration>				
+				<configuration>
 					<warSourceDirectory>${basedir}/src/main/webapp</warSourceDirectory>
 					<webResources>
 						<webResource>
