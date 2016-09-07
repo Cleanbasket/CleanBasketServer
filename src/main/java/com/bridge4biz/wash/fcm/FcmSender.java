@@ -52,7 +52,7 @@ public class FcmSender {
 
 	private InputStream getAccountJSON() {
 		try {
-			return new ClassPathResource("CleanBasketPush-411875c193ab.json").getInputStream();
+			return new ClassPathResource("CleanBasketAndroid-77612746bd5d.json").getInputStream();
 		} catch (Exception e) {
 			return null;
 		}
