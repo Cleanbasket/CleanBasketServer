@@ -46,6 +46,9 @@ import com.google.gson.Gson;
 public class DelivererController {
 	@Autowired
 	private MybatisDAO dao;
+	
+	@Autowired
+	private FcmDAO fcmDAO;
 
 	@Autowired
 	private PaymentDAO paymentDao;
@@ -104,7 +107,6 @@ public class DelivererController {
 		Integer uid = dao.getUid(auth.getName());
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			FcmDAO fcmDAO = new FcmDAO();
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 //			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
@@ -145,7 +147,6 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
-			FcmDAO fcmDAO = new FcmDAO();
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
