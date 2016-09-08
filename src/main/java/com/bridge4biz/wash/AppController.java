@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.bridge4biz.wash.data.UserData;
+import com.bridge4biz.wash.mybatis.MileageDao;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
@@ -53,7 +54,8 @@ public class AppController {
 	@RequestMapping(method=RequestMethod.GET, value = "/mileage")
 	@ResponseBody
 	public Constant getMileage(Constant constant, Gson gson, Authentication auth) {
-		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(dao.getMileage(dao.getUid(auth.getName()))));		
+		MileageDao mileageDao = new MileageDao();
+		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(mileageDao.getMileage(dao.getUid(auth.getName()))));		
 	}
 	
 	@Secured("ROLE_MEMBER")
