@@ -38,13 +38,21 @@ import com.google.firebase.FirebaseOptions;
 
 public class FcmSender {
 
+	private static FcmSender fcmSender;
+	
 	private static final String key = "AIzaSyCLPofmWdWaeL_5icJrSE-QCLIHK9gHRgc";
 	protected final Random random = new Random();
 	
 	protected static final Logger logger = Logger.getLogger(FcmSender.class.getName());
 
+	public static FcmSender getInstance() {
+		if(fcmSender == null) {
+			fcmSender = new FcmSender();
+		}
+		return fcmSender;
+	}
 
-	public FcmSender() {
+	private FcmSender() {
 		FirebaseOptions options = new FirebaseOptions.Builder().setServiceAccount(getAccountJSON())
 				.setDatabaseUrl("https://project-561258547352407813.firebaseio.com/").build();
 		FirebaseApp.initializeApp(options);

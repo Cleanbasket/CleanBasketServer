@@ -14,7 +14,7 @@ public class FcmPushMessage {
 	private static final Logger log = LoggerFactory.getLogger(FcmPushMessage.class);
 
 	public static void addPush(String msg, String regId) {
-		FcmSender sender = new FcmSender();
+		FcmSender sender = FcmSender.getInstance();
 
 		Message message = new Message.Builder().addData("title", "테스트 입니다.").addData("text", msg).build();
 		List<String> list = new ArrayList<String>();
@@ -28,11 +28,12 @@ public class FcmPushMessage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void sendGradeNotification(String regId) {
-		FcmSender sender = new FcmSender();
-		
-		Message message = new Message.Builder().addData("title", "서비스를 평가해 주세요.").addData("text", "크린파트너를 평가해 주세요.").addData("type","Grade").build();
+		FcmSender sender = FcmSender.getInstance();
+
+		Message message = new Message.Builder().addData("title", "서비스를 평가해 주세요.").addData("text", "크린파트너를 평가해 주세요.")
+				.addData("type", "Grade").build();
 		List<String> list = new ArrayList<String>();
 		list.add(regId);
 		Result result;
