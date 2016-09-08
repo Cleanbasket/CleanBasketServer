@@ -34,6 +34,9 @@ public class AppController {
 
 	@Autowired
 	private MybatisDAO dao;
+	
+	@Autowired
+	private MileageDao mileageDao;
 
 	@Autowired
 	private EmailService emailService;
@@ -54,7 +57,6 @@ public class AppController {
 	@RequestMapping(method=RequestMethod.GET, value = "/mileage")
 	@ResponseBody
 	public Constant getMileage(Constant constant, Gson gson, Authentication auth) {
-		MileageDao mileageDao = new MileageDao();
 		return constant.setConstant(Constant.SUCCESS, "", gson.toJson(mileageDao.getMileage(dao.getUid(auth.getName()))));		
 	}
 	
