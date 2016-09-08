@@ -51,7 +51,7 @@ public class FcmDAO {
 		return true;
 	}
 
-	public String getRegid(Integer uid) {
+	public Integer getRegid(Integer uid) {
 		return fcmMapper.getRegid(uid);
 	}
 }
