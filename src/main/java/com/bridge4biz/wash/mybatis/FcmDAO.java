@@ -18,7 +18,7 @@ public class FcmDAO {
 	
 	public Boolean updateRegid(Integer uid, String regid) {
 		try {
-			if(fcmMapper.getRegid(uid) == null){
+			if(fcmMapper.getRegid(uid) == 0){
 				fcmMapper.updateRegid(uid, regid);
 			}else {
 				fcmMapper.clearRegid(uid);

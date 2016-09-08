@@ -46,7 +46,7 @@ public class FcmSender {
 
 	public FcmSender() {
 		FirebaseOptions options = new FirebaseOptions.Builder().setServiceAccount(getAccountJSON())
-				.setDatabaseUrl("https://cleanbasketpush.firebaseio.com/").build();
+				.setDatabaseUrl("https://project-561258547352407813.firebaseio.com/").build();
 		FirebaseApp.initializeApp(options);
 	}
 
