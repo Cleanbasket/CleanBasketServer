@@ -8,8 +8,11 @@ import org.apache.ibatis.annotations.SelectKey;
 
 public interface FcmMapper {
 
+	@Select("SELECT regid FROM fcm WHERE uid = #{uid}")
+	String getRegid(@Param("uid") Integer uid);
+	
 	@Select("SELECT COUNT(*) FROM fcm WHERE uid = #{uid}")
-	Integer getRegid(@Param("uid") Integer uid);
+	Integer getRegIdCountByUid(@Param("uid") Integer uid);
 
 	@Select("SELECT COUNT(*) FROM fcm WHERE regid = #{regid}")
 	Integer getCanonicalRegidCount(@Param("regid") String canonicalRegId);
