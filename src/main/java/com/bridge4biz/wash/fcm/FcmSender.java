@@ -1,6 +1,6 @@
 package com.bridge4biz.wash.fcm;
 
-import static com.bridge4biz.wash.gcm.Constants.GCM_SEND_ENDPOINT;
+import static com.bridge4biz.wash.gcm.Constants.FCM_SEND_ENDPOINT;
 import static com.bridge4biz.wash.gcm.Constants.PARAM_COLLAPSE_KEY;
 import static com.bridge4biz.wash.gcm.Constants.PARAM_DELAY_WHILE_IDLE;
 import static com.bridge4biz.wash.gcm.Constants.PARAM_DRY_RUN;
@@ -118,14 +118,14 @@ public class FcmSender {
 		HttpURLConnection conn;
 		int status;
 		try {
-			conn = post(GCM_SEND_ENDPOINT, requestBody);
+			conn = post(FCM_SEND_ENDPOINT, requestBody);
 			status = conn.getResponseCode();
 		} catch (IOException e) {
-			logger.log(Level.FINE, "IOException posting to GCM", e);
+			logger.log(Level.FINE, "IOException posting to FCM", e);
 			return null;
 		}
 		if (status / 100 == 5) {
-			logger.fine("GCM service is unavailable (status " + status + ")");
+			logger.fine("FCM service is unavailable (status " + status + ")");
 			return null;
 		}
 		String responseBody;
@@ -152,7 +152,7 @@ public class FcmSender {
 		}
 		String[] lines = responseBody.split("\n");
 		if (lines.length == 0 || lines[0].equals("")) {
-			throw new IOException("Received empty response from GCM service.");
+			throw new IOException("Received empty response from FCM service.");
 		}
 		String firstLine = lines[0];
 		String[] responseParts = split(firstLine);
@@ -169,7 +169,7 @@ public class FcmSender {
 				if (token.equals(TOKEN_CANONICAL_REG_ID)) {
 					builder.canonicalRegistrationId(value);
 				} else {
-					logger.warning("Invalid response from GCM: " + responseBody);
+					logger.warning("Invalid response from FCM: " + responseBody);
 				}
 			}
 			Result result = builder.build();
@@ -180,7 +180,7 @@ public class FcmSender {
 		} else if (token.equals(TOKEN_ERROR)) {
 			return new Result.Builder().errorCode(value).build();
 		} else {
-			throw new IOException("Invalid response from GCM: " + responseBody);
+			throw new IOException("Invalid response from FCM: " + responseBody);
 		}
 	}
 	
@@ -251,7 +251,7 @@ public class FcmSender {
 	private String[] split(String line) throws IOException {
 		String[] split = line.split("=", 2);
 		if (split.length != 2) {
-			throw new IOException("Received invalid response line from GCM: " + line);
+			throw new IOException("Received invalid response line from FCM: " + line);
 		}
 		return split;
 	}

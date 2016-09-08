@@ -33,7 +33,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.bridge4biz.wash.data.DropoffStateData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
+import com.bridge4biz.wash.fcm.FcmPushMessage;
 import com.bridge4biz.wash.mybatis.DelivererDAO;
+import com.bridge4biz.wash.mybatis.FcmDAO;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
@@ -99,8 +101,11 @@ public class DelivererController {
 	@RequestMapping(value = "/pickup/complete")
 	@ResponseBody
 	public Constant delivererPickupComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
+		Integer uid = dao.getUid(auth.getName());
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
+			FcmDAO fcmDAO = new FcmDAO();
+			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 //			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
@@ -140,6 +145,8 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
+			FcmDAO fcmDAO = new FcmDAO();
+			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
 			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");
