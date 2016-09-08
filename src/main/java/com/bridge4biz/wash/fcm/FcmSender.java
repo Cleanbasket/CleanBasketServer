@@ -54,6 +54,7 @@ public class FcmSender {
 		try {
 			return new ClassPathResource("CleanBasketAndroid-77612746bd5d.json").getInputStream();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}
