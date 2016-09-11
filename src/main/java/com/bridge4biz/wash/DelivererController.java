@@ -18,6 +18,8 @@ import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -44,6 +46,8 @@ import com.google.gson.Gson;
 @Controller
 @RequestMapping(value = "/deliverer")
 public class DelivererController {
+	private static final Logger log = LoggerFactory.getLogger(DelivererController.class);
+	
 	@Autowired
 	private MybatisDAO dao;
 	
@@ -147,6 +151,8 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
+			String regid = fcmDAO.getRegid(uid);
+			log.debug("REGID : " +regid);
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
