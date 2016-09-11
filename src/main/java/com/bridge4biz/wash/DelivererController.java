@@ -152,7 +152,7 @@ public class DelivererController {
 		
 		if (success && value == Constant.SUCCESS) {
 			String regid = fcmDAO.getRegid(uid);
-			log.debug("REGID : " +regid);
+			log.debug("REGID : " +regid + "\n UID :" +uid);
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
