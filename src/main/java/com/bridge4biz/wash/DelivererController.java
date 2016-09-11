@@ -109,6 +109,7 @@ public class DelivererController {
 	@ResponseBody
 	public Constant delivererPickupComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
 		Integer uid = dao.getUid(auth.getName());
+	
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
@@ -151,7 +152,7 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
-			String regid = fcmDAO.getRegid(uid);
+			String regid = fcmDAO.getRegid(order.uid);
 			log.debug("REGID : " +regid + "\n UID :" +uid);
 			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
