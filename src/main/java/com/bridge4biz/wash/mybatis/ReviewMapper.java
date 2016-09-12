@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.SelectKey;
 
 public interface ReviewMapper {
 	
-	@Insert("INSERT INTO feedback(uid, oid, rate, kindness, memo) VALUES(#{uid}, #{oid}, #{rate}, #{kindness}, #{memo})")
+	@Insert("INSERT INTO feedback(uid, oid, rate, kindness, memo, rdate, time, quality) VALUES(#{uid}, #{oid}, #{rate}, #{kindness}, #{memo}, NOW(), 0, 0)")
 	@SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "fid", before = false, resultType = Integer.class)	
 	Boolean addReview(@Param("uid") int uid, @Param("oid") int oid, @Param("rate") int rate, @Param("kindness") int kindness, @Param("memo") String memo);
 
