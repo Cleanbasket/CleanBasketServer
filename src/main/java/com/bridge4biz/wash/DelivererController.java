@@ -120,6 +120,7 @@ public class DelivererController {
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
+				log.info("수거 완료 노티 보내기 to :" + fcmRegId);
 				FcmPushMessage.sendGradeNotification(fcmRegId);
 			}
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
@@ -165,6 +166,7 @@ public class DelivererController {
 
 		if (success && value == Constant.SUCCESS) {
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
+				log.info("배달 완료 노티 보내기 to :" + fcmRegId);
 				FcmPushMessage.sendGradeNotification(fcmRegId);
 			}
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
