@@ -119,8 +119,6 @@ public class DelivererController {
 
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			log.info("ClientUid :" + clientUid);
-			log.info("fcmRegId :" + fcmRegId);
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
 				log.info("수거 완료 노티 보내기 to :" + fcmRegId);
 				FcmPushMessage.sendGradeNotification(fcmRegId);
@@ -167,8 +165,7 @@ public class DelivererController {
 		}
 
 		if (success && value == Constant.SUCCESS) {
-			log.info("ClientUid :" + clientUid);
-			log.info("fcmRegId :" + fcmRegId);
+		
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
 				log.info("배달 완료 노티 보내기 to :" + fcmRegId);
 				FcmPushMessage.sendGradeNotification(fcmRegId);

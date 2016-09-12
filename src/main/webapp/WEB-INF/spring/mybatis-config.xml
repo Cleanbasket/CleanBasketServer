@@ -81,6 +81,15 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	
+	<bean id="reviewMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.bridge4biz.wash.mybatis.ReviewMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<bean id="reviewDao" class="com.bridge4biz.wash.mybatis.ReviewDAO" />
+
+	
 
 
 </beans>
