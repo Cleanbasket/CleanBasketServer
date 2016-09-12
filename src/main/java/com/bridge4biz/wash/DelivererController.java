@@ -108,12 +108,11 @@ public class DelivererController {
 	@RequestMapping(value = "/pickup/complete")
 	@ResponseBody
 	public Constant delivererPickupComplete(Constant constant, Authentication auth, @RequestBody Map<String, String> data) {
-		Integer uid = dao.getUid(auth.getName());
+		Integer clientUid = dao.getUidByOid(data.get("oid"));
 	
 		Boolean success = dao.updatePickupRequestComplete(Integer.parseInt(data.get("oid")), data.get("note"));
 		if (success) {
-			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(uid));
-//			SocketIO.broadCast(new PushMessage(Constant.PUSH_PICKUP_COMPLETE, 0, Integer.parseInt(data.get("oid"))));
+			FcmPushMessage.sendGradeNotification(fcmDAO.getRegid(clientUid));
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
 			return constant.setConstant(Constant.ERROR, "수거완료 처리 실패 : ERROR");
@@ -137,6 +136,7 @@ public class DelivererController {
 		Integer price = order.price;
 		Integer value = null;
 		String gson_test = null;
+		Integer clientUid = dao.getUidByOid(order.oid);
 		
 		if (order.payment_method != null) {
 			payment_method = order.payment_method;
@@ -152,8 +152,9 @@ public class DelivererController {
 		}
 		
 		if (success && value == Constant.SUCCESS) {
-			String regid = fcmDAO.getRegid(order.uid);
-			log.debug("REGID : " +regid + "\n UID :" + order.uid);
+			
+			String regid = fcmDAO.getRegid(clientUid);
+			log.debug("REGID : " +regid + "\n UID :" + clientUid);
 			FcmPushMessage.sendGradeNotification(regid);
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {

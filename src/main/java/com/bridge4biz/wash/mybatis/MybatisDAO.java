@@ -1515,4 +1515,12 @@ public class MybatisDAO {
 		} else
 			return -1;
 	}
+	
+	public Integer getUidByOid(Integer oid) {
+		return mapper.getUidByOid(oid);
+	}
+	
+	public Integer getUidByOid(String oid) {
+		return mapper.getUidByOid(Integer.parseInt(oid));
+	}
 }

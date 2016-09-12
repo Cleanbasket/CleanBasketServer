@@ -565,4 +565,7 @@ public interface MybatisMapper {
 
 	@Delete("DELETE FROM address WHERE adrid = #{adrid}")
 	Boolean deleteAddress(@Param("adrid") Integer adrid);
+	
+	@Select("SELECT uid FROM orders WHERE oid = #{oid}")
+	Integer getUidByOid(@Param("oid") Integer oid);
 }
