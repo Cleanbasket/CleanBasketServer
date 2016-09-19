@@ -29,11 +29,11 @@ public class FcmPushMessage {
 		}
 	}
 
-	public static void sendGradeNotification(String regId) {
+	public static void sendGradeNotification(String oid, String regId, String type) {
 		FcmSender sender = FcmSender.getInstance();
 
 		Message message = new Message.Builder().addData("title", "서비스를 평가해 주세요.").addData("text", "크린파트너를 평가해 주세요.")
-				.addData("type", "Grade").build();
+				.addData("type", type).addData("oid", oid).build();
 		List<String> list = new ArrayList<String>();
 		list.add(regId);
 		Result result;
