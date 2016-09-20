@@ -13,9 +13,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.bridge4biz.wash.data.ItemData;
-import com.bridge4biz.wash.mybatis.PaymentDAO;
-import com.fasterxml.jackson.core.json.UTF8JsonGenerator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -33,12 +30,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bridge4biz.wash.data.DropoffStateData;
+import com.bridge4biz.wash.data.ItemData;
 import com.bridge4biz.wash.data.PickupStateData;
 import com.bridge4biz.wash.data.UserData;
 import com.bridge4biz.wash.fcm.FcmPushMessage;
 import com.bridge4biz.wash.mybatis.DelivererDAO;
 import com.bridge4biz.wash.mybatis.FcmDAO;
 import com.bridge4biz.wash.mybatis.MybatisDAO;
+import com.bridge4biz.wash.mybatis.PaymentDAO;
 import com.bridge4biz.wash.service.Order;
 import com.bridge4biz.wash.util.Constant;
 import com.google.gson.Gson;
@@ -121,7 +120,7 @@ public class DelivererController {
 		if (success) {
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
 				log.info("수거 완료 노티 보내기 to :" + fcmRegId);
-				FcmPushMessage.sendGradeNotification(data.get("oid"),fcmRegId,"pickUp");
+				FcmPushMessage.sendGradeNotification(data.get("oid"), fcmRegId, "pickUp");
 			}
 			return constant.setConstant(Constant.SUCCESS, "수거완료 처리 성공 : SUCCESS");
 		} else {
@@ -165,10 +164,10 @@ public class DelivererController {
 		}
 
 		if (success && value == Constant.SUCCESS) {
-		
+
 			if (fcmRegId != null && !fcmRegId.isEmpty()) {
 				log.info("배달 완료 노티 보내기 to :" + fcmRegId);
-				FcmPushMessage.sendGradeNotification("" + order.oid,fcmRegId,"dropOff");
+				FcmPushMessage.sendGradeNotification("" + order.oid, fcmRegId, "dropOff");
 			}
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
