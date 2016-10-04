@@ -41,12 +41,22 @@ public class PaymentDAO {
 	
 	public PaymentResult getPaymentInfo(Integer uid) {
 		PaymentResult payment = paymentMapper.getPaymentInfo(uid);
-		
+
 		if (payment == null) {
 			payment = new PaymentResult("", "", "", "");
 		}
-		
-		return payment; 
+
+		return payment;
+	}
+
+	public PaymentResult getPaymentInfo_send(Integer uid) {
+		PaymentResult payment = paymentMapper.getPaymentInfo(uid);
+
+		if (payment == null) {
+			payment = new PaymentResult("null", "null", "null", "null");
+		}
+
+		return payment;
 	}
 	
 	public PaymentResult addPayment(int uid, PaymentData paymentData) { 

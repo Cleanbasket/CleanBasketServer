@@ -13,6 +13,10 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bridge4biz.wash.service.Item;
+import com.bridge4biz.wash.service.PaymentTriggerResult;
+import com.bridge4biz.wash.sms.SendSMS;
+import com.bridge4biz.wash.sms.Set;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -152,11 +156,21 @@ public class DelivererController {
 
 		if (order.payment_method != null) {
 			payment_method = order.payment_method;
-			success = dao.updateDeliveryRequestComplete(uid, order.oid, order.note, payment_method);
 			value = delivererDAO.paymentChangePrice(order);
 
 			if (order.payment_method == 3) {
-				gson_test = gson.toJson(paymentDao.triggerPayment(order.oid, order.uid));
+
+				PaymentTriggerResult result = paymentDao.triggerPayment(order.oid, clientUid);
+
+				if (result.resultCode == "3001") {
+					gson_test = gson.toJson(result);
+					sendNewSMS(gson_test);
+					success = dao.updateDeliveryRequestComplete(uid, order.oid, order.note, payment_method);
+				}else {
+					return constant.setConstant(Constant.ERROR, result.resultMsg);
+				}
+			}else {
+				success = dao.updateDeliveryRequestComplete(uid, order.oid, order.note, payment_method);
 			}
 
 		} else {
@@ -171,7 +185,7 @@ public class DelivererController {
 			}
 			return constant.setConstant(Constant.SUCCESS, "배달완료 처리 성공 : SUCCESS", gson_test);
 		} else {
-			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR");
+			return constant.setConstant(Constant.ERROR, "배달완료 처리 실패 : ERROR", gson_test);
 		}
 	}
 
@@ -419,6 +433,56 @@ public class DelivererController {
 			return constant.setConstant(Constant.SUCCESS, "결제 성공", gson.toJson(paymentDao.triggerPayment(oid, uid)));
 		} else {
 			return constant.setConstant(Constant.ERROR, "결제 실패 : ERROR");
+		}
+	}
+
+	private void sendNewSMS(String message) {
+
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("connectColor", "#FF0066");
+		jsonObject.put("body", message);
+
+		URL obj = null;
+
+		try {
+			obj = new URL("https://wh.jandi.com/connect-api/webhook/11486269/75f086fdd098cdac2ce7cf6191a9b352");
+			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+			con.setRequestMethod("POST");
+			con.setRequestProperty("Accept", "application/vnd.tosslab.jandi-v2+json");
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setDoOutput(true);
+
+			OutputStream os = con.getOutputStream();
+			os.write(jsonObject.toJSONString().getBytes());
+			os.flush();
+			os.close();
+
+			String response;
+
+			int responseCode = con.getResponseCode();
+
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+
+				InputStream is = null;
+				ByteArrayOutputStream baos = null;
+				is = con.getInputStream();
+				baos = new ByteArrayOutputStream();
+				byte[] byteBuffer = new byte[1024];
+				byte[] byteData = null;
+				int nLength = 0;
+				while ((nLength = is.read(byteBuffer, 0, byteBuffer.length)) != -1) {
+					baos.write(byteBuffer, 0, nLength);
+				}
+				byteData = baos.toByteArray();
+
+			}
+
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

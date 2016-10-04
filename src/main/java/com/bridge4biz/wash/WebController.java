@@ -52,6 +52,56 @@ public class WebController {
 		}
 	}
 
+	@RequestMapping(value = "/index")
+	public String index() {
+		return "index";
+	}
+
+	@RequestMapping(value = "/main")
+	public String main() {
+		return "pages/main";
+	}
+
+	@RequestMapping(value = "/sub01")
+	public String sub01() {
+		return "pages/sub01";
+	}
+
+	@RequestMapping(value = "/sub02")
+	public String sub02() {
+		return "pages/sub02";
+	}
+
+	@RequestMapping(value = "/sub03")
+	public String sub03() {
+		return "pages/sub03";
+	}
+
+	@RequestMapping(value = "/sub04")
+	public String sub04() {
+		return "pages/sub04";
+	}
+
+	@RequestMapping(value = "/sub0101")
+	public String sub0101() {
+		return "pages/sub0101";
+	}
+
+	@RequestMapping(value = "/sub02ask")
+	public String sub02ask() {
+		return "pages/sub02ask";
+	}
+
+	@RequestMapping(value = "/m_main")
+	public String mobileMain() {
+		return "pages/m_main";
+	}
+
+	@RequestMapping(value = "/m_sub04")
+	public String mobileSub04() {
+		return "pages/m_sub04";
+	}
+
 	@RequestMapping(value = "/logout", consumes = { "application/json" })
 	public String logoutJson(Authentication auth) {
 		return "redirect:./logout/success";
