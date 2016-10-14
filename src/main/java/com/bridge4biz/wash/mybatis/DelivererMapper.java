@@ -15,10 +15,10 @@ public interface DelivererMapper {
 	@Select("SELECT pickup_man, dropoff_man, oid, A.uid, order_number, email, address, addr_number, addr_building, addr_remainder, A.phone, pickup_date, dropoff_date, price, A.payment_method, note, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE oid < #{oid} ORDER BY oid DESC LIMIT 20")
 	ArrayList<Order> getRecentOrder(@Param("oid") Integer oid);
 	
-	@Select("SELECT pickup_man, dropoff_man, oid, A.uid, order_number, pickup_date, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, A.payment_method, note, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 0 ORDER BY state ASC, pickup_date ASC")
+	@Select("SELECT pickup_man, dropoff_man, oid, A.uid, order_number, pickup_date, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, A.payment_method, note, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 0 OR state = 1 ORDER BY state ASC, pickup_date ASC")
 	ArrayList<Order> getPickupData();
 
-	@Select("SELECT pickup_man, dropoff_man, oid, A.uid, order_number, pickup_date, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, A.payment_method, note, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 2 ORDER BY state ASC, dropoff_date ASC")
+	@Select("SELECT pickup_man, dropoff_man, oid, A.uid, order_number, pickup_date, dropoff_date, email, address, addr_number, addr_building, addr_remainder, A.phone, price, A.payment_method, note, memo, state, A.rdate FROM orders AS A INNER JOIN user AS B ON A.uid = B.uid WHERE state = 2 OR state = 3 ORDER BY state ASC, dropoff_date ASC")
 	ArrayList<Order> getDropoffData();
 	
 	@Update("UPDATE orders SET state = 1, pickup_man = #{uid}, rdate = NOW() WHERE oid = #{oid}")
