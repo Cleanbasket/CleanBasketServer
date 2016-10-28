@@ -32,7 +32,9 @@
             <h2 class="section-title">크린바스켓 세탁서비스 _ 물세탁편</h2>
             <span class="section-meta">2016.10.28</span>
           </header>
-          <iframe width="560" height="315" src="https://www.youtube.com/embed/BJQZw3MfTl4" frameborder="0" allowfullscreen></iframe>
+          <div class="lab-video">
+            <iframe width="1180" height="664" src="https://www.youtube.com/embed/vDFjEIh3AiU" frameborder="0" allowfullscreen></iframe>
+          </div>
           <div class="lab-text">
             <p>
               크린바스켓은 30년 이상의 경력을 가진 베테랑 세탁소를 엄선하여 세탁을 진행합니다. <br>

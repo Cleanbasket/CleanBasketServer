@@ -33,7 +33,7 @@
             <span class="section-meta">2016.10.28</span>
           </header>
           <div class="lab-video">
-            <iframe width="1180" height="664" src="https://www.youtube.com/embed/vDFjEIh3AiU" frameborder="0" allowfullscreen></iframe>
+            <iframe width="1180" height="664" src="https://www.youtube.com/embed/BJQZw3MfTl4" frameborder="0" allowfullscreen></iframe>
           </div>
           <div class="lab-text">
             <p>
