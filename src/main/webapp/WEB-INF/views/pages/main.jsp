@@ -4,6 +4,7 @@
 <head>
   <title></title>
   <link rel="stylesheet" href="./resources/styles/swiper.min.css">
+  <link rel="stylesheet" href="./resources/styles/common.css">
   <link rel="stylesheet" href="./resources/styles/main.css">
 </head>
 <body>
@@ -91,7 +92,7 @@
       </div>
       <div class="process">
         <div class="container">
-          <h2 class="process-process-title">
+          <h2 class="process-title">
             <span class="process-title-first">터치.터치.끝!</span>
             <br>
             <span class="process-title-second">이렇게 진행됩니다</span>
@@ -162,7 +163,7 @@
           <div class="seemore-detail seemore-price">
             <h3 class="seemore-title">
               <span class="seemore-title-first">
-                와이셔츠 2천원<br>
+                셔츠 2천원<br>
                 정장 한 벌 6천원
               </span>
               <br>

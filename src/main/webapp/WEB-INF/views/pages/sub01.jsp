@@ -3,6 +3,7 @@
 <html>
 <head>
   <title></title>
+  <link rel="stylesheet" href="./resources/styles/common.css">
   <link rel="stylesheet" href="./resources/styles/sub01.css">
 </head>
 <body>

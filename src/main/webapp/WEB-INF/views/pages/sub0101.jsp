@@ -3,6 +3,7 @@
 <html>
 <head>
   <title></title>
+  <link rel="stylesheet" href="./resources/styles/common.css">
   <link rel="stylesheet" href="./resources/styles/sub01-1.css">
   <link rel="stylesheet" href="./resources/styles/swiper.min.css">
 </head>

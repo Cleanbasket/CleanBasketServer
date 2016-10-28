@@ -82,7 +82,7 @@
         <div class="container">
           <div class="price-typo">
             <p class="price-text">
-              와이셔츠 2천원<br>
+              셔츠 2천원<br>
               정장한벌 6천원<br>
               합리적인 가격
             </p>

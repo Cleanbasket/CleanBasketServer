@@ -4,6 +4,7 @@
 <head>
   
   <title></title>
+  <link rel="stylesheet" href="./resources/styles/common.css">
   <link rel="stylesheet" href="./resources/styles/sub04.css">
 </head>
 <body>
