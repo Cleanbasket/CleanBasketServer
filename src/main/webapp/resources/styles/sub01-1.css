@@ -4,6 +4,7 @@
   .lab-video {
     position: relative;
     height: 100%;
+    margin: 50px 0;
     text-align: center; }
   .lab-images {
     margin-top: 50px;
