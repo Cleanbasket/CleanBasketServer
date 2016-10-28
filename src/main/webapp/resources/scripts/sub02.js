@@ -13,7 +13,7 @@ function init() {
 function expandableInit() {
   $('.expandable-item').map(function (index, item) {
     var $item = $(item);
-    $item.find('.expandable-toggle').click(function () {
+    $item.find('.expandable-subject').click(function () {
       var $this = $(this);
       $item.toggleClass('opened');
       if ($item.hasClass('opened')) {

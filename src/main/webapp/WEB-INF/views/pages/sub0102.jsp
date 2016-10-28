@@ -29,21 +29,21 @@
       <div class="container">
         <section class="section lab">
           <header class="section-header">
-            <h2 class="section-title">크린바스켓 세탁서비스 _ 드라이크리닝편</h2>
+            <h2 class="section-title">크린바스켓 세탁서비스 _ 물세탁편</h2>
             <span class="section-meta">2016.10.28</span>
           </header>
-          <iframe class="lab-video" width="560" height="315" src="https://www.youtube.com/embed/vDFjEIh3AiU" frameborder="0" allowfullscreen></iframe>
+          <iframe width="560" height="315" src="https://www.youtube.com/embed/BJQZw3MfTl4" frameborder="0" allowfullscreen></iframe>
           <div class="lab-text">
             <p>
               크린바스켓은 30년 이상의 경력을 가진 베테랑 세탁소를 엄선하여 세탁을 진행합니다. <br>
-              드라이크리닝은 고객님께 최고의 만족을 드리기위해 꼼꼼한 작업과정을 거치고 있습니다. <br>
-              크린바스켓의 빈틈없는 드라이크리닝 서비스 과정을 확인해보세요! <br>
+              패딩 등 물빨래를 필요로 하는 제품을 위한 전문적 물세탁 과정을 소개해드립니다. <br>
+              물세탁이라고 모두 다 같은 물세탁이 아니라는 것! <br>
             </p>
           </div>
           <div class="lab-tag">
             <span class="tag"># 크린바스켓</span>
             <span class="tag"># 서비스소개</span>
-            <span class="tag"># 드라이크리닝</span>
+            <span class="tag"># 물세탁</span>
           </div>
           <hr class="lab-hr">
           <div class="lab-btns clearfix">

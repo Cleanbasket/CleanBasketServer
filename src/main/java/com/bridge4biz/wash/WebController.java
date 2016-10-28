@@ -87,6 +87,47 @@ public class WebController {
 		return "pages/sub0101";
 	}
 
+	@RequestMapping(value = "/sub0102")
+	public String sub0102() {
+		return "pages/sub0102";
+	}
+
+	@RequestMapping(value = "/sub0103")
+	public String sub0103() {
+		return "pages/sub0103";
+	}
+
+	@RequestMapping(value = "/sub0104")
+	public String sub0104() {
+		return "pages/sub0104";
+	}
+
+	@RequestMapping(value = "/sub0105")
+	public String sub0105() {
+		return "pages/sub0105";
+	}
+
+	@RequestMapping(value = "/sub0106")
+	public String sub0106() {
+		return "pages/sub0106";
+	}
+
+	@RequestMapping(value = "/sub0107")
+	public String sub0107() {
+		return "pages/sub0107";
+	}
+
+	@RequestMapping(value = "/sub0108")
+	public String sub0108() {
+		return "pages/sub0108";
+	}
+	
+
+	@RequestMapping(value = "/sub0109")
+	public String sub0109() {
+		return "pages/sub0109";
+	}
+	
 	@RequestMapping(value = "/sub02ask")
 	public String sub02ask() {
 		return "pages/sub02ask";
