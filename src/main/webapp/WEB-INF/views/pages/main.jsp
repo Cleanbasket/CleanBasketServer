@@ -39,7 +39,7 @@
             <div class="area-right">
               <div class="area-location">
                 <span class="icon icon-gps"></span>
-                <input class="area-input" type="text" placeholder="서울시 강남구 논현동">
+                <input class="area-input" type="text" placeholder="동 이름을 입력하세요.">
               </div>
               <button class="btn area-submit">확인</button><!-- inline-block fix --><button class="btn btn-filled area-seeall"><span class="icon icon-map"></span><span>서비스지역 전체보기</span></button>
             </div>              
