@@ -174,11 +174,350 @@
               하지만 고객님의 걱정을 덜어드릴<br>
               격이 다른 품질을 경험 해 보세요. 
             </p>
-            <a class='alert-notyetopen' href="#"><button class="btn btn-border">세탁요금 알아보기</button></a>
+            <button class="price-btn btn btn-border">세탁요금 알아보기</button>
           </div>
         </div>
-        <!-- </div> -->
       </div>
+
+      <div id="price-modal">
+        <div class="modal-content">
+          <span class="modal-close">×</span>
+          <h2>요금 안내</h2>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">생활빨래</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>생활 빨래</td>
+                <td>₩10,000 / 수거가방</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">비즈니스</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>와이셔츠</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>정장(한벌)</td>
+                <td>₩6,000</td>
+              </tr>
+              <tr>
+                <td>정장 상의</td>
+                <td>₩3,500</td>
+              </tr>
+              <tr>
+                <td>정장 하의</td>
+                <td>₩3,500</td>
+              </tr>
+              <tr>
+                <td>여성 정장 상의</td>
+                <td>₩3,500</td>
+              </tr>
+              <tr>
+                <td>여성 정장 하의</td>
+                <td>₩3,500</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">상의</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>블라우스</td>
+                <td>₩4,000</td>
+              </tr>
+              <tr>
+                <td>롱스웨터</td>
+                <td>₩5,000</td>
+              </tr>
+              <tr>
+                <td>스웨터</td>
+                <td>₩4,000</td>
+              </tr>
+              <tr>
+                <td>가디건</td>
+                <td>₩4,000</td>
+              </tr>
+              <tr>
+                <td>티셔츠</td>
+                <td>₩3,000</td>
+              </tr>
+              <tr>
+                <td>조끼</td>
+                <td>₩4,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">아우터</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>반코트</td>
+                <td>₩8,000</td>
+              </tr>
+              <tr>
+                <td>코트 일반</td>
+                <td>₩10,000</td>
+              </tr>
+              <tr>
+                <td>트렌치코트</td>
+                <td>₩12,000</td>
+              </tr>
+              <tr>
+                <td>점퍼</td>
+                <td>₩7,000</td>
+              </tr>
+              <tr>
+                <td>자켓</td>
+                <td>₩4,000</td>
+              </tr>
+              <tr>
+                <td>가죽점퍼</td>
+                <td>₩40,000</td>
+              </tr>
+              <tr>
+                <td>가죽점퍼(Long)</td>
+                <td>₩50,000</td>
+              </tr>
+              <tr>
+                <td>패딩/아웃도어</td>
+                <td>₩12,000</td>
+              </tr>
+              <tr>
+                <td>인조무스탕</td>
+                <td>₩15,000</td>
+              </tr>
+              <tr>
+                <td>골프웨어</td>
+                <td>₩10,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">기타</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>원피스</td>
+                <td>₩7,000</td>
+              </tr>
+              <tr>
+                <td>현장확인</td>
+                <td>₩0</td>
+              </tr>
+              <tr>
+                <td>인형</td>
+                <td>₩10,000</td>
+              </tr>
+              <tr>
+                <td>교복</td>
+                <td>₩5,000</td>
+              </tr>
+              <tr>
+                <td>한복</td>
+                <td>₩15,000</td>
+              </tr>
+              <tr>
+                <td>넥타이</td>
+                <td>₩1,000</td>
+              </tr>
+              <tr>
+                <td>스카프</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>목도리</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>스키복 상의</td>
+                <td>₩15,000</td>
+              </tr>
+              <tr>
+                <td>스키복 하의</td>
+                <td>₩15,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">하의</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>바지</td>
+                <td>₩3,000</td>
+              </tr>
+              <tr>
+                <td>스커트</td>
+                <td>₩3,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">신발</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>운동화</td>
+                <td>₩5,000</td>
+              </tr>
+              <tr>
+                <td>등산화</td>
+                <td>₩7,000</td>
+              </tr>
+              <tr>
+                <td>구두</td>
+                <td>₩7,000</td>
+              </tr>
+              <tr>
+                <td>어그 부츠</td>
+                <td>₩15,000</td>
+              </tr>
+              <tr>
+                <td>골프화</td>
+                <td>₩8,000</td>
+              </tr>
+              <tr>
+                <td>명품 운동화</td>
+                <td>₩20,000</td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">이불</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>이불(더블)</td>
+                <td>₩15,000</td>
+              </tr>
+              <tr>
+                <td>이블(싱글)</td>
+                <td>₩10,000</td>
+              </tr>
+              <tr>
+                <td>이불(퀸)</td>
+                <td>₩18,000</td>
+              </tr>
+              <tr>
+                <td>이불 커버</td>
+                <td>₩8,000</td>
+              </tr>
+              <tr>
+                <td>오리털 이불</td>
+                <td>₩21,000</td>
+              </tr>
+              <tr>
+                <td>거위털 이불</td>
+                <td>₩23,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">가방</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>책가방</td>
+                <td>₩8,000</td>
+              </tr>
+              <tr>
+                <td>명품 가방(천)</td>
+                <td>₩50,000</td>
+              </tr>
+              <tr>
+                <td>명품 가방(가죽)</td>
+                <td>₩70,000</td>
+              </tr>
+              <tr>
+                <td>가방(천)</td>
+                <td>₩40,000</td>
+              </tr>
+              <tr>
+                <td>가방(가죽)</td>
+                <td>₩50,000</td>
+              </tr>
+            </tbody>
+          </table>
+          
+          <table>
+            <thead>
+              <tr>
+                  <th colspan="2">추가비용</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>실크</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>마</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>울</td>
+                <td>₩2,000</td>
+              </tr>
+              <tr>
+                <td>캐시미어</td>
+                <td>₩2,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="appinfo">
         <div class="container">
           <h3 class="appinfo-title">

@@ -4,10 +4,6 @@ $(document).ready(function () {
 
 function init() {
   fitHero();
-  $('.alert-notyetopen').click(function (e) {
-    e.preventDefault();
-    alert('서비스 준비중입니다. 빠른 시일내로 찾아뵙겠습니다.');
-  }) 
 
   var swiper = new Swiper('.swiper-container', {
     pagination: '.swiper-pagination',
@@ -37,14 +33,32 @@ function init() {
 
   $(".area-seeall").click(function(e) {
     $('.area-allplace').toggleClass('closed')
-  })
+  });
   $(".area-allplace .close").click(function(e) {
     $('.area-allplace').toggleClass('closed')
-  })
+  });
 
   $('.area-place .closebox').click(function (e) {
     $(this).parent().addClass("closed")
-  })
+  });
+
+  var priceModal = document.getElementById('price-modal'),
+    openBtn = document.getElementsByClassName("price-btn")[0],
+    closeBtn = document.getElementsByClassName("modal-close")[0];
+
+  openBtn.onclick = function() {
+      priceModal.style.display = "block";
+  }
+
+  closeBtn.onclick = function() {
+      priceModal.style.display = "none";
+  }
+
+  window.onclick = function(event) {
+      if (event.target == priceModal) {
+          priceModal.style.display = "none";
+      }
+  }
 }
 
 function fitHero () {
@@ -94,7 +108,6 @@ function showPlaceUnable() {
 function closePlaceUnable() {
   $('.area-place.unable').addClass('closed')
 }
-
 
 
 
