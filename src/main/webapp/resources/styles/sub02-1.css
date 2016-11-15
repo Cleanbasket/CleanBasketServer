@@ -32,44 +32,8 @@
     padding: 5px 10px;
     box-sizing: border-box;
     width: 100%; }
-
-.filebox {
-  display: inline-block; }
-  .filebox-trigger {
-    color: black;
-    font-size: inherit;
-    line-height: 27px;
-    vertical-align: middle;
-    padding: 6px 30px;
-    background-color: #e6e6e6;
-    border: 1px solid #ccc;
-    border-radius: 5px; }
-  .filebox-inputs {
-    visibility: hidden;
-    position: absolute; }
-    .filebox-inputs input {
-      visibility: hidden;
-      position: absolute; }
-
-.fileitem {
-  margin-top: 15px;
-  display: inline-block; }
-  .fileitem-name {
-    color: black;
-    font-size: 16px;
-    font-weight: 300;
-    margin-right: 20px; }
-  .fileitem-size {
-    font-size: 12px;
-    color: #ccc;
-    font-weight: 300;
-    margin-right: 10px; }
-  .fileitem-delete {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    border: 1px solid #ccc;
-    margin-right: 30px; }
+  .table .msg {
+    font-size: 18px; }
 
 .ask {
   letter-spacing: -0.075em; }

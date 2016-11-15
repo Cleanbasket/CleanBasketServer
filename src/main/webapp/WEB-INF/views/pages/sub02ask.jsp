@@ -49,21 +49,7 @@
                   <td class='text-top'>내용</td>
                   <td>
                     <textarea name="" id="" cols="30" rows="10" placeholder="상담내용을 입력해 주세요."></textarea>
-                  </td>
-                </tr>
-                <tr>
-                  <td>첨부파일</td>
-                  <td>
-                    <!-- <div class="filebox">
-                      <label for="add-file">파일추가</label>
-                      <input type="file" id="add-file" class='upload-hidden'>
-                    </div> -->
-                    <button class="attached-btn filebox-trigger" data-filebox-id='attached'>파일추가</button>
-                    <div class="filebox-inputs" data-filebox-id='attached'>
-                      
-                    </div>
-                    <span class='attached-text'>파일당 <strong>최대 10M까지</strong> 등록할 수 있습니다.</span>
-                    <div class='attached-box filebox-box' data-filebox-id='attached'></div>
+                    <p class="msg">첨부파일이 있는 문의는 help@cleanbasket.co.kr로 문의 부탁드립니다.</p>
                   </td>
                 </tr>
               </table>
@@ -110,7 +96,6 @@
     <%@ include file="./partials/footer.jspf"%>
   </div>
   <script src="./resources/scripts/jquery.min.js"></script>
-  <script src="./resources/scripts/filebox.js"></script>
   <script src="./resources/scripts/sub02-1.js"></script>
 </body>
 </html>
