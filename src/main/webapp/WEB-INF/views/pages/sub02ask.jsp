@@ -20,7 +20,7 @@
     <div class="content">
       <div class="container">
         <div class="ask">
-          <form action="">
+          <form id="ask-form" name="ask">
             <section class="section">
               <header class="section-header">
                 <h2 class="section-title">문의정보</h2>
@@ -29,26 +29,26 @@
                 <tr>
                   <td>문의종류</td>
                   <td>
-                    <input type="radio" name="question-type" value="order">
+                    <input type="radio" name="question-type" value="주문"  checked="checked">
                     <span class="radio-text">주문</span>
-                    <input type="radio" name="question-type" value="wash">
+                    <input type="radio" name="question-type" value="세탁">
                     <span class="radio-text">세탁</span>
-                    <input type="radio" name="question-type" value="deliver">
-                    <span class="radio-text">수집/배달</span>
-                    <input type="radio" name="question-type" value="cash">
+                    <input type="radio" name="question-type" value="수거/배달">
+                    <span class="radio-text">수거/배달</span>
+                    <input type="radio" name="question-type" value="결제">
                     <span class="radio-text">결제</span>
-                    <input type="radio" name="question-type" varle="partner">
+                    <input type="radio" name="question-type" varle="제휴문의">
                     <span class="radio-text">제휴문의</span>
                   </td>
                 </tr>
                 <tr>
                   <td>제목</td>
-                  <td><input class="input-fluid" type="text" placeholder="제목을 입력해 주세요."></td>
+                  <td><input class="input-fluid" type="text" name="title" placeholder="제목을 입력해 주세요." required></td>
                 </tr>
                 <tr>
                   <td class='text-top'>내용</td>
                   <td>
-                    <textarea name="" id="" cols="30" rows="10" placeholder="상담내용을 입력해 주세요."></textarea>
+                    <textarea name="content" id="" cols="30" rows="10" placeholder="상담내용을 입력해 주세요." required></textarea>
                     <p class="msg">첨부파일이 있는 문의는 help@cleanbasket.co.kr로 문의 부탁드립니다.</p>
                   </td>
                 </tr>
@@ -61,23 +61,23 @@
               <table class='table'>
                 <tr>
                   <td>고객명</td>
-                  <td><input type="text" placeholder="홍길동"></td>
+                  <td><input type="text" name="name" placeholder="홍길동" required></td>
                 </tr>
                 <tr>
                   <td>휴대폰 번호</td>
-                  <td><input type="text" placeholder="-없이 입력해 주세요"></td>
+                  <td><input type="text" name="phone" placeholder="-없이 입력해 주세요" required></td>
                 </tr>
                 <tr>
                   <td>이메일 주소</td>
-                  <td><input type="text" placeholder="example@gmail.com"></td>
+                  <td><input type="text" name="email" placeholder="example@gmail.com" required></td>
                 </tr>  
                 <tr>
                   <td>답변받기</td>
                   <td>
-                    <input type="radio" name="get-answer" value="email">
-                    <span class="radio-text">이메일답변</span>
-                    <input type="radio" name="get-answer" value="sms">
-                    <span class="radio-text">SNS답변</span>
+                    <input type="radio" name="get-answer" value="이메일 답변" checked="checked">
+                    <span class="radio-text">이메일 답변</span>
+                    <input type="radio" name="get-answer" value="문자 답변">
+                    <span class="radio-text">문자 답변</span>
                   </td>
                 </tr>
               </table>
