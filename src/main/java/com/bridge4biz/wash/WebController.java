@@ -143,6 +143,26 @@ public class WebController {
 		return "pages/m_sub04";
 	}
 
+	@RequestMapping(value = "/m_order")
+	public String mobileOrder() {
+		return "pages/m_order";
+	}
+
+	@RequestMapping(value = "/m_write")
+	public String mobileWrite() {
+		return "pages/m_write";
+	}
+
+	@RequestMapping(value = "/m_complete")
+	public String mobileComplete() {
+		return "pages/m_complete";
+	}
+
+	@RequestMapping(value = "/m_trace")
+	public String mobileTrace() {
+		return "pages/m_trace";
+	}
+
 	@RequestMapping(value = "/logout", consumes = { "application/json" })
 	public String logoutJson(Authentication auth) {
 		return "redirect:./logout/success";

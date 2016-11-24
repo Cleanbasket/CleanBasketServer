@@ -3,6 +3,7 @@
 <html>
 <head>
   <%@ include file="./partials/m_head.jspf"%>
+  <link rel="stylesheet" href="./resources/styles/m_common.css">
   <link rel="stylesheet" href="./resources/styles/m_sub04.css">
   <title></title>
 </head>

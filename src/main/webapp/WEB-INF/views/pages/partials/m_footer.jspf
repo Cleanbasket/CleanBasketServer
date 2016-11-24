@@ -4,7 +4,7 @@
 		<nav class="footer-nav">
 			<a href="../sub03" class="footer-link">회사소개</a>
             <a href="../m_sub04" class="footer-link">자주하는 질문</a>
-            <a href="#" class="footer-link">주문조회</a>
+            <a href="../m_trace" class="footer-link">주문조회</a>
             <a href="../main" class="footer-link">PC버전</a>
 		</nav>
 		<hr>

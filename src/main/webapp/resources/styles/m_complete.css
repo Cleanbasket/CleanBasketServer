@@ -1,0 +1,63 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
+html {
+  font-family: 'Noto Sans KR', 'Roboto', sans-serif;
+}
+.bg_box {
+  position: relative;
+  z-index: -1;
+}
+.bg_box .bg_img {
+  width: 100%;
+  height: auto;
+  background-size: cover;
+}
+.content-wrapper {
+  position: absolute;
+  text-align: center;
+  top: 7%;
+  left: 0;
+  right: 0;
+}
+.content-wrapper .content {
+  position: relative;
+  margin: 0 auto;
+  width: 90%;
+}
+.content-wrapper .content img {
+  margin-top: 50px;
+  width: 20.5%;
+}
+.content-wrapper .content .title {
+  margin: 20px 0;
+  font-size: 2.3em;
+  font-weight: lighter;
+  line-height: 1.2;
+  color: #394646;
+}
+.content-wrapper .content p {
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.6;
+  margin-bottom: 35px;
+  color: #646464;
+}
+.content-wrapper .content .divider {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.content-wrapper .content .app-info {
+  font-size: 0.7em;
+  font-weight: 500;
+  margin: 20px 0;
+}
+.content-wrapper .content .app-btn {
+  width: 37%;
+  height: 43px;
+  color: #394646;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin: 0 auto;
+  padding: 0;
+  border: 1px solid #394646;
+  box-shadow: none !important;
+  background-color: rgba(255, 255, 255, 0) !important;
+}

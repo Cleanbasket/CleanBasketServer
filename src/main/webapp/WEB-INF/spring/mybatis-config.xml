@@ -14,10 +14,10 @@
 	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="username" value="manager" />
-		<property name="url"
-			value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />
-		<!-- <property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true" 
-			/> -->
+		<!--<property name="url"-->
+			<!--value="jdbc:mysql://10.57.47.122/wash?autoReconnect=true" />-->
+		<property name="url" value="jdbc:mysql://localhost/wash?autoReconnect=true"
+			/>
 		<property name="password" value="fastdel2015@" />
 
 		<property name="maxActive" value="150" />

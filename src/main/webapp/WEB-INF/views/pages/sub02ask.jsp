@@ -65,7 +65,7 @@
                 </tr>
                 <tr>
                   <td>휴대폰 번호</td>
-                  <td><input type="text" name="phone" placeholder="-없이 입력해 주세요" required></td>
+                  <td><input type="text" id="phone" name="phone" placeholder="-없이 입력해 주세요" required></td>
                 </tr>
                 <tr>
                   <td>이메일 주소</td>

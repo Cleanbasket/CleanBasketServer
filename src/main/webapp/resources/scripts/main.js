@@ -16,6 +16,10 @@ function init() {
     autoplay: 6 * 1000
   });
 
+  $('.alert-notyetopen').click(function(){
+    alert("주문은 모바일 웹앱 혹은 어플리케이션에서 가능합니다!");
+  });
+
   $(window).on("resize", function () {
     console.log("resize");
     fitHero();

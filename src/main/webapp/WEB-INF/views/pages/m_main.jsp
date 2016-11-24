@@ -3,6 +3,7 @@
 <html>
 <head>
   <%@ include file="./partials/m_head.jspf"%>
+  <link rel="stylesheet" href="./resources/styles/m_common.css">
   <link rel="stylesheet" href="./resources/styles/m_main.css">
   <title></title>
 </head>
@@ -17,7 +18,7 @@
             <p class="hero-text">
               여유로운<br>생활의 시작<br><strong>크린바스켓</strong>
             </p>
-            <button class="btn btn-border hero-btn appdown-trigger">주문하기</button>
+            <button class="goto-order-btn btn btn-border hero-btn">주문하기</button>
           </div>
         </div>
         <div class="popup">

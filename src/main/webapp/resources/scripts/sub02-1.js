@@ -1,5 +1,29 @@
 $(document).ready(function () {
   init();
+
+  /***** 휴대폰 번호 무조건 11자리 숫자로만 *****/
+  var inputQuantity = [];
+  
+  $("#phone").each(function(i) {
+       inputQuantity[i]=this.defaultValue;
+       $(this).data("idx",i); // save this field's index to access later
+  });
+  
+  $("#phone").on("keyup", function (e) {
+      var $field = $(this),
+          val=this.value,
+          $thisIndex=parseInt($field.data("idx"),10); // retrieve the index
+      if (this.validity && this.validity.badInput || isNaN(val)  ) {
+          this.value = inputQuantity[$thisIndex];
+          return;
+      }
+      if (val.length > Number($field.attr("maxlength"))) {
+          val=val.slice(0, 11);
+          $field.val(val);
+      }
+      inputQuantity[$thisIndex]=val;
+  });     
+  /****************************************/ 
 })
 
 function init() {
@@ -10,8 +34,36 @@ function init() {
 
   $('#ask-form').submit(function (e) {
   	e.preventDefault();
-    ajaxPostAskData();
+    if(checkForm()){
+        ajaxPostAskData();
+    }   
   });
+}
+
+function checkForm() {
+    var ask_form = document.ask;
+
+    if (ask_form.title.value == ""){
+        alert("제목을 입력해주세요.");
+        return false;
+    } else if (ask_form.content.value == ""){
+        alert("내용을 입력해주세요.");
+        return false;
+    } else if (ask_form.name.value == ""){
+        alert("이름을 입력해주세요.");
+        return false;
+    } else if (ask_form.phone.value == ""){
+        alert("휴대폰 번호를 입력해주세요.");
+        return false;
+    } else if (ask_form.phone.value.length !== 11){
+        alert("핸드폰 번호를 다시 확인해주세요.(11자리 숫자)");
+        return false;
+    } else if (ask_form.email.value == ""){
+        alert("이메일 주소를 입력해주세요.");
+        return false;
+    } else {
+      return true;
+    }
 }
 
 function ajaxPostAskData(){
@@ -31,8 +83,6 @@ function ajaxPostAskData(){
 	}];
     
 	var json_data = JSON.stringify(obj);
-
-	console.log(json_data);
 
     $.ajax({                  
         type: "POST",
