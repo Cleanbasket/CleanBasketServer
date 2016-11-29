@@ -4,7 +4,6 @@ var view = {
 
   // init
   init: function() {
-    this.drawLaundryQty();
     this.setCategory(); 
     this.drawCartInfo();
     this.initEvent();
@@ -25,13 +24,6 @@ var view = {
     } else {
       window.location.href = '../m_write';
     }
-  },
-
-  drawLaundryQty: function(){
-    // 생활 물빨래 탭 item quantity box 정렬하기
-    var laundryQtyTop = $('.nav-top').height() + $('.tab-menu').height();
-    laundryQtyTop += ($('.laundry-img').height()/2.7);
-    $('#laundry .item-box-container').css('top',  laundryQtyTop + 'px');
   },
 
   setCategory: function() {

@@ -95,6 +95,11 @@
                 <div class="swiper-wrapper">
                     <div id="laundry" class="contents swiper-slide">
                         <img class="laundry-img" src="./resources/images/tab_1.png" alt="laundry">
+                        <div class="laundry-info">
+                            <div class="laundry-title">생활 물빨래</div>
+                            <div class="divider"></div>
+                            <p>방문 시 제공되는 수거 가방 1개당 1만원의 가격으로<br>자연 건조하여 잘 개어 배달 해 드립니다.<br>(가방 사이즈 : 60cm * 40cm)</p>
+                        </div>
                         <div class="item-box-container"></div>
                     </div>
                     <div id="business" class="contents swiper-slide">

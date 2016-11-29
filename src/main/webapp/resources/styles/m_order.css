@@ -56,10 +56,37 @@ html {
   width: 100%;
   height: auto;
 }
+.contents-container #laundry img {
+  position: relative;
+}
+.contents-container #laundry .laundry-info {
+  position: absolute;
+  top: 150px;
+  text-align: center;
+  width: 100%;
+}
+.contents-container #laundry .laundry-info .laundry-title {
+  font-size: 2.4em;
+  font-weight: lighter;
+  color: #666666;
+  margin-bottom: 22px;
+}
+.contents-container #laundry .laundry-info .divider {
+  width: 25px;
+  margin: 10px auto;
+  background-color: #8a8a8a;
+}
+.contents-container #laundry .laundry-info p {
+  color: #666666;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.9;
+}
 .contents-container #laundry .item-box-container {
   position: absolute;
   width: 100%;
   text-align: center;
+  top: 305px;
 }
 .contents-container #laundry .item-box-container .qty-box {
   width: 100px;
