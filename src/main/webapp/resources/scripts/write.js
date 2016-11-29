@@ -222,8 +222,10 @@ function showCartInfo() {
     });
 
     for(var i = 0; i < cartItemList.length; i++){
-        var subTotalPrice = cartItemList[i].qty * cartItemList[i].price;
-        cartHtml += "<tr><td>" + cartItemList[i].name + "</td><td>" + cartItemList[i].qty + "</td><td>₩" + subTotalPrice + "</td></tr>";
+        if(cartItemList[i].qty > 0){
+            var subTotalPrice = cartItemList[i].qty * cartItemList[i].price;
+            cartHtml += "<tr><td>" + cartItemList[i].name + "</td><td>" + cartItemList[i].qty + "</td><td>₩" + subTotalPrice + "</td></tr>";
+        }
     }
     cartHtml += "<tr><td>+ 배달비용</td><td></td><td>₩" + cartData.dropoff_price + "</td></tr>";
     cartHtml += "<tr><td>합계</td><td>" + cartData.totalItemQty + "</td><td>₩" + cartData.totalItemPrice + "</td></tr>";
@@ -321,9 +323,11 @@ function confirmOrder() {
 
     obj.item = [];
     for(var i = 0; i < cartItemList.length; i++){
-        obj.item[i] = {
-            item_code: cartItemList[i].item_code,
-            count: cartItemList[i].qty
+        if (cartItemList[i].qty > 0){
+            obj.item[i] = {
+                item_code: cartItemList[i].item_code,
+                count: cartItemList[i].qty
+            }
         }
     }
 
