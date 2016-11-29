@@ -56,7 +56,8 @@
                         <div class="s12">
                           <input id="phone" type="number"  name="phone" placeholder="휴대폰 번호" required>
                         </div>
-                        <div class="s12">
+                        <div class="search-wrap s12">
+                          <i class="search-btn material-icons" onclick="execDaumPostcode()">search</i>
                           <input id="address" type="text" name="address" onclick="execDaumPostcode()" placeholder="주소 검색" readonly="readonly" required>
 
                             <div id="address-wrap" style="display:none;border:1px solid;width:100%;height:100%;position:relative">

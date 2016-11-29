@@ -89,6 +89,15 @@ html {
   border-bottom: 1px solid #5ddbdb !important;
   box-shadow: 0 1px 0 0 #5ddbdb !important;
 }
+.section .input-wrapper .search-wrap {
+  position: relative;
+}
+.section .input-wrapper .search-wrap .search-btn{
+  color: #5ddbdb;
+  top: 10px;
+  right: 0;
+  position: absolute;
+}
 .section [type="checkbox"].filled-in:not(:checked) + label:after {
   height: 15px;
   width: 15px;
