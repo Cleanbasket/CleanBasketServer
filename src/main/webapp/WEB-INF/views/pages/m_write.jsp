@@ -37,13 +37,21 @@
                 <h5 class="headline-info">수거 및 배달 시간 선택</h5>
                 <div class="select-wrapper">
                     <div class="text">수거</div>
-                    <input type="date" id="pickup_date" name="pickup_date" required>
-                    <select name="pickup_time" id="pickup_time" required></select>
+                    <div class="select-box sb-input">
+                       <input type="date" id="pickup_date" name="pickup_date" required>
+                    </div>
+                    <div class="select-box sb-select">                    
+                        <select name="pickup_time" id="pickup_time" required></select>
+                    </div>
                 </div>
                 <div class="select-wrapper">
                     <div class="text">배달</div>
-                    <input type="date" id="dropoff_date" name="dropoff_date" required>
-                    <select name="dropoff_time" id="dropoff_time" required></select>
+                    <div class="select-box sb-input">
+                        <input type="date" id="dropoff_date" name="dropoff_date" required>
+                    </div>
+                    <div class="select-box sb-select">
+                        <select name="dropoff_time" id="dropoff_time" required></select>
+                    </div>
                 </div>
               </form>
             </div>

@@ -63,28 +63,45 @@ html {
   margin-bottom: 30px;
 }
 .section .select-wrapper {
+  width:100%;
   margin-bottom: 10px;
+  float: left;
+  clear:both;
 }
 .section .select-wrapper .text {
-  width: 16%;
   font-weight: bold;
   font-size: 16px;
-  line-height: 3rem;
-  padding: 0;
-  display: inline;
+  float:left;
+  height:42px;
+  line-height:42px;
 }
-.section .select-wrapper input,
-.section .select-wrapper select {
-  font-size: 0.9em;
-  width: 40%;
+.section .select-wrapper .select-box{
   border: 1px solid #bbb;
-  display: inline;
-  margin: 0 0 0 5px;
+  text-align:left;
+  height: 42px;
+  float:left;
 }
-.section .select-wrapper select {
+.section .select-wrapper .sb-input {
+  margin:0 7px;
+  width: 45%;
+}
+.section .select-wrapper .sb-select{
+  width: 38%;
+}
+.section .select-wrapper .select-box input {
+  vertical-align:middle;
+  width:100%;
+  height:100%;
+  border-bottom: none;
+}
+.section .select-wrapper .select-box select {
+  vertical-align:middle;
+  width:100%;
+  height:100%;
   -moz-appearance: none; 
   -webkit-appearance: none; 
   appearance: none;
+  display:inline;
 }
 .section .input-wrapper input {
   color: #666666;
