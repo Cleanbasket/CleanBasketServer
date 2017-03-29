@@ -1,0 +1,20 @@
+<%@ page pageEncoding="UTF-8" %>
+<header class="header">
+  <div class="header-bar">
+    <div class="container">
+      <button class="header-hamburger"><img src="./resources/images/icon_hamburger.png" alt=""></button>
+      <a href="../m_main">
+        <img class="header-title" src="./resources/images/cb_m_logo.svg" alt="CLEAN BASKET">  
+      </a>
+    </div>
+  </div>
+  
+  <ul class="header-nav closed">
+    <div class="container">
+      <li class="header-link goto-order-btn">주문하기</li>
+      <a href="../m_trace"><li class="header-link">주문조회</li></a>
+      <a href="../m_sub04"><li class="header-link">자주하는 질문</li></a>
+      <li class="header-link"><button class="btn btn-filled header-appdown appdown-trigger">앱 다운로드</a></li>  
+    </div>
+  </ul>
+</header>

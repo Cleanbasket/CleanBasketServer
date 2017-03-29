@@ -1,0 +1,6 @@
+.titlebar {
+  background: url("../images/sub02_title_image.png") no-repeat center center;
+  background-size: cover; }
+
+.content {
+  padding-bottom: 50px; }

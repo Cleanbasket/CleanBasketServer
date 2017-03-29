@@ -1,0 +1,161 @@
+mark {
+  background-color: transparent;
+  color: #5ddbdb; }
+
+.titlebar {
+  background: url("../images/sub04_title_image.png") no-repeat center center;
+  background-size: cover; }
+
+.environment .keystone {
+  top: 93px;
+  width: 104px;
+  height: 104px;
+  background-color: transparent;
+  border: 2px solid #72cbcf;
+  color: #72cbcf; }
+  .environment .keystone > p {
+    padding-top: 23px; }
+
+.environment .row {
+  margin: 0px; }
+
+.environment .col-1-of-3 {
+  padding: 0px; }
+
+.qualifi .keystone {
+  color: #72cbcf;
+  background-color: white; }
+
+.qualifi .btn-border {
+  color: white;
+  border: 2px solid white;
+  width: 180px;
+  height: 60px; }
+
+.message,
+.duty,
+.environment,
+.organization,
+.qualifi {
+  position: relative; }
+
+.message {
+  text-align: center;
+  padding-bottom: 58px; }
+  .message-subject {
+    margin: 0;
+    padding-top: 10px;
+    font-weight: 200;
+    font-size: 60px;
+    letter-spacing: -0.075em; }
+  .message-text {
+    padding-top: 15px;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 1.8em;
+    letter-spacing: -0.08em; }
+
+.duty {
+  height: 653px;
+  background: url("../images/sub04_sub_title.png") center center;
+  background-size: cover; }
+  .duty-detail {
+    padding-top: 210px;
+    width: 50%;
+    float: right; }
+  .duty-subject {
+    margin: 0;
+    color: #72cbcf;
+    font-weight: 200;
+    font-size: 60px;
+    line-height: 1.1em;
+    letter-spacing: -0.08em;
+    padding-left: 27px; }
+  .duty-text {
+    color: white;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.6em;
+    letter-spacing: -0.045em;
+    padding-left: 29px; }
+
+.environment {
+  padding-bottom: 98px; }
+  .environment-wrapper {
+    margin: 0 auto;
+    max-width: 1200px; }
+  .environment-detail {
+    padding-top: 230px; }
+  .environment-item {
+    text-align: center; }
+    .environment-item img {
+      width: 170px; }
+    .environment-item h3 {
+      padding-top: 30px;
+      margin: 7px 0;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.1em; }
+    .environment-item p {
+      margin: 14px 0;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 1.45em;
+      letter-spacing: -0.1em; }
+
+.organization {
+  padding-bottom: 50px;
+  text-align: center;
+  background-color: #f2f5f5; }
+  .organization-diagram {
+    padding-top: 145px; }
+
+.qualifi {
+  background: url("../images/ic_foot.png") no-repeat center center;
+  background-size: cover;
+  text-align: center; }
+  .qualifi ul {
+    margin: 0;
+    padding: 0;
+    list-style: none; }
+  .qualifi-detail {
+    padding-top: 158px;
+    padding-bottom: 73px; }
+    .qualifi-detail > p {
+      margin-top: 45px;
+      margin-bottom: 30px;
+      color: white;
+      font-size: 20px;
+      font-weight: 600; }
+  .qualifi-item {
+    vertical-align: middle;
+    line-height: 0;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 3px; }
+    .qualifi-item .num {
+      display: inline-block;
+      margin-right: 3px;
+      width: 63px;
+      height: 63px;
+      background-color: #72cbcf; }
+      .qualifi-item .num > span {
+        vertical-align: middle;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 63px;
+        color: white; }
+    .qualifi-item .text {
+      display: inline-block;
+      width: 580px;
+      height: 63px;
+      background-color: white;
+      opacity: 0.8;
+      text-align: left; }
+      .qualifi-item .text > span {
+        vertical-align: middle;
+        margin: 0;
+        margin-left: 20px;
+        line-height: 63px;
+        font-size: 18px;
+        letter-spacing: -0.03em; }

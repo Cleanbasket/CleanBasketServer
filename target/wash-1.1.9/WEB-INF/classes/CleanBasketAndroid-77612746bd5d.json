@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "project-561258547352407813",
+  "private_key_id": "77612746bd5d935e2c968cf80d08f88db4a3ee02",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC0Rem1FX+5w0MI\n+5WB/wnxMY95HSZI0XTxZxma5wIZwHRSRt0MWwwBEygdPKMqjQJF61pi1c20ZVns\nnpO+Mg9bWD/e9Ck3dI1XQwRWkLiHeUYuLOI51SmHmKvrO2UzmGZDbPsmNuVHTnFF\n7DBCbSehR/zYrTGsdSujY63cowNQfpDMOP+6KVdaNg2wQSDwdqIn0/VRCeCWefBj\nA7+5xly4Gn8H1zjhZGkngXZqspNZtu1cRWod5iUVj/iyxnoLacTn4U/JeBs20VHR\nmWqQ/24trhvpgJa4oxZm2Au+IPuyn6cjhb5HMTRt3IKKRBiGm1zlhErDSnPaju6V\n8GKULmMJAgMBAAECggEBAIb8+v2f9Z5yOlYVnWRUR2uWQurcCvjn7vt8yk2VwZrq\n469gZNGFs71yTM1nxH5uTE9y5qGvm3MDmYx3SgZXkexCbsFSbzKZUeUPx8XSZHr9\nMrIM5fGMTqa8ia+BMEysR5chmgaJgLIeaO+E5rY26j/4mbreJZ4PtveIAn5+ilLQ\n0OBH9HAoRGwOyd8dVnvFbhasR34027ZYiQo5DKD0lPMhqFsO7l13EGlXBO8SQqAw\n5giTT+NMrgjddtPzzq5d3/d+Tkm2op5AfRqSjVM+HVrtlHOUKRKqat12gJl8L4lG\nEPz2uq2L7WtcWjQxLSIP2n2V7R36AnyNs77Zxz9o9ekCgYEA5Iw8LRUEUhJBIO9d\nD20U3TXYgX3bHYSjxUIEax9x58OB3PdBnKUpUOnsCPkPMpJLpXiiekULH2OeoGQI\nvP2BAUsLxz4mfjGNWhHhQCvoPX+WETX6nvF0ycLWM0KK7kX2R0GsmCWyDZQFLoKf\nXdG0PELZ85O4PNqPJQNj73/q/P8CgYEAye0/b2oEDx4vrLcBGy3UdmSZhnzIhvp8\nWiBpo/09sSrF1RxeA8BsObKjEp9JqhHs2Y+ETXNmYd1To1CoVi6NSKu7ONA8YUkm\nEcuNboEIn0xPEeI6ywk8ewcC6NTpSzZ75Q6TsmTHAsF1uksg+L8fTA0NAP9adRB2\nOUnc46Bmt/cCgYA43E7oZG8zwAjmGcdMXDYxpwDbjqViHarlG7yfri4XnEOF5xoy\nz8CMufYYcWZ/jXg2jeHWi7DtuUow21J1OpjK6pHemy7WfJuPSh2BaqsYCdMbKxPU\nUXxd6hSCok6QY2WXatZ28AHxcN8tKCBgJhkyWOuCt0DCGxo7+jD12BxtnwKBgEnj\nW3v8UiHqDM3pZSk52u27oAX7MTFbBRfBloZgSyvCGAQETk6XIcL3H/7XdJAb4Qw3\nHNVubb9PyqQPBpoKjL5TwL1oTT/YEWsfjdAqvSn1NVW474SOC6iFB0aFahyQgkNt\n0xPLFptmiRqzFQyQevZMLD76MXJ2pJwP8BkG/68/AoGAfWb5L1IIQXRrrpEwRGAe\nqgTXXwcjtLEIp4kCQIsGXiYhf0puaqnE7ZxAY9D8Ji/QPU15PGPNVwE8v/E5UpJs\nPXcPNAXfJG4698jZJXzFybd7YNP0IF7pJMkeYGwW9CfJyz75Z6shqViI4QfVPyAw\ndSFcG2UajhwwhIt5OC6LeY0=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cleanbasketandroid@project-561258547352407813.iam.gserviceaccount.com",
+  "client_id": "108258054812114786811",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cleanbasketandroid%40project-561258547352407813.iam.gserviceaccount.com"
+}
