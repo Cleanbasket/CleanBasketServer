@@ -518,7 +518,7 @@ public class MybatisDAO {
 	private Boolean priceCheck(OrderData orderData, Integer uid) {
 		Integer sumPrice = 0;
 		Integer couponPrice = 0;
-		Integer dropoffPrice = 2000;
+		Integer dropoffPrice = 3000;
 		for (Item item : orderData.item) {
 			sumPrice += mapper.getItemPrice(item.item_code) * item.count;
 		}
@@ -546,7 +546,7 @@ public class MybatisDAO {
 	public Boolean priceCheck(Order orderData, Integer uid) {
 		Integer sumPrice = 0;
 		Integer couponPrice = 0;
-		Integer dropoffPrice = 2000;
+		Integer dropoffPrice = 3000;
 		Integer mileage = orderData.mileage;
 		
 		try {

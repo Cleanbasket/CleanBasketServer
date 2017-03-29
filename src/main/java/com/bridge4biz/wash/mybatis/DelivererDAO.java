@@ -210,7 +210,7 @@ public class DelivererDAO {
 		}
 
 		if (totalPrice < 20000){
-			totalPrice += 2000;
+			totalPrice += 3000;
 		}
 
 		Order order = new Order();

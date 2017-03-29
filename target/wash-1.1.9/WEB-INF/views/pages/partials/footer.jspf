@@ -1,8 +1,0 @@
-<%@ page pageEncoding="UTF-8" %>
-<footer id="footer" class='footer'>
-  <div class="container-fluid">
-    <p class='footer-info'>고객행복센터 1833-8543<span class="vertical-divider"></span>help@cleanbasket.co.kr</p>
-    <p class='footer-info'>(주)워시앱코리아<span class="vertical-divider"></span>대표이사 김우진<span class="vertical-divider"></span>사업자번호 220-88-86968<span class="vertical-divider"></span>주소 서울 강남구 봉은사로16길 16 타비쉬빌딩 1층</p>
-    <p class='footer-info'>Copyright © <strong>WashApp Korea Inc.</strong> All rights reserved.</p>
-  </div>
-</footer>
